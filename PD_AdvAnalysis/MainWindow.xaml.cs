@@ -238,8 +238,15 @@ namespace PD_AdvAnalysis
                             //lay down an initial grid for the dta and dd
                             TextBox header_box = new TextBox();
                             //modify the template
-                            PDTemplate template = new PDTemplate(false, false, false, AnalysisMode.CU, NormalizationMethod.Unknown, false, 0, (ROIType)ROITypes_cmb.SelectedIndex, 0, j, i, false, tested);
-                        //PDTemplate template_test = new PDTemplate(false,false, false,AnalysisMode.CU,NormalizationMethod.Unknown,false,0,0,)
+
+                         double margins_txt;
+                        Double.TryParse(marg_txt.Text, out margins_txt);
+                       // MessageBox.Show(margins_txt.ToString());
+
+
+                        PDTemplate template = new PDTemplate(false, false, false, AnalysisMode.CU, NormalizationMethod.Unknown, false, 0, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, j, i, false, tested);
+                        
+                       // PDTemplate template_test = new PDTemplate(false, false, false, AnalysisMode.CU, NormalizationMethod.Unknown, false, Convert.ToDouble(margins_txt.Text));
                             //apply the template to the analysis.
 
                             PDAnalysis analysis = fieldm.CreateTransientAnalysis(template, field.PredictedDoseImage);

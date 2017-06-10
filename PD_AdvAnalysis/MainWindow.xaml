@@ -37,6 +37,7 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
                             
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -69,11 +70,15 @@
                             <ComboBoxItem>User</ComboBoxItem> 
                             <ComboBoxItem>Field</ComboBoxItem> 
                             <ComboBoxItem>CIAO</ComboBoxItem>
-                            <ComboBoxItem>TestChanges</ComboBoxItem>
+                           
                         </ComboBox>
-                        <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="2" Margin="5">Tolerance [%]:</Label>
-                        <TextBox Name="tol_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="3" Width="150" Margin="5"></TextBox>
-                        <Button Name="calc_btn" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="4" Width="150" Content="Calculate Table" Height="25" FontWeight="Bold" Click="calc_btn_Click" Margin="5"></Button>
+                        <Label FontSize="14" HorizontalAlignment ="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="2" Margin="5">Margins [mm]</Label>
+                        <TextBox Name="marg_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="3" Width="150" Margin="5"></TextBox>
+                        <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="4" Margin="5">Tolerance [%]:</Label>
+                        <TextBox Name="tol_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="5" Width="150" Margin="5"></TextBox>
+                        
+                        <!--Row 4-->
+                        <Button Name="calc_btn" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" Width="150" Content="Calculate Table" Height="25" FontWeight="Bold" Click="calc_btn_Click" Margin="5"></Button>
                     
                     </Grid>
                     <Label FontSize="14" FontWeight="Bold" Margin="425,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">Dose Difference[%]</Label>
