@@ -66,9 +66,10 @@
                         <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" Margin="5">ROI Type:</Label>
                         <ComboBox Name="ROITypes_cmb" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Width="150" Margin="5" SelectedIndex="0">
                             <ComboBoxItem>None</ComboBoxItem>
-                            <ComboBoxItem>User</ComboBoxItem>
-                            <ComboBoxItem>Field</ComboBoxItem>
-                            <ComboBoxItem>CIAO</ComboBoxItem> 
+                            <ComboBoxItem>User</ComboBoxItem> 
+                            <ComboBoxItem>Field</ComboBoxItem> 
+                            <ComboBoxItem>CIAO</ComboBoxItem>
+                            <ComboBoxItem>TestChanges</ComboBoxItem>
                         </ComboBox>
                         <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="2" Margin="5">Tolerance [%]:</Label>
                         <TextBox Name="tol_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="3" Width="150" Margin="5"></TextBox>
