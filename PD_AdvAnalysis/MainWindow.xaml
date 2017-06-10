@@ -1,0 +1,98 @@
+﻿<Window x:Class="PD_AdvAnalysis.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Portal Dosimetry Analysis" Height="800" Width="1400">
+    <Grid>
+        <Label FontSize="18" FontWeight="Bold">Patient ID: </Label>
+        <TextBox Name="id_txt" Margin="100,0,0,0" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150"></TextBox>
+        <Button Name="id_btn" Margin="260,0,0,0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Content="Grab Patient" Click="id_btn_Click"></Button>
+        <Label Margin="420,0,0,0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top">Course ID:</Label>
+        <ComboBox Name="course_ddl" FontWeight="Bold" Margin="520,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="25" IsEnabled="False">
+            <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <Button Name="course_btn" FontSize="18" FontWeight="Bold" Margin="740,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="25" IsEnabled="False" Click="course_btn_Click" Content="Grab Course"></Button>
+        <Label Margin="900,0,0,0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top">Plan ID: </Label>
+        <ComboBox Name="plan_ddl" FontWeight="Bold" Margin="1000,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="25" IsEnabled="False">
+            <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <Button Name="plan_btn" Margin="1200,0,0,0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Content="Grab Plan" Click="plan_btn_Click" IsEnabled="False"></Button>
+        <Label FontSize="16" FontWeight="Bold" Margin="10,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">Field:</Label>
+        <ComboBox Name="field_ddl" FontWeight="Bold" Margin="70,45,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="25" IsEnabled="False">
+            <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <Button Name="field_btn" Margin="250,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="25" IsEnabled="False" Click="field_btn_Click" Content="Grab Field"></Button>
+        <Label FontSize="16" FontWeight="Bold" Margin="840,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">Comparison Field (Calculated):</Label>
+        <ComboBox Name="comp_ddl" FontWeight="Bold" Margin="1080,45,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="25" IsEnabled="False" SelectionChanged="comp_ddl_SelectionChanged">
+            <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <ComboBox Name="meas_ddl" FontWeight="Bold" Margin="640,45,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="25" IsEnabled="False" SelectionChanged="meas_ddl_SelectionChanged">
+            <ComboBoxItem></ComboBoxItem>
+        </ComboBox>
+        <Label FontSize="16" FontWeight="Bold" Margin="420,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">Reference Field (Measured):</Label>
+        <TabControl Background="LightGray" Margin="0,100,0,0">
+            <TabItem Header="Gamma Pass Table" Background="LightGray">
+            <StackPanel Name="pdType_pnl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                    <!-- Row 1-->
+                    <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" Margin="5">Start Dose Difference [%]:</Label>
+                        <TextBox Name="startdd_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150"  Grid.Row="0" Grid.Column="1" Margin="5"></TextBox>
+                        <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="0" Grid.Column="2" Margin="5">End Dose Difference[%]:</Label>
+                        <TextBox Name="enddd_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150"  Grid.Row="0" Grid.Column="3" Margin="5"></TextBox>
+                        <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="0" Grid.Column="4" Margin="5">&#x394;Dose Difference[%]:</Label>
+                        <TextBox Name="deldd_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150"  Grid.Row="0" Grid.Column="5" Margin="5"></TextBox>
+                        <!-- Row 2-->
+
+                        <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="1" Grid.Column="0" Margin="5">Start Dist. Agree.[mm]:</Label>
+                        <TextBox Name="startdta_txt" HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="1" Grid.Column="1" Width="150" Margin="5"></TextBox>
+                        <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Grid.Row="1" Grid.Column="2" Margin="5">End DTA [mm]: </Label>
+                        <TextBox Name="enddta_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Width="150" Margin="5"></TextBox>
+                        <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="4" Margin="5">&#x394; DTA [mm]:</Label>
+                        <TextBox Name="deldta_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="5" Width="150" Margin="5"></TextBox>
+                        <!-- Row 3-->
+                        <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" Margin="5">ROI Type:</Label>
+                        <ComboBox Name="ROITypes_cmb" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Width="150" Margin="5" SelectedIndex="0">
+                            <ComboBoxItem>None</ComboBoxItem>
+                            <ComboBoxItem>User</ComboBoxItem>
+                            <ComboBoxItem>Field</ComboBoxItem>
+                            <ComboBoxItem>CIAO</ComboBoxItem>
+                        </ComboBox>
+                        <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="2" Margin="5">Tolerance [%]:</Label>
+                        <TextBox Name="tol_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="3" Width="150" Margin="5"></TextBox>
+                        <Button Name="calc_btn" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="4" Width="150" Content="Calculate Table" Height="25" FontWeight="Bold" Click="calc_btn_Click" Margin="5"></Button>
+                    
+                    </Grid>
+                    <Label FontSize="14" FontWeight="Bold" Margin="425,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">Dose Difference[%]</Label>
+                    <Label FontSize="14" FontWeight="Bold" Margin="0,225,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">DTA[mm]</Label>
+                    <ScrollViewer HorizontalAlignment="Left" Margin="60,-235,0,0" Width="1000" Height="450" HorizontalScrollBarVisibility="Auto">
+                        <Grid Name="gamma_grd" Margin="0,0,0,0" Width="1000" Background="White" HorizontalAlignment="Left">
+                            
+                        </Grid>
+                    </ScrollViewer>
+            </StackPanel>
+               </TabItem>
+            <TabItem Header="WL Analysis" Background="LightGray">
+                
+            </TabItem>
+            <TabItem Header="Star Shot" Background="LightGray"></TabItem>
+            <TabItem Header="Multi-Met Analysis" Background="LightGray"></TabItem>
+            <TabItem Header="Dose Area Histogram" Background="LightGray"></TabItem>
+            <TabItem Header="ROI Reduction" Background="LightGray">
+                
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
