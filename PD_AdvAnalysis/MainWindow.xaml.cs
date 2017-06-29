@@ -237,7 +237,9 @@ namespace PD_AdvAnalysis
                 double startdd = Convert.ToDouble(startdd_txt.Text)/100; double endd = Convert.ToDouble(enddd_txt.Text)/100; double deldd = Convert.ToDouble(deldd_txt.Text)/100;
                 double startdta = Convert.ToDouble(startdta_txt.Text); double enddta = Convert.ToDouble(enddta_txt.Text); double deldta = Convert.ToDouble(deldta_txt.Text);
                 double tol = Convert.ToDouble(tol_txt.Text)/100;
-                double parm = Convert.ToDouble(testparam_txt) / 100;
+                double parm;
+                Double.TryParse(testparam_txt.Text, out parm);
+                parm = parm / 100;
                 //setup portal dosimetry analysis template.
                 IEnumerable<EvaluationTestDesc> tested = new List<EvaluationTestDesc> { new EvaluationTestDesc((EvaluationTestKind)EvalTestKind_cmb.SelectedIndex, parm, tol, false) };
                 

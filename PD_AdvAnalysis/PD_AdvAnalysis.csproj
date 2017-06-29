@@ -61,10 +61,10 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="VMS.CA.Scripting">
-      <HintPath>..\..\..\VMS.CA.Scripting.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Varian\PortalDosimetry\1.4\VMS.CA.Scripting.dll</HintPath>
     </Reference>
     <Reference Include="VMS.DV.PD.Scripting">
-      <HintPath>..\..\..\VMS.DV.PD.Scripting.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Varian\PortalDosimetry\1.4\VMS.DV.PD.Scripting.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
