@@ -37,17 +37,17 @@ namespace PD_AdvAnalysis
     public partial class MainWindow : Window
     {
         //the patient context will be in the PD.Scripting namespace
-        public Patient newcontext;//save these guys for use later.
+        public static Patient newcontext;//save these guys for use later.
         PDPlanSetup plan;
         Course course;
-        PDBeam field;
+        public static PDBeam field;
         PortalDoseImage fieldm;
         PortalDoseImage fieldc;
         //load up an application
-        VMS.DV.PD.Scripting.Application PDapp = VMS.DV.PD.Scripting.Application.CreateApplication(null,null);
+        public VMS.DV.PD.Scripting.Application PDapp = VMS.DV.PD.Scripting.Application.CreateApplication(null,null);
         public double to1;
         private IEnumerable<VMS.DV.PD.Scripting.EvaluationTestDesc> tested;
-
+        //UserControl current_tab; 
         public MainWindow()
         {
             /*using (PDapp = VMS.DV.PD.Scripting.Application.CreateApplication(null, null))
@@ -57,6 +57,8 @@ namespace PD_AdvAnalysis
                 wpfApp.Run();
             }*/
             InitializeComponent();
+            //current_tab = Tabs_tc.SelectedItem as UserControl;
+            
         }
    
        /*public class EvaluationTestDesc
@@ -216,7 +218,7 @@ namespace PD_AdvAnalysis
             }
         }
         //release memory int his program.
-        private void calc_btn_Click(object sender, RoutedEventArgs e)
+       /* private void calc_btn_Click(object sender, RoutedEventArgs e)
         {
             gamma_grd.Children.Clear();
             //here's where all the magic happens!!
@@ -359,7 +361,7 @@ namespace PD_AdvAnalysis
             {
                 testparam_txt.IsEnabled = false;
             }
-        }
+        }*/
     }
 }
 
