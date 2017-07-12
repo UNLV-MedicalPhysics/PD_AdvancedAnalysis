@@ -25,7 +25,7 @@ namespace PD_AdvAnalysis
         ComboBox meas_ddl = System.Windows.Application.Current.MainWindow.FindName("meas_ddl") as ComboBox;
         
         public Patient newcontext;//save these guys for use later.
-        //VMS.DV.PD.Scripting.Application PDapp;// = System.Windows.Application.Current.MainWindow.FindName("PDApp") as VMS.DV.PD.Scripting.Application;
+        
         PDPlanSetup plan;
         Course course;
         public PDBeam field;
@@ -130,8 +130,21 @@ namespace PD_AdvAnalysis
                         //MessageBox.Show(analysis.GammaParamHistogramCutoff.ToString());//this is not the gamma pass rate.
                         //F.GetVoxels(0, pixels);
                         //double gamma_pass = GetGammaPassRate(gamma);
-                        double gamma_pass = analysis.EvaluationTests.First().TestValue * 100;
+                        //This code determines if the Gamma Test Parameters are in absolute or relative value
+                        int[] selec_in = new int[] { 0, 3, 4, 5, 8, 9 };
+                        double gamma_pass;
+
+                        if (selec_in.Contains(EvalTestKind_cmb.SelectedIndex))
+                        {
+                            gamma_pass = analysis.EvaluationTests.First().TestValue * 100;
+                        }
+                        else
+                        {
+                            gamma_pass = analysis.EvaluationTests.First().TestValue;
+                        }
+
                         //MessageBox.Show(gamma_pass.ToString());
+                        //The Code below shows the results from the gamma test. It is color coded to show where the gamma passes or failes.
                         TextBox gamma_box = new TextBox(); gamma_box.IsReadOnly = true; gamma_box.Text = gamma_pass.ToString("F3");
                         gamma_box.Width = bw; gamma_box.Height = bh; gamma_box.Background = gamma_pass < tol * 100 ? Brushes.Pink : Brushes.LightGreen; gamma_box.BorderBrush = Brushes.Black;
                         gamma_box.HorizontalAlignment = HorizontalAlignment.Left; gamma_box.VerticalAlignment = VerticalAlignment.Top;
