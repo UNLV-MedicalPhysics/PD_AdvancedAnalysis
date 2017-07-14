@@ -8,20 +8,20 @@
         <TextBox Name="id_txt" Margin="100,0,0,0" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30"></TextBox>
         <Button Name="id_btn" Margin="260,0,0,0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" Content="Grab Patient" Click="id_btn_Click"></Button>
         <Label Margin="420,0,0,0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top">Course ID:</Label>
-        <ComboBox Name="course_ddl" FontWeight="Bold" Margin="520,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False">
+        <ComboBox Name="course_ddl" FontWeight="Bold" Margin="520,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False" SelectionChanged="course_ddl_SelectionChanged">
             <ComboBoxItem></ComboBoxItem>
         </ComboBox>
-        <Button Name="course_btn" FontSize="18" FontWeight="Bold" Margin="690,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False" Click="course_btn_Click" Content="Grab Course"></Button>
+        <Button Name="course_btn" Visibility="Hidden" FontSize="18" FontWeight="Bold" Margin="690,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False" Click="course_btn_Click" Content="Grab Course"></Button>
         <Label Margin="850,0,0,0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top">Plan ID: </Label>
         <ComboBox Name="plan_ddl" FontWeight="Bold" Margin="930,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False">
             <ComboBoxItem></ComboBoxItem>
         </ComboBox>
-        <Button Name="plan_btn" Margin="1110,0,0,0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" Content="Grab Plan" Click="plan_btn_Click" IsEnabled="False"></Button>
+        <Button Name="plan_btn" Visibility="Hidden" Margin="1110,0,0,0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" Content="Grab Plan" Click="plan_btn_Click" IsEnabled="False"></Button>
         <Label FontSize="18" FontWeight="Bold" Margin="10,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">Field:</Label>
         <ComboBox Name="field_ddl" FontWeight="Bold" Margin="100,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False">
             <ComboBoxItem></ComboBoxItem>
         </ComboBox>
-        <Button Name="field_btn" FontSize="18" FontWeight="Bold" Margin="260,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False" Click="field_btn_Click" Content="Grab Field"></Button>
+        <Button Name="field_btn" FontSize="18" Visibility="Hidden" FontWeight="Bold" Margin="260,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False" Click="field_btn_Click" Content="Grab Field"></Button>
         <Label FontSize="18" FontWeight="Bold" Margin="840,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">Comparison Field (Calculated):</Label>
         <ComboBox Name="comp_ddl" FontWeight="Bold" Margin="1110,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False" SelectionChanged="comp_ddl_SelectionChanged">
             <ComboBoxItem></ComboBoxItem>
