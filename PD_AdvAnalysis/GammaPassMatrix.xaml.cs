@@ -25,7 +25,7 @@ namespace PD_AdvAnalysis
         ComboBox meas_ddl = System.Windows.Application.Current.MainWindow.FindName("meas_ddl") as ComboBox;
         
         public Patient newcontext;//save these guys for use later.
-        //VMS.DV.PD.Scripting.Application PDapp;// = System.Windows.Application.Current.MainWindow.FindName("PDApp") as VMS.DV.PD.Scripting.Application;
+        
         PDPlanSetup plan;
         Course course;
         public PDBeam field;
@@ -48,21 +48,75 @@ namespace PD_AdvAnalysis
             {
                 MessageBox.Show("Please select a field");
             }
-            else if (String.IsNullOrEmpty(startdd_txt.Text) || string.IsNullOrEmpty(startdta_txt.Text) || string.IsNullOrEmpty(enddd_txt.Text) || string.IsNullOrEmpty(enddta_txt.Text) || string.IsNullOrEmpty(deldd_txt.Text) || string.IsNullOrEmpty(deldta_txt.Text) || string.IsNullOrEmpty(tol_txt.Text))
+            /*else if (String.IsNullOrEmpty(startdd_txt.Text) || string.IsNullOrEmpty(startdta_txt.Text) || string.IsNullOrEmpty(enddd_txt.Text) || string.IsNullOrEmpty(enddta_txt.Text) || string.IsNullOrEmpty(deldd_txt.Text) || string.IsNullOrEmpty(deldta_txt.Text) || string.IsNullOrEmpty(tol_txt.Text))
             {
                 MessageBox.Show("Please input all numeric parameters in the appropriate box");
-            }
+            }*/
             else
             {
-                //get beams
+                //get beams 
+                bool any_empty = false;
+                //This portion of the code makes the textboxes red if they are empty
+                List<Control> mandatory_boxes = new List<Control>() {startdd_txt,enddd_txt, deldd_txt, startdta_txt, enddta_txt, deldta_txt, marg_txt, tol_txt };
+                foreach (Control c in mandatory_boxes)
+                {
+                    double test_double;
+                    if (!Double.TryParse((c as TextBox).Text, out test_double))
+                    {
+                        (c as TextBox).Focus();
+                        (c as TextBox).BorderBrush = Brushes.Red;
+                        (c as TextBox).BorderThickness = new Thickness(2);
+                        any_empty = true;
+                    }
+                    else
+                    {
+                        (c as TextBox).BorderBrush = Brushes.Transparent;
+                    }
+                }
+                if ((bool)threshold_chk.IsChecked)
+                {
+                    double test_double2;
+                    if (!Double.TryParse((threshold_txt).Text, out test_double2))
+                    {
+                        (threshold_txt).Focus();
+                        (threshold_txt).BorderBrush = Brushes.Red;
+                        (threshold_txt).BorderThickness = new Thickness(2);
+                        any_empty = true;
+                    }
+                    else
+                    {
+                        (threshold_txt).BorderBrush = Brushes.Transparent;
+                    }
+                }
+                int[] threshold_parm = new int[] { 4, 5, 8, 9, 12, 13 };
+
+                if (threshold_parm.Contains(EvalTestKind_cmb.SelectedIndex))
+                {
+                    double test_double3;
+                    if (!Double.TryParse((testparam_txt).Text, out test_double3))
+                    {
+                        (testparam_txt).Focus();
+                        (testparam_txt).BorderBrush = Brushes.Red;
+                        (testparam_txt).BorderThickness = new Thickness(2);
+                        any_empty = true;
+                    }
+                    else
+                    {
+                        (testparam_txt).BorderBrush = Brushes.Transparent;
+                    }
+                }
+              
+                if (any_empty) { return; }
                 fieldm = field.PortalDoseImages.Where(i => i.Id == meas_ddl.SelectedItem.ToString()).First();
                 //don't need to do the where clause for the predicted.
-                double startdd = Convert.ToDouble(startdd_txt.Text) / 100; double endd = Convert.ToDouble(enddd_txt.Text) / 100; double deldd = Convert.ToDouble(deldd_txt.Text) / 100;
+                double startdd = Convert.ToDouble(startdd_txt.Text); double endd = Convert.ToDouble(enddd_txt.Text); double deldd = Convert.ToDouble(deldd_txt.Text);
                 double startdta = Convert.ToDouble(startdta_txt.Text); double enddta = Convert.ToDouble(enddta_txt.Text); double deldta = Convert.ToDouble(deldta_txt.Text);
                 double tol = Convert.ToDouble(tol_txt.Text) / 100;
                 double parm;
                 Double.TryParse(testparam_txt.Text, out parm);
-                parm = parm / 100;
+                
+                
+               
                 //setup portal dosimetry analysis template.
                 IEnumerable<EvaluationTestDesc> tested = new List<EvaluationTestDesc> { new EvaluationTestDesc((EvaluationTestKind)EvalTestKind_cmb.SelectedIndex, parm, tol, false) };
 
@@ -73,9 +127,9 @@ namespace PD_AdvAnalysis
                 //lay down the dta and dd labels.
                 int bw = 50; int bh = 25;
                 int marginx = bw; int marginy = bh;
-                for (double i = startdd; i <= endd; i += deldd)
+                for (double j = startdd; j <= endd; j += deldd)
                 {
-                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}%", i * 100);
+                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}%", j);
                     dbox.Width = bw; dbox.Background = Brushes.White; dbox.BorderBrush = Brushes.Black;
                     dbox.HorizontalAlignment = HorizontalAlignment.Left; dbox.VerticalAlignment = VerticalAlignment.Top;
                     dbox.Height = bh;
@@ -83,9 +137,9 @@ namespace PD_AdvAnalysis
                     gamma_grd.Children.Add(dbox);
                     marginx += bw;
                 }
-                for (double j = startdta; j <= enddta; j += deldta)
+                for (double i = startdta; i <= enddta; i += deldta)
                 {
-                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}mm", j);
+                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}mm", i);
                     dbox.Width = bw; dbox.Background = Brushes.White; dbox.BorderBrush = Brushes.Black;
                     dbox.HorizontalAlignment = HorizontalAlignment.Left; dbox.VerticalAlignment = VerticalAlignment.Top;
                     dbox.Height = bh;
@@ -110,14 +164,14 @@ namespace PD_AdvAnalysis
                     // MessageBox.Show(margins_txt.ToString());
 
                     int anal_mode = (bool)abs_rdb.IsChecked ? 0 : 2;
-                    for (double j = startdd; j <= endd; j += deldd)
+                    for (double j = startdd; j <= endd;  j += deldd)
                     {
                         marginx += bw;
                         //lay down an initial grid for the dta and dd
                         TextBox header_box = new TextBox();
                         //modify the template
                         //PDTemplate template = new PDTemplate(false, false, false, AnalysisMode.CU, NormalizationMethod.Unknown, false, 0, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, j, i, false, tested);
-                        PDTemplate template1 = new PDTemplate(false, false, false, (AnalysisMode)anal_mode, (NormalizationMethod)Normalizaton_cmb.SelectedIndex, (bool)threshold_chk.IsChecked, th_txt, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, j, i, false, tested);
+                        PDTemplate template1 = new PDTemplate(false, false, false, (AnalysisMode)anal_mode, (NormalizationMethod)Normalizaton_cmb.SelectedIndex, (bool)threshold_chk.IsChecked, th_txt, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, i/100, j, false, tested);
                         //PDTemplate template2 = new PDTemplate(false,false, false, (AnalysisMode))
                         // PDTemplate template_test = new PDTemplate(false, false, false, AnalysisMode.CU, NormalizationMethod.Unknown, false, Convert.ToDouble(margins_txt.Text));
                         //apply the template to the analysis.
@@ -130,8 +184,21 @@ namespace PD_AdvAnalysis
                         //MessageBox.Show(analysis.GammaParamHistogramCutoff.ToString());//this is not the gamma pass rate.
                         //F.GetVoxels(0, pixels);
                         //double gamma_pass = GetGammaPassRate(gamma);
-                        double gamma_pass = analysis.EvaluationTests.First().TestValue * 100;
+                        //This code determines if the Gamma Test Parameters are in absolute or relative value
+                        int[] selec_in = new int[] { 0, 1, 4, 5, 11, 12 };
+                        double gamma_pass;
+
+                        if (selec_in.Contains(EvalTestKind_cmb.SelectedIndex))
+                        {
+                            gamma_pass = analysis.EvaluationTests.First().TestValue * 100;
+                        }
+                        else
+                        {
+                            gamma_pass = analysis.EvaluationTests.First().TestValue;
+                        }
+
                         //MessageBox.Show(gamma_pass.ToString());
+                        //The Code below shows the results from the gamma test. It is color coded to show where the gamma passes or failes.
                         TextBox gamma_box = new TextBox(); gamma_box.IsReadOnly = true; gamma_box.Text = gamma_pass.ToString("F3");
                         gamma_box.Width = bw; gamma_box.Height = bh; gamma_box.Background = gamma_pass < tol * 100 ? Brushes.Pink : Brushes.LightGreen; gamma_box.BorderBrush = Brushes.Black;
                         gamma_box.HorizontalAlignment = HorizontalAlignment.Left; gamma_box.VerticalAlignment = VerticalAlignment.Top;
@@ -176,12 +243,14 @@ namespace PD_AdvAnalysis
 
             else if (sel_in.Contains(EvalTestKind_cmb.SelectedIndex))
             {
-                testparam_txt.IsEnabled = true;
+                testparam_txt.IsEnabled = false;
             }
             else
             {
-                testparam_txt.IsEnabled = false;
+                testparam_txt.IsEnabled = true;
             }
         }
+
+       
     }
 }
