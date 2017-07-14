@@ -57,8 +57,8 @@ namespace PD_AdvAnalysis
                 //get beams 
                 bool any_empty = false;
                 //This portion of the code makes the textboxes red if they are empty
-                List<Control> mandatory_boxes = new List<Control>() {startdd_txt,enddd_txt, deldd_txt, startdta_txt, enddta_txt, deldta_txt, marg_txt };
-                foreach(Control c in mandatory_boxes)
+                List<Control> mandatory_boxes = new List<Control>() {startdd_txt,enddd_txt, deldd_txt, startdta_txt, enddta_txt, deldta_txt, marg_txt, tol_txt };
+                foreach (Control c in mandatory_boxes)
                 {
                     double test_double;
                     if (!Double.TryParse((c as TextBox).Text, out test_double))
@@ -72,26 +72,40 @@ namespace PD_AdvAnalysis
                     {
                         (c as TextBox).BorderBrush = Brushes.Transparent;
                     }
-                    if ( (bool) threshold_chk.IsChecked)
+                }
+                if ((bool)threshold_chk.IsChecked)
+                {
+                    double test_double2;
+                    if (!Double.TryParse((threshold_txt).Text, out test_double2))
                     {
-                        List<Control> mandatory_boxes2 = new List<Control>() {threshold_txt, testparam_txt, tol_txt };
-                        foreach (Control s in mandatory_boxes2)
-                        {
-                            double test_double2;
-                            if (!Double.TryParse((s as TextBox).Text, out test_double2))
-                            {
-                                (s as TextBox).Focus();
-                                (s as TextBox).BorderBrush = Brushes.Red;
-                                (s as TextBox).BorderThickness = new Thickness(2);
-                                any_empty = true;
-                            }
-                            else
-                            {
-                                (s as TextBox).BorderBrush = Brushes.Transparent;
-                            }
-                        }
+                        (threshold_txt).Focus();
+                        (threshold_txt).BorderBrush = Brushes.Red;
+                        (threshold_txt).BorderThickness = new Thickness(2);
+                        any_empty = true;
+                    }
+                    else
+                    {
+                        (threshold_txt).BorderBrush = Brushes.Transparent;
                     }
                 }
+                int[] threshold_parm = new int[] { 4, 5, 8, 9, 12, 13 };
+
+                if (threshold_parm.Contains(EvalTestKind_cmb.SelectedIndex))
+                {
+                    double test_double3;
+                    if (!Double.TryParse((testparam_txt).Text, out test_double3))
+                    {
+                        (testparam_txt).Focus();
+                        (testparam_txt).BorderBrush = Brushes.Red;
+                        (testparam_txt).BorderThickness = new Thickness(2);
+                        any_empty = true;
+                    }
+                    else
+                    {
+                        (testparam_txt).BorderBrush = Brushes.Transparent;
+                    }
+                }
+              
                 if (any_empty) { return; }
                 fieldm = field.PortalDoseImages.Where(i => i.Id == meas_ddl.SelectedItem.ToString()).First();
                 //don't need to do the where clause for the predicted.
@@ -100,7 +114,7 @@ namespace PD_AdvAnalysis
                 double tol = Convert.ToDouble(tol_txt.Text) / 100;
                 double parm;
                 Double.TryParse(testparam_txt.Text, out parm);
-                parm = parm / 100;
+                
                 
                
                 //setup portal dosimetry analysis template.
@@ -229,12 +243,14 @@ namespace PD_AdvAnalysis
 
             else if (sel_in.Contains(EvalTestKind_cmb.SelectedIndex))
             {
-                testparam_txt.IsEnabled = true;
+                testparam_txt.IsEnabled = false;
             }
             else
             {
-                testparam_txt.IsEnabled = false;
+                testparam_txt.IsEnabled = true;
             }
         }
+
+       
     }
 }
