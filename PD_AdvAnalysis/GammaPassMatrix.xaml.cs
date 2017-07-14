@@ -57,7 +57,7 @@ namespace PD_AdvAnalysis
                 //get beams 
                 bool any_empty = false;
                 //This portion of the code makes the textboxes red if they are empty
-                List<Control> mandatory_boxes = new List<Control>() {startdd_txt,enddd_txt };
+                List<Control> mandatory_boxes = new List<Control>() {startdd_txt,enddd_txt, deldd_txt, startdta_txt, enddta_txt, deldta_txt, marg_txt };
                 foreach(Control c in mandatory_boxes)
                 {
                     double test_double;
@@ -72,7 +72,25 @@ namespace PD_AdvAnalysis
                     {
                         (c as TextBox).BorderBrush = Brushes.Transparent;
                     }
-                    
+                    if ( (bool) threshold_chk.IsChecked)
+                    {
+                        List<Control> mandatory_boxes2 = new List<Control>() {threshold_txt, testparam_txt, tol_txt };
+                        foreach (Control s in mandatory_boxes2)
+                        {
+                            double test_double2;
+                            if (!Double.TryParse((s as TextBox).Text, out test_double2))
+                            {
+                                (s as TextBox).Focus();
+                                (s as TextBox).BorderBrush = Brushes.Red;
+                                (s as TextBox).BorderThickness = new Thickness(2);
+                                any_empty = true;
+                            }
+                            else
+                            {
+                                (s as TextBox).BorderBrush = Brushes.Transparent;
+                            }
+                        }
+                    }
                 }
                 if (any_empty) { return; }
                 fieldm = field.PortalDoseImages.Where(i => i.Id == meas_ddl.SelectedItem.ToString()).First();
