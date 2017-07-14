@@ -53,13 +53,13 @@ namespace PD_AdvAnalysis
             {
                 MessageBox.Show("Please select a field");
             }
-            /*else if (String.IsNullOrEmpty(startdd_txt.Text) || string.IsNullOrEmpty(startdta_txt.Text) || string.IsNullOrEmpty(enddd_txt.Text) || string.IsNullOrEmpty(enddta_txt.Text) || string.IsNullOrEmpty(deldd_txt.Text) || string.IsNullOrEmpty(deldta_txt.Text) || string.IsNullOrEmpty(tol_txt.Text))
+            else if (String.IsNullOrEmpty(startdd_txt.Text) || string.IsNullOrEmpty(startdta_txt.Text) || string.IsNullOrEmpty(enddd_txt.Text) || string.IsNullOrEmpty(enddta_txt.Text) || string.IsNullOrEmpty(deldd_txt.Text) || string.IsNullOrEmpty(deldta_txt.Text) || string.IsNullOrEmpty(tol_txt.Text))
             {
                 MessageBox.Show("Please input all numeric parameters in the appropriate box");
-            }*/
+            }
             else
             {
-                //get beams 
+ 
                 bool any_empty = false;
                 //This portion of the code makes the textboxes red if they are empty
                 List<Control> mandatory_boxes = new List<Control>() {startdd_txt,enddd_txt, deldd_txt, startdta_txt, enddta_txt, deldta_txt, marg_txt, tol_txt };
@@ -112,16 +112,17 @@ namespace PD_AdvAnalysis
                 }
               
                 if (any_empty) { return; }
+
+                //get beams
+
                 fieldm = field.PortalDoseImages.Where(i => i.Id == meas_ddl.SelectedItem.ToString()).First();
                 //don't need to do the where clause for the predicted.
-                double startdd = Convert.ToDouble(startdd_txt.Text); double endd = Convert.ToDouble(enddd_txt.Text); double deldd = Convert.ToDouble(deldd_txt.Text);
+                double startdd = Convert.ToDouble(startdd_txt.Text) / 100; double endd = Convert.ToDouble(enddd_txt.Text) / 100; double deldd = Convert.ToDouble(deldd_txt.Text) / 100;
                 double startdta = Convert.ToDouble(startdta_txt.Text); double enddta = Convert.ToDouble(enddta_txt.Text); double deldta = Convert.ToDouble(deldta_txt.Text);
                 double tol = Convert.ToDouble(tol_txt.Text) / 100;
                 double parm;
                 Double.TryParse(testparam_txt.Text, out parm);
-                
-                
-               
+
                 //setup portal dosimetry analysis template.
                 IEnumerable<EvaluationTestDesc> tested = new List<EvaluationTestDesc> { new EvaluationTestDesc((EvaluationTestKind)EvalTestKind_cmb.SelectedIndex, parm, tol, false) };
 
@@ -132,9 +133,9 @@ namespace PD_AdvAnalysis
                 //lay down the dta and dd labels.
                 int bw = 50; int bh = 25;
                 int marginx = bw; int marginy = bh;
-                for (double j = startdd; j <= endd; j += deldd)
+                for (double i = startdd; i <= endd; i += deldd)
                 {
-                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}%", j);
+                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}%", i * 100);
                     dbox.Width = bw; dbox.Background = Brushes.White; dbox.BorderBrush = Brushes.Black;
                     dbox.HorizontalAlignment = HorizontalAlignment.Left; dbox.VerticalAlignment = VerticalAlignment.Top;
                     dbox.Height = bh;
@@ -142,9 +143,9 @@ namespace PD_AdvAnalysis
                     gamma_grd.Children.Add(dbox);
                     marginx += bw;
                 }
-                for (double i = startdta; i <= enddta; i += deldta)
+                for (double j = startdta; j <= enddta; j += deldta)
                 {
-                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}mm", i);
+                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}mm", j);
                     dbox.Width = bw; dbox.Background = Brushes.White; dbox.BorderBrush = Brushes.Black;
                     dbox.HorizontalAlignment = HorizontalAlignment.Left; dbox.VerticalAlignment = VerticalAlignment.Top;
                     dbox.Height = bh;
@@ -169,14 +170,14 @@ namespace PD_AdvAnalysis
                     // MessageBox.Show(margins_txt.ToString());
 
                     int anal_mode = (bool)abs_rdb.IsChecked ? 0 : 2;
-                    for (double j = startdd; j <= endd;  j += deldd)
+                    for (double j = startdd; j <= endd; j += deldd)
                     {
                         marginx += bw;
                         //lay down an initial grid for the dta and dd
                         TextBox header_box = new TextBox();
                         //modify the template
                         //PDTemplate template = new PDTemplate(false, false, false, AnalysisMode.CU, NormalizationMethod.Unknown, false, 0, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, j, i, false, tested);
-                        PDTemplate template1 = new PDTemplate(false, false, false, (AnalysisMode)anal_mode, (NormalizationMethod)Normalizaton_cmb.SelectedIndex, (bool)threshold_chk.IsChecked, th_txt, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, i/100, j, false, tested);
+                        PDTemplate template1 = new PDTemplate(false, false, false, (AnalysisMode)anal_mode, (NormalizationMethod)Normalizaton_cmb.SelectedIndex, (bool)threshold_chk.IsChecked, th_txt, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, j, i, false, tested);
                         //PDTemplate template2 = new PDTemplate(false,false, false, (AnalysisMode))
                         // PDTemplate template_test = new PDTemplate(false, false, false, AnalysisMode.CU, NormalizationMethod.Unknown, false, Convert.ToDouble(margins_txt.Text));
                         //apply the template to the analysis.
@@ -190,7 +191,7 @@ namespace PD_AdvAnalysis
                         //F.GetVoxels(0, pixels);
                         //double gamma_pass = GetGammaPassRate(gamma);
                         //This code determines if the Gamma Test Parameters are in absolute or relative value
-                        int[] selec_in = new int[] { 0, 1, 4, 5, 11, 12 };
+                        int[] selec_in = new int[] { 0, 3, 4, 5, 8, 9 };
                         double gamma_pass;
 
                         if (selec_in.Contains(EvalTestKind_cmb.SelectedIndex))
