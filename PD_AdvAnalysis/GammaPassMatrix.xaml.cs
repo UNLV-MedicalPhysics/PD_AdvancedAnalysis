@@ -40,6 +40,11 @@ namespace PD_AdvAnalysis
         {
             //newcontext = System.Windows.Application.Current.MainWindow.FindName("newcontext") as Patient;
             newcontext = PD_AdvAnalysis.MainWindow.newcontext;
+            if(newcontext == null)
+            {
+                MessageBox.Show("No Patient Selected.");
+                return;
+            }
             field = PD_AdvAnalysis.MainWindow.field;
             gamma_grd.Children.Clear();
             //here's where all the magic happens!!
