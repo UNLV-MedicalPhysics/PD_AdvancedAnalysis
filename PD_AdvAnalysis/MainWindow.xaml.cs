@@ -44,7 +44,7 @@ namespace PD_AdvAnalysis
         PortalDoseImage fieldm;
         PortalDoseImage fieldc;
         //load up an application
-        public VMS.DV.PD.Scripting.Application PDapp = VMS.DV.PD.Scripting.Application.CreateApplication(null,null);
+        public VMS.DV.PD.Scripting.Application PDapp;// = VMS.DV.PD.Scripting.Application.CreateApplication(null,null);
         public double to1;
         private IEnumerable<VMS.DV.PD.Scripting.EvaluationTestDesc> tested;
         //UserControl current_tab; 
@@ -105,19 +105,22 @@ namespace PD_AdvAnalysis
             {
                 //get the patient from the patient ID
                 newcontext = PDapp.OpenPatientById(id_txt.Text);
-                course_ddl.IsEnabled = true;
-                course_btn.IsEnabled = true;
+                
                 //first clear the plan boxes.
                 course_ddl.Items.Clear();
                 //now add a blank one 
-                course_ddl.Items.Add("");
-                //now loop through all the plans in this patient and find list them as combobox items.
+               
                 if (newcontext == null)
                 {
-                    MessageBox.Show("Incorrect Patient ID");
+                    MessageBox.Show("Patient ID not found.");
+
                 }
                 else
                 {
+                    course_ddl.IsEnabled = true;
+                    course_btn.IsEnabled = true;
+                    course_ddl.Items.Add("");
+                    //now loop through all the plans in this patient and find list them as combobox items.
                     foreach (Course cs in newcontext.Courses)
                     {
                         course_ddl.Items.Add(cs.Id);
