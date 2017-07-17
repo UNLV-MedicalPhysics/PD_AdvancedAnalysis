@@ -55,7 +55,7 @@ namespace PD_AdvAnalysis
             }
             else if (String.IsNullOrEmpty(startdd_txt.Text) || string.IsNullOrEmpty(startdta_txt.Text) || string.IsNullOrEmpty(enddd_txt.Text) || string.IsNullOrEmpty(enddta_txt.Text) || string.IsNullOrEmpty(deldd_txt.Text) || string.IsNullOrEmpty(deldta_txt.Text) || string.IsNullOrEmpty(tol_txt.Text))
             {
-                MessageBox.Show("Please input all numeric parameters in the appropriate box"); 
+                MessageBox.Show("Please input all numeric parameters in the appropriate box");
             }
             else
             {
