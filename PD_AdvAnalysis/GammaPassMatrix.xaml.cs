@@ -68,6 +68,7 @@ namespace PD_AdvAnalysis
                     double test_double;
                     if (!Double.TryParse((c as TextBox).Text, out test_double))
                     {
+
                         (c as TextBox).Focus();
                         (c as TextBox).BorderBrush = Brushes.Red;
                         (c as TextBox).BorderThickness = new Thickness(2);
