@@ -61,12 +61,7 @@
                 <TextBox Name="marg_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="3" Width="150" Height="30" Margin="5"></TextBox>
                 <CheckBox Name="threshold_chk" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="4" Width="150" Height="30" Margin="5" Content="Use Threshold:" FontSize="14"></CheckBox>
                 <TextBox Name="threshold_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="5" Width="150" Height="30" Margin="5"></TextBox>
-
-               
-                <!--Row 4-->
-
                 <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="6" Margin="5">Evaluation Tests Kind:</Label>
-
                 <ComboBox  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="7" Width="150" Height="30" Margin="5" SelectedIndex="0" Name="EvalTestKind_cmb" SelectionChanged="EvalTestKind_cmb_SelectionChanged">
                     <ComboBoxItem>GammaAreLessThanOne</ComboBoxItem>
                     <ComboBoxItem>GammaLargestConnectedArea</ComboBoxItem>
