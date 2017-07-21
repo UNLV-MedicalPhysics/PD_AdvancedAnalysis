@@ -44,7 +44,7 @@ namespace PD_AdvAnalysis
         PortalDoseImage fieldm;
         PortalDoseImage fieldc;
         //load up an application
-        public VMS.DV.PD.Scripting.Application PDapp;// = VMS.DV.PD.Scripting.Application.CreateApplication(null,null);
+        public VMS.DV.PD.Scripting.Application PDapp = VMS.DV.PD.Scripting.Application.CreateApplication(null,null);
         public double to1;
         private IEnumerable<VMS.DV.PD.Scripting.EvaluationTestDesc> tested;
         //UserControl current_tab; 
@@ -131,51 +131,12 @@ namespace PD_AdvAnalysis
 
         private void plan_btn_Click(object sender, RoutedEventArgs e)
         {
-            if (plan_ddl.SelectedIndex == 0)
-            {
-                MessageBox.Show("Please select a plan in the dropdown list.");
-            }
-            else
-            {
-
-                PlanSetup plan_holder = course.PlanSetups.Where(i => i.Id == plan_ddl.SelectedItem.ToString()).First();
-                //:This is how you go from plansetup to pdplansetup check my swag.
-                plan = newcontext.PDPlanSetups.Where(i => i.PlanSetup == plan_holder).First();//equal object types!!
-                //do all field stuff
-                field_ddl.IsEnabled = true;
-                field_btn.IsEnabled = true;
-                field_ddl.Items.Clear();
-                field_ddl.Items.Add("");
-                foreach (PDBeam beams in plan.Beams)
-                {
-                    field_ddl.Items.Add(beams.Id);
-                }
-                
-            }
+            
         }
 
         private void course_btn_Click(object sender, RoutedEventArgs e)
         {
-            if (course_ddl.SelectedIndex == 0)
-            {
-                MessageBox.Show("Please select a course from the dropdown list.");
-            }
-            else
-            {
-                //get the course from the dropdown.
-                course = newcontext.Courses.Where(i=>i.Id == course_ddl.SelectedItem.ToString()).First();
-                //enable plan lists
-                plan_ddl.IsEnabled = true;
-                plan_btn.IsEnabled = true;
-                //clear the plan box.
-                plan_ddl.Items.Clear();
-                plan_ddl.Items.Add("");
-                //loop through plans and add to list.
-                foreach (PlanSetup pdps in course.PlanSetups)
-                {
-                    plan_ddl.Items.Add(pdps.Id);
-                }
-            }
+           
         }
 
         private void comp_ddl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -200,32 +161,7 @@ namespace PD_AdvAnalysis
 
         private void field_btn_Click(object sender, RoutedEventArgs e)
         {
-            //enable the field lists
-            //comp_ddl.IsEnabled = true;
-            if (field_ddl.SelectedIndex == 0)
-            {
-                MessageBox.Show("Select a field to analyze");
-            }
-            else
-            {
-                field = plan.Beams.Where(i => i.Id == field_ddl.SelectedItem.ToString()).First();
-                meas_ddl.IsEnabled = true;
-                comp_ddl.Items.Clear();
-                meas_ddl.Items.Clear();
-                //comp_ddl.Items.Add("");
-                meas_ddl.Items.Add("");
-                //first the portal dose images
-                foreach (PortalDoseImage pdi in field.PortalDoseImages)
-                {
-                    meas_ddl.Items.Add(pdi.Id);
-                }
-                //add the ROI Types to the ROI dropdown list.
-                
-                //each field only has one predicted dose image so I'm going to force the predicted dose image when the portal dose image is selected.
-                comp_ddl.Items.Add(field.PredictedDoseImage.Id);
-                comp_ddl.SelectedValue = field.PredictedDoseImage.Id;
-                
-            }
+           
         }
 
         private void course_ddl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -249,6 +185,61 @@ namespace PD_AdvAnalysis
                 {
                     plan_ddl.Items.Add(pdps.Id);
                 }
+            }
+        }
+
+        private void plan_ddl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (plan_ddl.SelectedIndex == 0)
+            {
+                MessageBox.Show("Please select a plan in the dropdown list.");
+            }
+            else
+            {
+
+                PlanSetup plan_holder = course.PlanSetups.Where(i => i.Id == plan_ddl.SelectedItem.ToString()).First();
+                //:This is how you go from plansetup to pdplansetup check my swag.
+                plan = newcontext.PDPlanSetups.Where(i => i.PlanSetup == plan_holder).First();//equal object types!!
+                //do all field stuff
+                field_ddl.IsEnabled = true;
+                field_btn.IsEnabled = true;
+                field_ddl.Items.Clear();
+                field_ddl.Items.Add("");
+                foreach (PDBeam beams in plan.Beams)
+                {
+                    field_ddl.Items.Add(beams.Id);
+                }
+
+            }
+        }
+
+        private void field_ddl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //enable the field lists
+            //comp_ddl.IsEnabled = true;
+            if (field_ddl.SelectedIndex == 0)
+            {
+                MessageBox.Show("Select a field to analyze");
+            }
+            else
+            {
+                field = plan.Beams.Where(i => i.Id == field_ddl.SelectedItem.ToString()).First();
+                meas_ddl.IsEnabled = true;
+                comp_ddl.Items.Clear();
+                meas_ddl.Items.Clear();
+                //comp_ddl.Items.Add("");
+                meas_ddl.Items.Add("");
+                //first the portal dose images
+                foreach (PortalDoseImage pdi in field.PortalDoseImages)
+                {
+                    meas_ddl.Items.Add(pdi.Id);
+                }
+                //add the ROI Types to the ROI dropdown list.
+
+                //each field only has one predicted dose image so I'm going to force the predicted dose image when the portal dose image is selected.
+                comp_ddl.Items.Add(field.PredictedDoseImage.Id);
+                comp_ddl.SelectedValue = field.PredictedDoseImage.Id;
+
             }
         }
         //release memory int his program.
