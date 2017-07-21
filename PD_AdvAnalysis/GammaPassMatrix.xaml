@@ -35,9 +35,13 @@
                 <TextBox Name="enddd_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" Grid.Row="0" Grid.Column="3" Margin="5"></TextBox>
                 <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="0" Grid.Column="4" Margin="5">Dose Difference[%]:</Label>
                 <TextBox Name="deldd_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30"  Grid.Row="0" Grid.Column="5" Margin="5"></TextBox>
-                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="6" Margin="5">Test Parameter:</Label>
-                <TextBox Name="testparam_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="7" Width="150" Height="30" Margin="5"></TextBox>
+               
+                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Grid.Column="6" Margin="5">Analasys Mode:</Label>
+                <StackPanel Name="RadioButton" Grid.Row="0" Grid.Column="7">
 
+                    <RadioButton Name ="abs_rdb" Content="Absolute" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" IsChecked="True"></RadioButton>
+                    <RadioButton Content="Relative" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"></RadioButton>
+                </StackPanel>
                 <!-- Row 2-->
 
                 <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="1" Grid.Column="0" Margin="5">Start Dist. Agree.[mm]:</Label>
@@ -46,8 +50,15 @@
                 <TextBox Name="enddta_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="3" Width="150" Height="30" Margin="5"></TextBox>
                 <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="4" Margin="5">&#x394; DTA [mm]:</Label>
                 <TextBox Name="deldta_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="5" Width="150" Height="30" Margin="5"></TextBox>
-                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="6" Margin="5">Tolerance [%]:</Label>
-                <TextBox Name="tol_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="7" Width="150" Height="30" Margin="5"></TextBox>
+                
+                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="6" Margin="5">Normalization:</Label>
+                <ComboBox Name="Normalizaton_cmb" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Grid.Column="7" Width="150" Height="30" Margin="5" SelectedIndex="0">
+                    <ComboBoxItem>MaxPredictedDose</ComboBoxItem>
+                    <ComboBoxItem>MaxEachDose</ComboBoxItem>
+                    <ComboBoxItem>Point</ComboBoxItem>
+                    <ComboBoxItem>IsoCenter</ComboBoxItem>
+                    <ComboBoxItem>MinimizeDifference</ComboBoxItem>
+                </ComboBox>
                 <!-- Row 3-->
                 <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" Margin="5">ROI Type:</Label>
                 <ComboBox Name="ROITypes_cmb" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Width="150" Height="30" Margin="5" SelectedIndex="0">
@@ -61,8 +72,15 @@
                 <TextBox Name="marg_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="3" Width="150" Height="30" Margin="5"></TextBox>
                 <CheckBox Name="threshold_chk" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="4" Width="150" Height="30" Margin="5" Content="Use Threshold:" FontSize="14"></CheckBox>
                 <TextBox Name="threshold_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="5" Width="150" Height="30" Margin="5"></TextBox>
-                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="6" Margin="5">Evaluation Tests Kind:</Label>
-                <ComboBox  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="7" Width="150" Height="30" Margin="5" SelectedIndex="0" Name="EvalTestKind_cmb" SelectionChanged="EvalTestKind_cmb_SelectionChanged">
+                
+
+                <!--Row 4-->
+                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" Margin="5">Test Parameter:</Label>
+                <TextBox Name="testparam_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" Width="150" Height="30" Margin="5"></TextBox>
+                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="2" Margin="5">Tolerance [%]:</Label>
+                <TextBox Name="tol_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="3" Width="150" Height="30" Margin="5"></TextBox>
+                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="4" Margin="5">Evaluation Tests Kind:</Label>
+                <ComboBox  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="5" Width="150" Height="30" Margin="5" SelectedIndex="0" Name="EvalTestKind_cmb" SelectionChanged="EvalTestKind_cmb_SelectionChanged">
                     <ComboBoxItem>GammaAreLessThanOne</ComboBoxItem>
                     <ComboBoxItem>GammaLargestConnectedArea</ComboBoxItem>
                     <ComboBoxItem>MaxGamma</ComboBoxItem>
@@ -79,29 +97,14 @@
                     <ComboBoxItem>DoseDiffAboveThreshold2Relative</ComboBoxItem>
                 </ComboBox>
 
-                <!--Row 4-->
 
-                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" Margin="5">Analasys Mode:</Label>
-                <StackPanel Name="RadioButton" Grid.Row="3" Grid.Column="1">
-
-                    <RadioButton Name ="abs_rdb" Content="Absolute" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" IsChecked="True"></RadioButton>
-                    <RadioButton Content="Relative" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"></RadioButton>
-                </StackPanel>
-                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="2" Margin="5">Normalization:</Label>
-                <ComboBox Name="Normalizaton_cmb" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="3" Width="150" Height="30" Margin="5" SelectedIndex="0">
-                    <ComboBoxItem>MaxPredictedDose</ComboBoxItem>
-                    <ComboBoxItem>MaxEachDose</ComboBoxItem>
-                    <ComboBoxItem>Point</ComboBoxItem>
-                    <ComboBoxItem>IsoCenter</ComboBoxItem>
-                    <ComboBoxItem>MinimizeDifference</ComboBoxItem>
-                </ComboBox>
-                <Button Name="calc_btn" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="4"
+                <Button Name="calc_btn" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="7"
                                 Width="150" Height="30" Content="Calculate Table" FontWeight="Bold" Click="calc_btn_Click" Margin="5"></Button>
 
             </Grid>
             <Label FontSize="14" FontWeight="Bold" Margin="425,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">Dose Difference[%]</Label>
             <Label FontSize="14" FontWeight="Bold" Margin="0,225,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">DTA[mm]</Label>
-            <ScrollViewer HorizontalAlignment="Left" Margin="60,-235,0,0" Width="1000" Height="450" HorizontalScrollBarVisibility="Auto">
+            <ScrollViewer HorizontalAlignment="Left" Margin="80,-235,0,0" Width="1000" Height="450" HorizontalScrollBarVisibility="Auto">
                 <Grid Name="gamma_grd" Margin="0,0,0,0" Width="1000" Background="White" HorizontalAlignment="Left">
 
                 </Grid>

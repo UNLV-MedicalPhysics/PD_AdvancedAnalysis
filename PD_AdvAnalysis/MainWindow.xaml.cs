@@ -38,7 +38,7 @@ namespace PD_AdvAnalysis
     {
         //the patient context will be in the PD.Scripting namespace
         public static Patient newcontext;//save these guys for use later.
-        PDPlanSetup plan;
+       public static PDPlanSetup plan;
         Course course;
         public static PDBeam field;
         PortalDoseImage fieldm;

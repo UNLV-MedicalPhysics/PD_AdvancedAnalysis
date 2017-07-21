@@ -120,7 +120,7 @@ namespace PD_AdvAnalysis
                 double tol = Convert.ToDouble(tol_txt.Text) / 100;
                 double parm;
                 Double.TryParse(testparam_txt.Text, out parm);
-                parm = parm / 100;
+                
                 //setup portal dosimetry analysis template.
                 IEnumerable<EvaluationTestDesc> tested = new List<EvaluationTestDesc> { new EvaluationTestDesc((EvaluationTestKind)EvalTestKind_cmb.SelectedIndex, parm, tol, false) };
 
