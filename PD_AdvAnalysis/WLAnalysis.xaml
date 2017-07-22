@@ -7,8 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1400">
     <Grid>
-        <Button Name="grabimag_btn" Margin="30,120,0,0" FontSize="18" FontWeight="Bold"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="False" Click="grabimag_btn_Click" Content="Grab Imagine"></Button>
-        <StackPanel Name="Fields" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Button Name="grabimag_btn" Margin="30,120,0,0" FontSize="18" FontWeight="Bold"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="True" Click="grabimag_btn_Click" Content="Grab Imagine"></Button>
+        <StackPanel Name="Fields" Width ="150" Margin="220,120,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
            
         </StackPanel>
         <Border Margin="537,84,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="600" Height="500" BorderBrush="Black" BorderThickness="2">

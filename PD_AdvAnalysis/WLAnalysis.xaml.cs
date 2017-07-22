@@ -39,7 +39,7 @@ namespace PD_AdvAnalysis
             {
                 CheckBox cb = new CheckBox();
                 cb.Content = pb.Id;
-                Fields.Children.Add(currentplan);
+                Fields.Children.Add(cb);
             }
         }
 
