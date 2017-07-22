@@ -19,7 +19,7 @@
         <Label Name="cone_label" Margin="1200,280, 0, 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="150">Cone</Label>
         <Slider Name="cone_sb" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1200,320,0,0" Width="150"  Minimum="1" Maximum="20" TickPlacement="BottomRight" TickFrequency="1" ></Slider>
         <Label Name="ball_label" Margin="1200,380, 0, 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="150">Ball</Label>
-        <Slider Name="ball_sb" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1200,420,0,0" Width="150"  Minimum="1" Maximum="10" TickPlacement="BottomRight" TickFrequency="1" Value="Binding Value"></Slider>
+        <Slider Name="ball_sb" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1200,420,0,0" Width="150"  Minimum="1" Maximum="10" TickPlacement="BottomRight" TickFrequency="1" ></Slider>
         <Button Name="previous_btn" Margin="535, 620, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Previous"></Button>
         <Button Name="next_btn" Margin="1017, 620, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Next"></Button>
         <Button Name="changefield_btn" Margin="765, 620, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Change Field"></Button>
