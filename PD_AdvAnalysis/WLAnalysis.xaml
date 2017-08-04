@@ -7,26 +7,24 @@
              xmlns:local="clr-namespace:PD_AdvAnalysis"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1400">
-   
+    
     <Grid>
-        <Button Name="grabimag_btn" Margin="30,120,0,0" FontSize="18" FontWeight="Bold"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="True" Click="grabimag_btn_Click" Content="Grab Imagine"></Button>
+        <Button Name="grabimag_btn" Margin="30,120,0,0" FontSize="18" FontWeight="Bold"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="True" Click="grabimag_btn_Click" Content="Grab Image"></Button>
         <StackPanel Name="Fields" Width ="150" Margin="220,120,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
            
         </StackPanel>
         <Border Margin="537,84,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="600" Height="500" BorderBrush="Black" BorderThickness="2">
-            <Canvas Name="imgine_cnv"  Width="600" Height="500"></Canvas>
+            <Canvas Name="canvas"  Width="600" Height="500"></Canvas>
         </Border>
         <Button Name="autodetect_btn" Margin="1200,120,0,0" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Width="150" Height="30" Click="autodetect_btn_Click" Content="Auto Detect All"></Button>
         <Button Name="manualydetect_btn" Margin="1200, 220, 0, 0" FontSize="15" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" Click="manualydetect_btn_Click" Content="Manually Detect All"></Button>
         <Label Name="cone_label" Margin="1200,280, 0, 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="150">Cone</Label>
-        <Slider Name="cone_sb" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1200,320,0,0" Width="150"  Minimum="1" Maximum="20" TickPlacement="BottomRight" TickFrequency="1" ></Slider>
+        <Slider Name="cone_sb" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1200,320,0,0" Width="150"  Minimum="1" Maximum="30" TickPlacement="BottomRight" TickFrequency="1" ValueChanged="ball_sb_ValueChanged" Value="10" ></Slider>
         <Label Name="ball_label" Margin="1200,380, 0, 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="150">Ball</Label>
-        <!--<Grid.Resources>
-
-            <local:EllipseConverter x:Key="EllipseConverter" />
-        </Grid.Resources>
-        <Image Source="{Binding Radius, Converter={StaticResource EllipseConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="None" />-->
-        <Slider Name="ball_sb"  Value="{Binding Radius}" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1200,424,0,0" Width="150"  Minimum="1" Maximum="10" TickPlacement="BottomRight" TickFrequency="1" ></Slider>
+        <Slider Name="ball_sb"  Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1200,420,0,0" Width="150"  Minimum="1" Maximum="10" TickPlacement="BottomRight" TickFrequency="1" ValueChanged="ball_sb_ValueChanged" Value="5" ></Slider>
+        <Button Name="zoomin_btn" Margin="1200, 460, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Click="zoomin_btn_Click" Content="Zoom In"></Button>
+        <Button Name="zoomout_btn" Margin="1200, 510, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Click="zoomout_btn_Click" Content="Zoom Out"></Button>
+        <Button Name="reset_btn" Margin="1200, 560, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Click="reset_btn_Click" Content="Reset"></Button>
         <Button Name="previous_btn" Margin="535, 620, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Previous"></Button>
         <Button Name="next_btn" Margin="1017, 620, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Next"></Button>
         <Button Name="changefield_btn" Margin="765, 620, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Change Field"></Button>

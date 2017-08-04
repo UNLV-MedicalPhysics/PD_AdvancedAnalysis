@@ -72,7 +72,7 @@
                 <TextBox Name="marg_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="3" Width="150" Height="30" Margin="5"></TextBox>
                 <CheckBox Name="threshold_chk" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="4" Width="150" Height="30" Margin="5" Content="Use Threshold:" FontSize="14"></CheckBox>
                 <TextBox Name="threshold_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Grid.Column="5" Width="150" Height="30" Margin="5"></TextBox>
-                
+                <Button Name="prindPDF_btn" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" Grid.Column="7" Width="150" Height="30" Margin="5" Click="prindPDF_btn_Click" Content="Print PDF"></Button>
 
                 <!--Row 4-->
                 <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" Margin="5">Test Parameter:</Label>

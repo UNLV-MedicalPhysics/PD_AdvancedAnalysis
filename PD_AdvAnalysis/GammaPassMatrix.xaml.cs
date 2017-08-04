@@ -13,6 +13,16 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VMS.CA.Scripting;
 using VMS.DV.PD.Scripting;
+using PdfSharp.Pdf;
+using PdfSharp.Drawing;
+using Microsoft.Win32;
+using System.IO;
+using System.IO.Packaging;
+using System.Printing;
+using System.Windows.Xps;
+using System.Windows.Xps.Packaging;
+using System.Runtime.InteropServices;
+
 
 namespace PD_AdvAnalysis
 {
@@ -253,6 +263,45 @@ namespace PD_AdvAnalysis
             {
                 testparam_txt.IsEnabled = false;
             }
+        }
+       
+        private void prindPDF_btn_Click(object sender, RoutedEventArgs e)
+        {
+            //Build the pdf
+            int Xmargin = 36;
+            int Ymargin = 36;
+            PdfDocument doc;
+            PdfPage page;
+            XGraphics gfx;
+            //set up page and header
+            doc = new PdfDocument();
+            page = new PdfPage();
+            gfx = XGraphics.FromPdfPage(page);
+            XRect rect = new XRect(Xmargin, Ymargin, page.Width - 2 * Xmargin, 50);
+            gfx.DrawRectangle(new XPen(XColors.Black, 2), rect);
+            rect.X += 4; rect.Y += 4;
+            rect.Width -= 8; rect.Height -= 8;
+            XFont font = new XFont("Arial", 12, XFontStyle.Regular);
+            XFont font2 = new XFont("Arial", 11, XFontStyle.Italic);
+            XStringFormat format = new XStringFormat();
+            format.Alignment = XStringAlignment.Near;
+            format.LineAlignment = XLineAlignment.Near;
+            PdfSharp.Drawing.Layout.XTextFormatter tf = new PdfSharp.Drawing.Layout.XTextFormatter(gfx);
+            //Provide header information for the patient
+            tf.DrawString(String.Format("Gamma Pass Table for:{0}", newcontext), font, XBrushes.Black, rect, format);
+            tf.DrawString(String.Format("Field:{0}", meas_ddl.SelectedItem.ToString()), font, XBrushes.Black, rect, format);
+            tf.DrawString(String.Format("\nDate Run:{0}", DateTime.Now.ToString("MM/dd/yyyy")), font, XBrushes.Black, rect, format);
+            //save the grid into a image and insert the image unto PdfSharp
+            MemoryStream MemoryStreatm1 = new MemoryStream();
+            Package package = Package.Open(MemoryStreatm1, FileMode.Create);
+            XpsDocument doc1 = new XpsDocument(package);
+            XpsDocumentWriter writter = XpsDocument.CreateXpsDocumentWriter(doc1);
+            writter.Write(gamma_grd);
+            doc.Close();
+            package.Close();
+            //var pdfXpsDoc = PdfSharp.Xps.XpsModel.XpsDocument.Open(MemoryStreatm1);
+            //PdfSharp.Xps.XpsConverter.Convert(pdfXpsDoc, d.FileName, 0);
+            
         }
     }
 }
