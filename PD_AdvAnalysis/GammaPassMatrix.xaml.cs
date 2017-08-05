@@ -275,7 +275,8 @@ namespace PD_AdvAnalysis
             XGraphics gfx;
             //set up page and header
             doc = new PdfDocument();
-            page = new PdfPage();
+            page = doc.AddPage();
+            //page = new PdfPage();
             gfx = XGraphics.FromPdfPage(page);
             XRect rect = new XRect(Xmargin, Ymargin, page.Width - 2 * Xmargin, 50);
             gfx.DrawRectangle(new XPen(XColors.Black, 2), rect);
@@ -292,15 +293,29 @@ namespace PD_AdvAnalysis
             tf.DrawString(String.Format("Field:{0}", meas_ddl.SelectedItem.ToString()), font, XBrushes.Black, rect, format);
             tf.DrawString(String.Format("\nDate Run:{0}", DateTime.Now.ToString("MM/dd/yyyy")), font, XBrushes.Black, rect, format);
             //save the grid into a image and insert the image unto PdfSharp
+            string filename = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\testpdf.pdf";
+            doc.Save(filename);
+            doc.Close();
+            
+          
             MemoryStream MemoryStreatm1 = new MemoryStream();
             Package package = Package.Open(MemoryStreatm1, FileMode.Create);
             XpsDocument doc1 = new XpsDocument(package);
             XpsDocumentWriter writter = XpsDocument.CreateXpsDocumentWriter(doc1);
             writter.Write(gamma_grd);
-            doc.Close();
+            
+            doc1.Close();
             package.Close();
-            //var pdfXpsDoc = PdfSharp.Xps.XpsModel.XpsDocument.Open(MemoryStreatm1);
-            //PdfSharp.Xps.XpsConverter.Convert(pdfXpsDoc, d.FileName, 0);
+
+            string newfilename = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\testpdf2.pdf";
+            var pdfXpsDoc = PdfSharp.Xps.XpsModel.XpsDocument.Open(MemoryStreatm1);
+            //var d  = 
+            PdfSharp.Xps.XpsConverter.Convert(pdfXpsDoc,newfilename,0);
+            /*PdfSharp.Xps.XpsModel.FixedDocument fixed_doc = pdfXpsDoc.GetDocument();
+            PdfDocument pdfdoc = new PdfDocument();
+            PDFRenderer renderer = new PDFRenderer();*/
+
+            MessageBox.Show("Hello");
             
         }
     }
