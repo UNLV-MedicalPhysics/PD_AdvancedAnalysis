@@ -17,6 +17,7 @@ using VMS.CA.Scripting;
 using VMS.DV.PD.Scripting;
 using System.IO;
 
+
 namespace PD_AdvAnalysis
 {
     /// <summary>
@@ -24,6 +25,11 @@ namespace PD_AdvAnalysis
     /// </summary>
     public partial class WLAnalysis : UserControl
     {
+        public ScriptContext sc;
+        public VMS.CA.Scripting.Frame f;
+        public PortalDoseImage pdi;
+        public double slope;
+        VMS.DV.PD.Scripting.Application app = ((PD_AdvAnalysis)System.Windows.Application.Current).APIApp;
         double resx = 0.34;
         double resy = 0.34;
         ComboBox currentplan = System.Windows.Application.Current.MainWindow.FindName("plan_ddl") as ComboBox;
@@ -36,6 +42,28 @@ namespace PD_AdvAnalysis
 
         private void grabimag_btn_Click(object sender, RoutedEventArgs e)
         {
+            Patient p = app.OpenPatientById("US-PD-004");
+            PDPlanSetup pds = p.PDPlanSetups.First();
+            PDBeam pdb = pds.Beams.First();
+            pdi = pdb.PortalDoseImages.First();
+            VMS.CA.Scripting.Image i = pdi.Image;
+            f = i.Frames[0];//get first frame
+            //int min, max = pdi.GetMinMax(out min, out max, false);
+            ushort[,] pixels = new ushort[f.XSize, f.YSize];
+            f.GetVoxels(0, pixels);
+            int image_min;// = pixels.Cast<UInt16>().Min();
+            int image_max;// = pixels.Cast<UInt16>().Max();
+            pdi.GetMinMax(out image_max, out image_min, false);
+            //set window CU values
+            
+            //information from imaging-overview on MSDN (https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/imaging-overview 
+            ///BitmapSource is an important class used in decoding and enconding of images.
+            ///It is the basic building block of the WPF Imaging pipeline and represents a single, constant set of pixels at a certain size and resolution.
+            ///A Bitmapsource can be an individual frame of a multiple frame image, or it can be the result of transform performed on a BitmapSource.
+            ///It is the parent of many of the primary classes in WPF imaging such as BitmapFrame.
+            //var image_pixels = pixels.Cast<UInt16>().ToArray();
+            //image_pixels above has to be constructed manually, becuase the rows and columns are transposed. 
+            
             newcontext = PD_AdvAnalysis.MainWindow.newcontext;
 
 
@@ -48,6 +76,7 @@ namespace PD_AdvAnalysis
                 cb.Margin = new Thickness(5);
             }
         }
+        
 
         private void autodetect_btn_Click(object sender, RoutedEventArgs e)
         {

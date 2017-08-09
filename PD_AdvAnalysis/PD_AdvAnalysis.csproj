@@ -51,14 +51,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PdfSharp-WPF">
-      <HintPath>..\..\PdfSharp-WPF.dll</HintPath>
+      <HintPath>..\..\..\PdfSharp-WPF.dll</HintPath>
     </Reference>
     <Reference Include="PdfSharp.Charting, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
       <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PdfSharp.Xps">
-      <HintPath>..\..\PdfSharp.Xps.dll</HintPath>
+      <HintPath>..\..\..\PdfSharp.Xps.dll</HintPath>
     </Reference>
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
@@ -89,6 +89,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DrawImage.cs" />
     <Compile Include="WLAnalysis.xaml.cs">
       <DependentUpon>WLAnalysis.xaml</DependentUpon>
     </Compile>
