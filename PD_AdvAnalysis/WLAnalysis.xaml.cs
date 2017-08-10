@@ -25,14 +25,11 @@ namespace PD_AdvAnalysis
     /// </summary>
     public partial class WLAnalysis : UserControl
     {
-        public ScriptContext sc;
-        public VMS.CA.Scripting.Frame f;
-        public PortalDoseImage pdi;
-        public double slope;
-        VMS.DV.PD.Scripting.Application app = ((PD_AdvAnalysis)System.Windows.Application.Current).APIApp;
+        int image_number = 0;
         double resx = 0.34;
         double resy = 0.34;
         ComboBox currentplan = System.Windows.Application.Current.MainWindow.FindName("plan_ddl") as ComboBox;
+        List<PDBeam> fields;
         //ComboBox c = System.Windows.Application.Current.MainWindow.FindName("course-ddl") as ComboBox;
         public Patient newcontext;
         public WLAnalysis()
@@ -41,32 +38,8 @@ namespace PD_AdvAnalysis
         }
 
         private void grabimag_btn_Click(object sender, RoutedEventArgs e)
-        {
-            Patient p = app.OpenPatientById("US-PD-004");
-            PDPlanSetup pds = p.PDPlanSetups.First();
-            PDBeam pdb = pds.Beams.First();
-            pdi = pdb.PortalDoseImages.First();
-            VMS.CA.Scripting.Image i = pdi.Image;
-            f = i.Frames[0];//get first frame
-            //int min, max = pdi.GetMinMax(out min, out max, false);
-            ushort[,] pixels = new ushort[f.XSize, f.YSize];
-            f.GetVoxels(0, pixels);
-            int image_min;// = pixels.Cast<UInt16>().Min();
-            int image_max;// = pixels.Cast<UInt16>().Max();
-            pdi.GetMinMax(out image_max, out image_min, false);
-            //set window CU values
-            
-            //information from imaging-overview on MSDN (https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/imaging-overview 
-            ///BitmapSource is an important class used in decoding and enconding of images.
-            ///It is the basic building block of the WPF Imaging pipeline and represents a single, constant set of pixels at a certain size and resolution.
-            ///A Bitmapsource can be an individual frame of a multiple frame image, or it can be the result of transform performed on a BitmapSource.
-            ///It is the parent of many of the primary classes in WPF imaging such as BitmapFrame.
-            //var image_pixels = pixels.Cast<UInt16>().ToArray();
-            //image_pixels above has to be constructed manually, becuase the rows and columns are transposed. 
-            
+        {            
             newcontext = PD_AdvAnalysis.MainWindow.newcontext;
-
-
             PDPlanSetup ps = PD_AdvAnalysis.MainWindow.plan;
             foreach (PDBeam pb in ps.Beams)
             {
@@ -204,6 +177,31 @@ namespace PD_AdvAnalysis
             ell2.Height = cone_sb.Value / resy * marginx;
             ell.Margin = new Thickness((canvas.Width - ell.Width) / 2, (canvas.Height - ell.Height) / 2, 0, 0);
             ell2.Margin = new Thickness((canvas.Width - ell2.Width) / 2, (canvas.Height - ell2.Height) / 2, 0, 0);
+
+        }
+
+        private void changefield_btn_Click(object sender, RoutedEventArgs e)
+        {
+            List<String> field_id = new List<String>();
+                foreach(CheckBox sb in Fields.Children)
+            {
+                if ((bool)sb.IsChecked)
+                {
+                    field_id.Add(sb.Content.ToString());
+                }
+            }
+            fields = PD_AdvAnalysis.MainWindow.plan.Beams.Where(j => field_id.Contains(j.Id)).ToList();
+            PDBeam pdb = fields[image_number];
+            PortalDoseImage img = pdb.PortalDoseImages.Last();
+            VMS.CA.Scripting.Image img1 = img.Image;
+            VMS.CA.Scripting.Frame frame = img1.Frames[0];
+            ushort[,] pixels = new ushort[frame.XSize, frame.YSize];
+            //int image_max, image_min;
+            //img.GetMinMax(out image_max, out image_min, false);
+            frame.GetVoxels(0, pixels);
+            ImageDecon2.ImageDecon2 id2 = new ImageDecon2.ImageDecon2();
+            BitmapSource bmp = id2.DrawImage(frame, pixels);
+            field_img.Source = bmp;
 
         }
 

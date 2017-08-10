@@ -23,7 +23,7 @@ namespace ImageDecon2
     /// Interaction logic for MainWindow.xaml
     /// </summary>
 
-    public partial class MainWindow : Window
+    public partial class ImageDecon2
     {
         /*public ScriptContext sc;
         public VMS.CA.Scripting.Frame f;
@@ -64,16 +64,26 @@ namespace ImageDecon2
             image.Source = bmp;// _rot;
 
         }*/
-        private BitmapSource DrawImage(VMS.CA.Scripting.Frame f, ushort[,] pixels, int image_min, int image_max)
+        public BitmapSource DrawImage(VMS.CA.Scripting.Frame f, ushort[,] pixels)
         {
-            int[] image_pixels = new int[f.XSize * f.YSize];
-            for (int j = 0; j < f.YSize; j++)
+            PD_AdvAnalysis.WLAnalysis wla = new PD_AdvAnalysis.WLAnalysis();
+            System.Windows.Controls.Image imag = wla.field_img; //System.Windows.Application.Current.MainWindow.FindName("field_img") as System.Windows.Controls.Image;
+            int w = Convert.ToInt16(imag.Width); int h = Convert.ToInt16(imag.Height);
+            double[] image_pixels = new double[w*h];
+            int index_out = 0;
+            for (int j =f.YSize/2 - h/2; j < f.YSize/2 + h/2; j++)
             {
-                for (int k = 0; k < f.XSize; k++)
+                int index_in = 0;
+                for (int k = f.XSize/2 -w/2; k < f.XSize/2 + w/2; k++)
                 {
-                    image_pixels[k + j * f.XSize] = pixels[k, j];
+
+                    image_pixels[index_in + index_out * w] = f.VoxelToDisplayValue(pixels[k, j]);
+                    index_in++;
                 }
+                index_out++;
             }
+            double image_max = image_pixels.Max();
+            double image_min = image_pixels.Min();
             //byte[] image_bytes = new byte[image_pixels.Length * sizeof(UInt16)];
             //Buffer.BlockCopy(image_pixels, 0, image_bytes, 0, image_bytes.Length);
             PixelFormat format = PixelFormats.Rgb24;
@@ -81,13 +91,17 @@ namespace ImageDecon2
             //iamge min now comes from the method input parameter image_min
             //image_min = image_pixels.Min();//this is the red value. I.e. 255,0,0
             //image_max = image_pixels.Max();//this is the blue value. i.e. 0,0,255.
-            int image_med = (image_max + image_min) / 2;
-            int stride = (f.XSize * format.BitsPerPixel + 7) / 8;
-            byte[] image_bytes = new byte[stride * f.YSize];
+            double image_med = (image_max + image_min) / 2;
+            int stride = (w * format.BitsPerPixel + 7) / 8;
+            byte[] image_bytes = new byte[stride * h];
             //copy data to image bytes 
             for (int j = 0; j < image_pixels.Length; j++)
             {
-                int value = image_pixels[j];
+                double value = image_pixels[j];
+                if (value < 0)
+                {
+                    MessageBox.Show("hello");
+                }
                 System.Windows.Media.Color c = new System.Windows.Media.Color();
                 if(value < image_min)
                 {
@@ -97,14 +111,14 @@ namespace ImageDecon2
                 }
                 else if (value < image_med)
                 {
-                    c.B = 0;
-                    c.R = Convert.ToByte(255 - (255 * (value - image_min) / (image_med - image_min)));
+                    c.R = 0;
+                    c.B = Convert.ToByte(255 - (255 * (value - image_min) / (image_med - image_min)));
                     c.G = Convert.ToByte(255 - (255 * (image_med - value) / (image_med - image_min)));
                 }
                 else if (value <= image_max)
                 {
-                    c.R = 0;
-                    c.B = Convert.ToByte(255 - (255 * (image_max - value) / (image_max - image_med)));
+                    c.B = 0;
+                    c.R = Convert.ToByte(255 - (255 * (image_max - value) / (image_max - image_med)));
                     c.G = Convert.ToByte(255 - (255 * (value - image_med) / (image_max - image_med)));
                 }
                 else if(value > image_max)
@@ -119,8 +133,8 @@ namespace ImageDecon2
 
             }
             BitmapSource bmp = BitmapSource.Create(
-                f.XSize,
-                f.YSize,
+                w,
+                h,
                 10 * 2.54 / f.XRes,
                 10 * 2.54 / f.YRes,
                 format,

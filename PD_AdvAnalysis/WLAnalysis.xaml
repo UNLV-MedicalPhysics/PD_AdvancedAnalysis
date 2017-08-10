@@ -9,12 +9,19 @@
              d:DesignHeight="900" d:DesignWidth="1400">
     
     <Grid>
-        <Button Name="grabimag_btn" Margin="30,120,0,0" FontSize="18" FontWeight="Bold"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="True" Click="grabimag_btn_Click" Content="Grab Image"></Button>
+        <Button Name="grabimag_btn" Margin="30,120,0,0" FontSize="18" FontWeight="Bold"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="True" Click="grabimag_btn_Click" Content="Grab Fields"></Button>
         <StackPanel Name="Fields" Width ="150" Margin="220,120,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
            
         </StackPanel>
-        <Border Margin="537,84,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="600" Height="500" BorderBrush="Black" BorderThickness="2">
-            <Canvas Name="canvas"  Width="600" Height="500"></Canvas>
+        <StackPanel Name="PdImages" Width ="150" Margin="220, 420, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"></StackPanel>
+        
+        <Border Margin="537,84,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="600" Height="600" BorderBrush="Black" BorderThickness="2">
+            <Grid>
+                <Canvas Name="canvas"  Width="600" Height="600">
+
+                </Canvas>
+                <Image Name="field_img" Width="600" Height="600"></Image>
+            </Grid>
         </Border>
         <Button Name="autodetect_btn" Margin="1200,120,0,0" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Width="150" Height="30" Click="autodetect_btn_Click" Content="Auto Detect All"></Button>
         <Button Name="manualydetect_btn" Margin="1200, 220, 0, 0" FontSize="15" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" Click="manualydetect_btn_Click" Content="Manually Detect All"></Button>
@@ -25,8 +32,8 @@
         <Button Name="zoomin_btn" Margin="1200, 460, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Click="zoomin_btn_Click" Content="Zoom In"></Button>
         <Button Name="zoomout_btn" Margin="1200, 510, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Click="zoomout_btn_Click" Content="Zoom Out"></Button>
         <Button Name="reset_btn" Margin="1200, 560, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Click="reset_btn_Click" Content="Reset"></Button>
-        <Button Name="previous_btn" Margin="535, 620, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Previous"></Button>
-        <Button Name="next_btn" Margin="1017, 620, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Next"></Button>
-        <Button Name="changefield_btn" Margin="765, 620, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Change Field"></Button>
+        <Button Name="previous_btn" Margin="535, 720, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Previous"></Button>
+        <Button Name="next_btn" Margin="1017, 720, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Next"></Button>
+        <Button Name="changefield_btn" Margin="765, 720, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Grab Images" Click="changefield_btn_Click"></Button>
     </Grid>
 </UserControl>
