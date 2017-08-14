@@ -57,6 +57,7 @@ namespace PD_AdvAnalysis
         }
 
         Ellipse ell = new Ellipse();
+        
         Ellipse ell2 = new Ellipse();
         private void manualydetect_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -101,6 +102,7 @@ namespace PD_AdvAnalysis
             {
                 double x = e.GetPosition(canvas).X;
                 double y = e.GetPosition(canvas).Y;
+                
                 //change position of ellipse on the screen
                 (source as Ellipse).Margin = new Thickness(x, y, 0, 0);
                 if(x < 0)
@@ -203,6 +205,58 @@ namespace PD_AdvAnalysis
             BitmapSource bmp = id2.DrawImage(frame, pixels);
             field_img.Source = bmp;
 
+        }
+
+        private void previous_btn_Click(object sender, RoutedEventArgs e)
+        {
+            image_number--;
+            List<String> field_id = new List<String>();
+            foreach (CheckBox sb in Fields.Children)
+            {
+                if ((bool)sb.IsChecked)
+                {
+                    field_id.Add(sb.Content.ToString());
+                }
+            }
+            fields = PD_AdvAnalysis.MainWindow.plan.Beams.Where(j => field_id.Contains(j.Id)).ToList();
+            PDBeam pdb = fields[image_number];
+            PortalDoseImage img = pdb.PortalDoseImages.Last();
+            VMS.CA.Scripting.Image img1 = img.Image;
+            VMS.CA.Scripting.Frame frame = img1.Frames[0];
+            ushort[,] pixels = new ushort[frame.XSize, frame.YSize];
+            //int image_max, image_min;
+            //img.GetMinMax(out image_max, out image_min, false);
+            frame.GetVoxels(0, pixels);
+            ImageDecon2.ImageDecon2 id2 = new ImageDecon2.ImageDecon2();
+            BitmapSource bmp = id2.DrawImage(frame, pixels);
+            field_img.Source = bmp;
+
+
+        }
+
+        private void next_btn_Click(object sender, RoutedEventArgs e)
+        {
+            image_number++;
+            List<String> field_id = new List<String>();
+            foreach (CheckBox sb in Fields.Children)
+            {
+                if ((bool)sb.IsChecked)
+                {
+                    field_id.Add(sb.Content.ToString());
+                }
+            }
+            fields = PD_AdvAnalysis.MainWindow.plan.Beams.Where(j => field_id.Contains(j.Id)).ToList();
+            PDBeam pdb = fields[image_number];
+            PortalDoseImage img = pdb.PortalDoseImages.Last();
+            VMS.CA.Scripting.Image img1 = img.Image;
+            VMS.CA.Scripting.Frame frame = img1.Frames[0];
+            ushort[,] pixels = new ushort[frame.XSize, frame.YSize];
+            //int image_max, image_min;
+            //img.GetMinMax(out image_max, out image_min, false);
+            frame.GetVoxels(0, pixels);
+            ImageDecon2.ImageDecon2 id2 = new ImageDecon2.ImageDecon2();
+            BitmapSource bmp = id2.DrawImage(frame, pixels);
+            field_img.Source = bmp;
         }
 
         private void Ell_MouseDown(object sender, MouseButtonEventArgs e)

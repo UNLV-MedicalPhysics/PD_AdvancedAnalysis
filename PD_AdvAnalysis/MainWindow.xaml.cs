@@ -46,7 +46,7 @@ namespace PD_AdvAnalysis
         PortalDoseImage fieldm;
         PortalDoseImage fieldc;
         //load up an application
-        public VMS.DV.PD.Scripting.Application PDapp = VMS.DV.PD.Scripting.Application.CreateApplication("Physicist","Physicist");
+        public VMS.DV.PD.Scripting.Application PDapp; //= VMS.DV.PD.Scripting.Application.CreateApplication("Physicist", "Physicist");
         public double to1;
         private IEnumerable<VMS.DV.PD.Scripting.EvaluationTestDesc> tested;
         //UserControl current_tab; 
