@@ -78,6 +78,7 @@ namespace ImageDecon2
                 {
 
                     image_pixels[index_in + index_out * w] = f.VoxelToDisplayValue(pixels[k, j]);
+                    
                     index_in++;
                 }
                 index_out++;

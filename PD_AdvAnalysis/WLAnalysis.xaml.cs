@@ -26,6 +26,8 @@ namespace PD_AdvAnalysis
     public partial class WLAnalysis : UserControl
     {
         int image_number = 0;
+        //CheckBox cb = new CheckBox();
+        int image_numbermax;
         double resx = 0.34;
         double resy = 0.34;
         ComboBox currentplan = System.Windows.Application.Current.MainWindow.FindName("plan_ddl") as ComboBox;
@@ -46,6 +48,7 @@ namespace PD_AdvAnalysis
                 CheckBox cb = new CheckBox();
                 cb.Content = pb.Id;
                 Fields.Children.Add(cb);
+                
                 cb.Margin = new Thickness(5);
             }
         }
@@ -185,6 +188,7 @@ namespace PD_AdvAnalysis
         private void changefield_btn_Click(object sender, RoutedEventArgs e)
         {
             List<String> field_id = new List<String>();
+            //field_id.Count.ToString();
                 foreach(CheckBox sb in Fields.Children)
             {
                 if ((bool)sb.IsChecked)
@@ -243,7 +247,13 @@ namespace PD_AdvAnalysis
                 if ((bool)sb.IsChecked)
                 {
                     field_id.Add(sb.Content.ToString());
+                    
                 }
+            }
+            image_numbermax = field_id.Count();
+            if (image_number >= image_numbermax)
+            {
+                image_number = 0;
             }
             fields = PD_AdvAnalysis.MainWindow.plan.Beams.Where(j => field_id.Contains(j.Id)).ToList();
             PDBeam pdb = fields[image_number];
