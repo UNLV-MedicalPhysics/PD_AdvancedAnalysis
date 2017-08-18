@@ -64,24 +64,35 @@ namespace ImageDecon2
             image.Source = bmp;// _rot;
 
         }*/
-        public BitmapSource DrawImage(VMS.CA.Scripting.Frame f, ushort[,] pixels)
+        public BitmapSource DrawImage(VMS.CA.Scripting.Frame f, ushort[,] pixels, int zoom_level)
         {
             PD_AdvAnalysis.WLAnalysis wla = new PD_AdvAnalysis.WLAnalysis();
             System.Windows.Controls.Image imag = wla.field_img; //System.Windows.Application.Current.MainWindow.FindName("field_img") as System.Windows.Controls.Image;
             int w = Convert.ToInt16(imag.Width); int h = Convert.ToInt16(imag.Height);
             double[] image_pixels = new double[w*h];
             int index_out = 0;
-            for (int j =f.YSize/2 - h/2; j < f.YSize/2 + h/2; j++)
+            for (int j =(f.YSize - h/zoom_level)/2; j < (f.YSize + h/zoom_level)/2; j++)
             {
                 int index_in = 0;
-                for (int k = f.XSize/2 -w/2; k < f.XSize/2 + w/2; k++)
+                for (int k = (f.XSize -w/zoom_level)/2; k < (f.XSize + w/zoom_level)/2; k++)
                 {
+                    if (zoom_level == 1)
+                    {
+                        image_pixels[index_in + index_out * w] = f.VoxelToDisplayValue(pixels[k, j]);
+                        index_in++;
+                    }
+                    else
+                    {
+                        for (int o = 0; o < zoom_level; o++)
+                        {
+                            image_pixels[index_in + (index_out+o) * w] = f.VoxelToDisplayValue(pixels[k, j]);
+                            index_in++;
+                        }
 
-                    image_pixels[index_in + index_out * w] = f.VoxelToDisplayValue(pixels[k, j]);
+                    }
                     
-                    index_in++;
                 }
-                index_out++;
+                index_out+=zoom_level;
             }
             double image_max = image_pixels.Max();
             double image_min = image_pixels.Min();
