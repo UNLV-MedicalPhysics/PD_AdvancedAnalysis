@@ -178,16 +178,38 @@ namespace PD_AdvAnalysis
 
         private void zoomout_btn_Click(object sender, RoutedEventArgs e)
         {
+            //if (images[image_number].zoom_number < 0)
+            //{
+            //    images[image_number].zoom_number = 1;
+            //}
+            ////images[image_number].ell.Width--;
+            ////images[image_number].ell.Height--;
+            ////images[image_number].ell2.Width--;
+            ////images[image_number].ell2.Height--;
+            ////images[image_number].zoom_number--;
+            ////images[image_number].ell.Width = ball_sb.Value / resx * images[image_number].zoom_number;
+            ////images[image_number].ell.Height = ball_sb.Value / resy * images[image_number].zoom_number;
+            ////images[image_number].ell2.Width = cone_sb.Value / resx * images[image_number].zoom_number;
+            ////images[image_number].ell2.Height = cone_sb.Value / resy * images[image_number].zoom_number;
+            images[image_number].zoom_number--;
             images[image_number].ell.Width--;
             images[image_number].ell.Height--;
             images[image_number].ell2.Width--;
             images[image_number].ell2.Height--;
-            images[image_number].zoom_number--;
+            if (images[image_number].zoom_number <= 0)
+            {
+                images[image_number].zoom_number = 1;
+            }
             images[image_number].ell.Width = ball_sb.Value / resx * images[image_number].zoom_number;
             images[image_number].ell.Height = ball_sb.Value / resy * images[image_number].zoom_number;
             images[image_number].ell2.Width = cone_sb.Value / resx * images[image_number].zoom_number;
             images[image_number].ell2.Height = cone_sb.Value / resy * images[image_number].zoom_number;
-
+            ImageDecon2.ImageDecon2 id2 = new ImageDecon2.ImageDecon2();
+            images[image_number].bmp = id2.DrawImage(images[image_number].f, images[image_number].pixels, images[image_number].zoom_number);
+            //BitmapSource bmp = id2.DrawImage(frame, pixels);
+            field_img.Source = images[image_number].bmp;
+            
+            
         }
 
         private void reset_btn_Click(object sender, RoutedEventArgs e)
@@ -215,6 +237,7 @@ namespace PD_AdvAnalysis
             public Ellipse ell2 { get; set; }
             //public double images[image_number].zoom_number = 1;
             public BitmapSource bmp { get; set; }
+            
         }
 
         private void changefield_btn_Click(object sender, RoutedEventArgs e)
