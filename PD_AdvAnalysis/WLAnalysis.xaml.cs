@@ -237,6 +237,10 @@ namespace PD_AdvAnalysis
             public Ellipse ell2 { get; set; }
             //public double images[image_number].zoom_number = 1;
             public BitmapSource bmp { get; set; }
+            public string gantry_angle { get; set; }
+            public string coll_angle { get; set; }
+            public string couch_angle { get; set; }
+
             
         }
 

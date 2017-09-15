@@ -46,9 +46,11 @@ namespace PD_AdvAnalysis
         PortalDoseImage fieldm;
         PortalDoseImage fieldc;
         //load up an application
-        public VMS.DV.PD.Scripting.Application PDapp = VMS.DV.PD.Scripting.Application.CreateApplication("Physicist", "Physicist");
+        public VMS.DV.PD.Scripting.Application PDapp;// = VMS.DV.PD.Scripting.Application.CreateApplication("Physicist", "Physicist");
         public double to1;
         private IEnumerable<VMS.DV.PD.Scripting.EvaluationTestDesc> tested;
+        // This portion of the code access the gantry orientation which will be used later when performin WL test
+
         //UserControl current_tab; 
         public MainWindow()
         {
@@ -207,9 +209,14 @@ namespace PD_AdvAnalysis
                 field_btn.IsEnabled = true;
                 field_ddl.Items.Clear();
                 field_ddl.Items.Add("");
-                foreach (PDBeam beams in plan.Beams)
+                
+                foreach (PDBeam beams in newcontext.PDPlanSetups.First().Beams)
                 {
                     field_ddl.Items.Add(beams.Id);
+                    string bid = beams.Id;
+                    string gantry_angle = beams.Beam.ControlPoints.First().GantryAngle.ToString();
+                    string coll_angle = beams.Beam.ControlPoints.First().CollimatorAngle.ToString();
+                    string couch_angle = beams.Beam.ControlPoints.First().PatientSupportAngle.ToString();
                 }
 
             }
