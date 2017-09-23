@@ -44,17 +44,83 @@ namespace PD_AdvAnalysis
         {
             newcontext = PD_AdvAnalysis.MainWindow.newcontext;
             PDPlanSetup ps = PD_AdvAnalysis.MainWindow.plan;
+            int margin_height = 0;
+            int beam_number = 0;
+            
             foreach (PDBeam pb in ps.Beams)
             {
-                CheckBox cb = new CheckBox();
-                cb.Content = pb.Id;
+                TextBlock cb = new TextBlock();
+                cb.Text = pb.Id;
+                cb.FontSize = 14;
+                cb.TextDecorations = TextDecorations.Underline;
+                cb.HorizontalAlignment = HorizontalAlignment.Left;
+                cb.VerticalAlignment = VerticalAlignment.Top;
+                cb.Margin = new Thickness(5, margin_height, 0, 0);
+                
                 Fields.Children.Add(cb);
 
-                cb.Margin = new Thickness(5);
+                ScrollViewer sv = new ScrollViewer();
+                sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                sv.HorizontalAlignment = HorizontalAlignment.Left;
+                sv.VerticalAlignment = VerticalAlignment.Top;
+                sv.Height = 60;
+                sv.Width = 400;
+                
+                sv.Margin = new Thickness(5, margin_height + 10, 0, 0);
+                int margin_width = 2;
+                Grid sp = new Grid();
+                sp.Name = String.Format("Grid_{0}", beam_number);
+                beam_number++;
+                
+                sp.Margin = new Thickness(margin_width, 0, 0, 0);
+                //sp.Orientation = Orientation.Horizontal;
+                for (int r = 0; r < pb.PortalDoseImages.Count(); r++)
+                {
+                    ColumnDefinition  cd = new ColumnDefinition();
+                    sp.ColumnDefinitions.Add(cd);
+                   
+                }
+                RowDefinition rd = new RowDefinition();
+                sp.RowDefinitions.Add(rd);
+                RowDefinition rd2 = new RowDefinition();
+                sp.RowDefinitions.Add(rd2);
+                int col = 0;
+                foreach (PortalDoseImage pdi in pb.PortalDoseImages)
+                {
+                    //ColumnDefinition cd = new ColumnDefinition();
+                    //sp.ColumnDefinitions= new ColumnDefinitionC
+                    //sp.ColumnDefinitions.Add(cd);
+                    CheckBox cb2 = new CheckBox();
+                    cb2.Content = pdi.Id;
+                    cb2.HorizontalAlignment = HorizontalAlignment.Left;
+                    cb2.VerticalAlignment = VerticalAlignment.Top;
+                    cb2.Margin = new Thickness(0, 0, 0, 0);
 
+                    //RowDefinition rd = new RowDefinition();
+                    //sp.RowDefinitions.Add(rd);
+                    
+                    string  StartDate = pdi.Session.SessionDate.ToString("MM/dd/yyyy");
+                    TextBlock text_blck = new TextBlock();
+                    text_blck.Text = StartDate;
+                    text_blck.HorizontalAlignment = HorizontalAlignment.Left;
+                    text_blck.VerticalAlignment = VerticalAlignment.Top;
+                    text_blck.Margin = new Thickness(0, 20, 0, 0);
+                    //margin_width = 60;
+                    //sp.Children.Add(cb2);
+                    //sp.Children.Add(text_blck);
+                    Grid.SetRow(cb2, 0);
+                    Grid.SetColumn(cb2, col);
+                    sp.Children.Add(cb2);
+                    Grid.SetRow(text_blck, 0);
+                    Grid.SetColumn(text_blck, col);
+                    sp.Children.Add(text_blck);
+                    col++;          
+                    
+                }
+                Fields.Children.Add(sp);
                 //if ((sender as CheckBox).cb)
                 //{
-                //    //CheckBox cb2 = new CheckBox();
+                //    CheckBox cb2 = new CheckBox();
                 //    ScrollViewer sv = new ScrollViewer();
                 //    sv.Width = 15;
                 //    Fields.Children.Add(sv);
@@ -66,10 +132,12 @@ namespace PD_AdvAnalysis
                 //        CheckBox cb2 = new CheckBox();
                 //    }
                 //}
+                //margin_height = 80;
             }
 
         }
 
+      
 
         private void autodetect_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -253,9 +321,9 @@ namespace PD_AdvAnalysis
             public Ellipse ell2 { get; set; }
             //public double images[image_number].zoom_number = 1;
             public BitmapSource bmp { get; set; }
-            public string gantry_angle { get; set; }
-            public string coll_angle { get; set; }
-            public string couch_angle { get; set; }
+            //public string gantry_angle { get; set; }
+            //public string coll_angle { get; set; }
+            //public string couch_angle { get; set; }
             public Beam field_id { get; set; }
 
             
@@ -264,58 +332,69 @@ namespace PD_AdvAnalysis
         private void changefield_btn_Click(object sender, RoutedEventArgs e)
         {
             images.Clear();
+            //facke comment
             //List<String> field_id = new List<String>();
             //field_id.Count.ToString();
             int i_num = 0; int zoom_initial = 1;
-            foreach (CheckBox sb in Fields.Children)
+            IEnumerable<Grid> grid_collections = Fields.Children.OfType<Grid>();
+            foreach (Grid gr in grid_collections)
             {
-                if ((bool)sb.IsChecked)
+                IEnumerable<CheckBox> cb_collections = gr.Children.OfType<CheckBox>();
+                int field_numb = Convert.ToInt16(gr.Name.Split('_').Last());
+                foreach (CheckBox sb in cb_collections)
                 {
-                    //fieldid.Add(sb.Content.ToString());
-                    images.Add(new imag_avg
+
+                    if ((bool)sb.IsChecked)
                     {
-                        image_id = i_num,
-                        fieldid = PD_AdvAnalysis.MainWindow.plan.Beams.Where(j => j.Id == sb.Content.ToString()).First(),
-                        zoom_number = zoom_initial,
-                        ell = new Ellipse
+                        //fieldid.Add(sb.Content.ToString());
+                        images.Add(new imag_avg
                         {
-                            Width = ball_sb.Value / resx * zoom_initial,
-                            Name = "ball_ell",
-                            Height = ball_sb.Value / resy * zoom_initial,
-                            Stroke = System.Windows.Media.Brushes.Black,
-                            StrokeThickness = 1.5,
-                            Margin = new Thickness((canvas.Width - ball_sb.Value / resx * zoom_initial) / 2, (canvas.Height - ball_sb.Value / resy * zoom_initial) / 2, 0, 0),
+                            image_id = i_num,
+                            fieldid = PD_AdvAnalysis.MainWindow.plan.Beams[field_numb],
+                            zoom_number = zoom_initial,
+                            f = PD_AdvAnalysis.MainWindow.plan.Beams[field_numb].PortalDoseImages.Where(j => j.Id == sb.Content.ToString()).First().Image.Frames[0],
+                            field_id = PD_AdvAnalysis.MainWindow.plan.Beams[field_numb].Beam,
+
+                            ell = new Ellipse
+                            {
+                                Width = ball_sb.Value / resx * zoom_initial,
+                                Name = "ball_ell",
+                                Height = ball_sb.Value / resy * zoom_initial,
+                                Stroke = System.Windows.Media.Brushes.Black,
+                                StrokeThickness = 1.5,
+                                Margin = new Thickness((canvas.Width - ball_sb.Value / resx * zoom_initial) / 2, (canvas.Height - ball_sb.Value / resy * zoom_initial) / 2, 0, 0),
 
 
-                        },
-                        ell2 = new Ellipse
-                        {
-                            Width = cone_sb.Value / resx * zoom_initial,
-                            Name = "cone_ell",
-                            Height = cone_sb.Value / resy * zoom_initial,
-                            Stroke = System.Windows.Media.Brushes.Red,
-                            StrokeThickness = 1.5,
-                            Margin = new Thickness((canvas.Width - cone_sb.Value / resx * zoom_initial) / 2, (canvas.Height - cone_sb.Value / resy * zoom_initial) / 2, 0, 0),
-                        }
+                            },
+                            ell2 = new Ellipse
+                            {
+                                Width = cone_sb.Value / resx * zoom_initial,
+                                Name = "cone_ell",
+                                Height = cone_sb.Value / resy * zoom_initial,
+                                Stroke = System.Windows.Media.Brushes.Red,
+                                StrokeThickness = 1.5,
+                                Margin = new Thickness((canvas.Width - cone_sb.Value / resx * zoom_initial) / 2, (canvas.Height - cone_sb.Value / resy * zoom_initial) / 2, 0, 0),
+                            }
 
-                    });
-                    images[i_num].ell.MouseDown += Ell_MouseDown;
-                images[i_num].ell.MouseUp += Ell_MouseUp;
-                images[i_num].ell.MouseMove += Ell_MouseMove;
-                images[i_num].ell2.MouseDown += Ell_MouseDown;
-                images[i_num].ell2.MouseUp += Ell_MouseUp;
-                images[i_num].ell2.MouseMove += Ell_MouseMove;
-                    PortalDoseImage img = images[i_num].fieldid.PortalDoseImages.Last();
-                    VMS.CA.Scripting.Image img1 = img.Image;
-                    images[i_num].f = img1.Frames[0];
-                    images[i_num].pixels = new ushort[images[i_num].f.XSize, images[i_num].f.YSize];
-                    images[i_num].f.GetVoxels(0, images[i_num].pixels);
+                        });
+                        images[i_num].ell.MouseDown += Ell_MouseDown;
+                        images[i_num].ell.MouseUp += Ell_MouseUp;
+                        images[i_num].ell.MouseMove += Ell_MouseMove;
+                        images[i_num].ell2.MouseDown += Ell_MouseDown;
+                        images[i_num].ell2.MouseUp += Ell_MouseUp;
+                        images[i_num].ell2.MouseMove += Ell_MouseMove;
+                        //PortalDoseImage img = images[i_num].fieldid.PortalDoseImages.Last();
+                        //VMS.CA.Scripting.Image img1 = img.Image;
+                        //images[i_num].f = img1.Frames[0];
+                        
+                        images[i_num].pixels = new ushort[images[i_num].f.XSize, images[i_num].f.YSize];
+                        images[i_num].f.GetVoxels(0, images[i_num].pixels);
 
-                i_num++;
+                        i_num++;
+
+                    }
 
                 }
-                
-
             }
             canvas.Children.Clear();
             //images[image_number].ell.Name = "ball_ell";

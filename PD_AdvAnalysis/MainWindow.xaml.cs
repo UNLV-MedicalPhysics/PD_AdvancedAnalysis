@@ -246,8 +246,17 @@ namespace PD_AdvAnalysis
                 //add the ROI Types to the ROI dropdown list.
 
                 //each field only has one predicted dose image so I'm going to force the predicted dose image when the portal dose image is selected.
-                comp_ddl.Items.Add(field.PredictedDoseImage.Id);
-                comp_ddl.SelectedValue = field.PredictedDoseImage.Id;
+                if (field.PredictedDoseImage != null)
+                {
+                    comp_ddl.Items.Add(field.PredictedDoseImage.Id);
+                    comp_ddl.SelectedValue = field.PredictedDoseImage.Id;
+                }
+                else
+                {
+                    comp_ddl.Items.Add("No Predicted Image");
+                    comp_ddl.SelectedIndex = 0;
+                }
+                
 
             }
         }
