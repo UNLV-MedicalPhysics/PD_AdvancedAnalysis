@@ -32,7 +32,6 @@ namespace PD_AdvAnalysis
         double resx = 0.34;
         double resy = 0.34;
         ComboBox currentplan = System.Windows.Application.Current.MainWindow.FindName("plan_ddl") as ComboBox;
-        List<StackPanel> sp_list = new List<StackPanel>();
         //List<PDBeam> fields;
         //ComboBox c = System.Windows.Application.Current.MainWindow.FindName("course-ddl") as ComboBox;
         public Patient newcontext;
@@ -52,19 +51,25 @@ namespace PD_AdvAnalysis
                 Fields.Children.Add(cb);
 
                 cb.Margin = new Thickness(5);
-                cb.Checked += Cb_Checked;
-                //add another event for unchecked and remove that stackpanel from the list.
+
+                //if ((sender as CheckBox).cb)
+                //{
+                //    //CheckBox cb2 = new CheckBox();
+                //    ScrollViewer sv = new ScrollViewer();
+                //    sv.Width = 15;
+                //    Fields.Children.Add(sv);
+                //    StackPanel sp = new StackPanel();
+                //    sp.Name = pb.Id + "field_1_sp";
+                //    sp.Children.Add(sp);
+                //    foreach (images in pb.PortalDoseImages)
+                //    {
+                //        CheckBox cb2 = new CheckBox();
+                //    }
+                //}
             }
+
         }
 
-        private void Cb_Checked(object sender, RoutedEventArgs e)
-        {
-            //hrow new NotImplementedException();
-            PDPlanSetup ps = PD_AdvAnalysis.MainWindow.plan;
-            PDBeam pb = ps.Beams.First(x => x.Id == (sender as CheckBox).Content.ToString());
-            //TODO grab all PDImages from pb. Save them to a new stackpanel. Get the Image ID and the Date and store in the stackpanel.
-            //When you create the stackpanel, add it to the list.
-        }
 
         private void autodetect_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -251,6 +256,7 @@ namespace PD_AdvAnalysis
             public string gantry_angle { get; set; }
             public string coll_angle { get; set; }
             public string couch_angle { get; set; }
+            public Beam field_id { get; set; }
 
             
         }
@@ -261,21 +267,11 @@ namespace PD_AdvAnalysis
             //List<String> field_id = new List<String>();
             //field_id.Count.ToString();
             int i_num = 0; int zoom_initial = 1;
-            //change this loop to loop through the stackpanel
-            //add another child loop to loop through the images that are checked within that stackpanel.
-            //Note: your stackpanel (i.e. field_1_sp) will have both checkboxes and textblocks so the loop may look like this.
-            /*
-             * foreach(Child c in Fields.Children.OfType<CheckBox>()){
-             * {
-             *   
-             * }
-             */
             foreach (CheckBox sb in Fields.Children)
             {
                 if ((bool)sb.IsChecked)
                 {
                     //fieldid.Add(sb.Content.ToString());
-                   
                     images.Add(new imag_avg
                     {
                         image_id = i_num,
@@ -301,7 +297,7 @@ namespace PD_AdvAnalysis
                             StrokeThickness = 1.5,
                             Margin = new Thickness((canvas.Width - cone_sb.Value / resx * zoom_initial) / 2, (canvas.Height - cone_sb.Value / resy * zoom_initial) / 2, 0, 0),
                         }
-                       
+
                     });
                     images[i_num].ell.MouseDown += Ell_MouseDown;
                 images[i_num].ell.MouseUp += Ell_MouseUp;
