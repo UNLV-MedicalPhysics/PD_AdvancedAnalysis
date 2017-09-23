@@ -51,7 +51,23 @@ namespace PD_AdvAnalysis
                 Fields.Children.Add(cb);
 
                 cb.Margin = new Thickness(5);
+
+                //if ((sender as CheckBox).cb)
+                //{
+                //    //CheckBox cb2 = new CheckBox();
+                //    ScrollViewer sv = new ScrollViewer();
+                //    sv.Width = 15;
+                //    Fields.Children.Add(sv);
+                //    StackPanel sp = new StackPanel();
+                //    sp.Name = pb.Id + "field_1_sp";
+                //    sp.Children.Add(sp);
+                //    foreach (images in pb.PortalDoseImages)
+                //    {
+                //        CheckBox cb2 = new CheckBox();
+                //    }
+                //}
             }
+
         }
 
 
@@ -240,6 +256,7 @@ namespace PD_AdvAnalysis
             public string gantry_angle { get; set; }
             public string coll_angle { get; set; }
             public string couch_angle { get; set; }
+            public Beam field_id { get; set; }
 
             
         }
