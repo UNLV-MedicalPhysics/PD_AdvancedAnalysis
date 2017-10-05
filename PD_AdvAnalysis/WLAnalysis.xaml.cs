@@ -149,6 +149,10 @@ namespace PD_AdvAnalysis
         //images[image_number].ell2 = new Ellipse();
         private void manualydetect_btn_Click(object sender, RoutedEventArgs e)
         {
+           double position;
+            position = images[image_number].ell.Margin.Left - canvas.Width /2 - images[image_number].ell.Width/2;
+            MessageBox.Show(string.Format("Th center of the circlle is {0}", position));
+
             //canvas.Children.Clear();
             ////Ellipse ell = new Ellipse();
             //images[image_number].ell = new Ellipse();
@@ -361,7 +365,7 @@ namespace PD_AdvAnalysis
                                 Name = "ball_ell",
                                 Height = ball_sb.Value / resy * zoom_initial,
                                 Stroke = System.Windows.Media.Brushes.Black,
-                                StrokeThickness = 1.5,
+                                StrokeThickness = 3,
                                 Margin = new Thickness((canvas.Width - ball_sb.Value / resx * zoom_initial) / 2, (canvas.Height - ball_sb.Value / resy * zoom_initial) / 2, 0, 0),
 
 
@@ -372,7 +376,7 @@ namespace PD_AdvAnalysis
                                 Name = "cone_ell",
                                 Height = cone_sb.Value / resy * zoom_initial,
                                 Stroke = System.Windows.Media.Brushes.Red,
-                                StrokeThickness = 1.5,
+                                StrokeThickness = 3,
                                 Margin = new Thickness((canvas.Width - cone_sb.Value / resx * zoom_initial) / 2, (canvas.Height - cone_sb.Value / resy * zoom_initial) / 2, 0, 0),
                             }
 
