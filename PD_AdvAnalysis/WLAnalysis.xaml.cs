@@ -151,14 +151,14 @@ namespace PD_AdvAnalysis
         {
             double position;// this is the x position of the ball
             double position1;// this is the y position of the ball
-            double position3;// this is the x position of the Cone
-            double position4;// this is the y position of the Cone
+            double position2;// this is the x position of the Cone
+            double position3;// this is the y position of the Cone
             position = images[image_number].ell.Margin.Left - canvas.Width /2 - images[image_number].ell.Width/2;
             position1 = images[image_number].ell.Margin.Top - canvas.Height / 2 - images[image_number].ell.Height / 2;
-            position3 = images[image_number].ell2.Margin.Left - canvas.Width / 2 - images[image_number].ell2.Width / 2;
-            position4 = images[image_number].ell2.Margin.Top - canvas.Height / 2 - images[image_number].ell2.Height / 2;
+            position2 = images[image_number].ell2.Margin.Left - canvas.Width / 2 - images[image_number].ell2.Width / 2;
+            position3 = images[image_number].ell2.Margin.Top - canvas.Height / 2 - images[image_number].ell2.Height / 2;
 
-            MessageBox.Show(string.Format("The center of the circle is {0}", position, position1));
+            MessageBox.Show(string.Format("The center of the circle is: X: {0}  Y: {1}", position, position1 + "\n" + "The center of the Cone is: X: {0} Y: {1}", position2, position3) );
 
             //canvas.Children.Clear();
             ////Ellipse ell = new Ellipse();
