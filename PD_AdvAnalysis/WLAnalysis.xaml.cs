@@ -149,16 +149,40 @@ namespace PD_AdvAnalysis
         //images[image_number].ell2 = new Ellipse();
         private void manualydetect_btn_Click(object sender, RoutedEventArgs e)
         {
+            //loop through all the images and detect the ball and cone position and report deviations
+            /*For average deviation
+             * We have the deviations in mm already. For ex: lat = pos-pos2*22.5/96
+             * We need a non-angle specific average. 
+             * If the ball is off by 1mm laterally
+             * Gantry 0 => ball is off by 1mm*cos(0) = 1mm
+             * Gantry 15 => ball is off by 1mm*cos(15) = 0.966mm
+             * 
+             */
+            //feel free to also report deviations at each gantry angle.
             double position;// this is the x position of the ball
             double position1;// this is the y position of the ball
             double position2;// this is the x position of the Cone
             double position3;// this is the y position of the Cone
-            position = images[image_number].ell.Margin.Left - canvas.Width /2 - images[image_number].ell.Width/2;
-            position1 = images[image_number].ell.Margin.Top - canvas.Height / 2 - images[image_number].ell.Height / 2;
-            position2 = images[image_number].ell2.Margin.Left - canvas.Width / 2 - images[image_number].ell2.Width / 2;
-            position3 = images[image_number].ell2.Margin.Top - canvas.Height / 2 - images[image_number].ell2.Height / 2;
+           // position = images[image_number].ell.Margin.Left - canvas.Width /2 - images[image_number].ell.Width/2;
+            position = images[image_number].ell.Margin.Left-(canvas.Width - images[image_number].ell.Width) / 2;
+            //position= images[image_number].ell
+            position1 = images[image_number].ell.Margin.Top - (canvas.Height - images[image_number].ell.Height) / 2;
+            position2 = images[image_number].ell2.Margin.Left - (canvas.Width - images[image_number].ell2.Width) / 2;
+            position3 = images[image_number].ell2.Margin.Top - (canvas.Height  - images[image_number].ell2.Height) / 2;
+            double g_angle;
+            g_angle = images[image_number].field_id.ControlPoints.First().GantryAngle;
+            double lat_disp; 
+            double vert_disp;
+            //X_disp = (ball pos x - cone pos x)*22.5/96*(Math.Cos(gantry) + Math.Sin(gantry))
+            //Y_disp = (ball pos y - cone pos y)*22.5/96
+            //Lat = X_disp/cos(gantry)
+            //
+            lat_disp = ((position - position2) * (22.5 / 96)) * Math.Cos(g_angle*180/Math.PI);
+            vert_disp = ((position - position2) * (22.5 / 96)) * Math.Sin(g_angle*180/Math.PI);
+            //Add Longitudinal displacement.
 
-            MessageBox.Show(string.Format("The center of the circle is: X: {0}  Y: {1}", position, position1 + "\n" + "The center of the Cone is: X: {0} Y: {1}", position2, position3) );
+            //think about whether the direction for the micrometer will be CW or CCW.
+            MessageBox.Show(string.Format("The center of the Ball is: X: {0}  Y: {1} \nThe center of the Cone is: X: {2}  Y: {3} \n Move ball {4} mm in the lateral direction \n Move ball {5} mm in vertical direction", position, position1, position2, position3, lat_disp, vert_disp) );
 
             //canvas.Children.Clear();
             ////Ellipse ell = new Ellipse();
