@@ -149,68 +149,72 @@ namespace PD_AdvAnalysis
         //images[image_number].ell2 = new Ellipse();
         private void manualydetect_btn_Click(object sender, RoutedEventArgs e)
         {
-            //loop through all the images and detect the ball and cone position and report deviations
-            /*For average deviation
-             * We have the deviations in mm already. For ex: lat = pos-pos2*22.5/96
-             * We need a non-angle specific average. 
-             * If the ball is off by 1mm laterally
-             * Gantry 0 => ball is off by 1mm*cos(0) = 1mm
-             * Gantry 15 => ball is off by 1mm*cos(15) = 0.966mm
-             * 
-             */
-            //feel free to also report deviations at each gantry angle.
-            double position;// this is the x position of the ball
-            double position1;// this is the y position of the ball
-            double position2;// this is the x position of the Cone
-            double position3;// this is the y position of the Cone
-           // position = images[image_number].ell.Margin.Left - canvas.Width /2 - images[image_number].ell.Width/2;
-            position = images[image_number].ell.Margin.Left-(canvas.Width - images[image_number].ell.Width) / 2;
-            //position= images[image_number].ell
-            position1 = images[image_number].ell.Margin.Top - (canvas.Height - images[image_number].ell.Height) / 2;
-            position2 = images[image_number].ell2.Margin.Left - (canvas.Width - images[image_number].ell2.Width) / 2;
-            position3 = images[image_number].ell2.Margin.Top - (canvas.Height  - images[image_number].ell2.Height) / 2;
-            double g_angle;
-            g_angle = images[image_number].field_id.ControlPoints.First().GantryAngle;
-            double lat_disp; 
-            double vert_disp;
-            //X_disp = (ball pos x - cone pos x)*22.5/96*(Math.Cos(gantry) + Math.Sin(gantry))
-            //Y_disp = (ball pos y - cone pos y)*22.5/96
-            //Lat = X_disp/cos(gantry)
-            //
-            lat_disp = ((position - position2) * (22.5 / 96)) * Math.Cos(g_angle*180/Math.PI);
-            vert_disp = ((position - position2) * (22.5 / 96)) * Math.Sin(g_angle*180/Math.PI);
-            //Add Longitudinal displacement.
+            foreach (imag_avg ima in images ) {
+                //loop through all the images and detect the ball and cone position and report deviations
+                /*For average deviation
+                 * We have the deviations in mm already. For ex: lat = pos-pos2*22.5/96
+                 * We need a non-angle specific average. 
+                 * If the ball is off by 1mm laterally
+                 * Gantry 0 => ball is off by 1mm*cos(0) = 1mm
+                 * Gantry 15 => ball is off by 1mm*cos(15) = 0.966mm
+                 * 
+                 */
+                //feel free to also report deviations at each gantry angle.
+                double position;// this is the x position of the ball
+                double position1;// this is the y position of the ball
+                double position2;// this is the x position of the Cone
+                double position3;// this is the y position of the Cone
+                                 // position = images[image_number].ell.Margin.Left - canvas.Width /2 - images[image_number].ell.Width/2;
+                position = ima.ell.Margin.Left - (canvas.Width - ima.ell.Width) / 2;
+                //position= images[image_number].ell
+                position1 = ima.ell.Margin.Top - (canvas.Height - ima.ell.Height) / 2;
+                position2 = ima.ell2.Margin.Left - (canvas.Width - ima.ell2.Width) / 2;
+                position3 = ima.ell2.Margin.Top - (canvas.Height - ima.ell2.Height) / 2;
+                double g_angle;
+                g_angle = ima.field_id.ControlPoints.First().GantryAngle;
+                double lat_disp;
+                double vert_disp;
+                double long_disp;
+                //X_disp = (ball pos x - cone pos x)*22.5/96*(Math.Cos(gantry) + Math.Sin(gantry))
+                //Y_disp = (ball pos y - cone pos y)*22.5/96
+                //Lat = X_disp/cos(gantry)
+                //
+                lat_disp = ((position - position2) * (22.5 / 96)) * Math.Cos(g_angle * 180 / Math.PI);
+                vert_disp = ((position - position2) * (22.5 / 96)) * Math.Sin(g_angle * 180 / Math.PI);
+                long_disp = (position1 - position3) * (22.5 / 96);
 
-            //think about whether the direction for the micrometer will be CW or CCW.
-            MessageBox.Show(string.Format("The center of the Ball is: X: {0}  Y: {1} \nThe center of the Cone is: X: {2}  Y: {3} \n Move ball {4} mm in the lateral direction \n Move ball {5} mm in vertical direction", position, position1, position2, position3, lat_disp, vert_disp) );
+                //Add Longitudinal displacement.
 
-            //canvas.Children.Clear();
-            ////Ellipse ell = new Ellipse();
-            //images[image_number].ell = new Ellipse();
-            //images[image_number].ell2 = new Ellipse();
-            //images[image_number].ell.Name = "ball_ell";
-            //images[image_number].ell.Width = ball_sb.Value/resx * images[image_number].zoom_number;
-            //images[image_number].ell.Height = ball_sb.Value/resy *images[image_number].zoom_number;
-            //images[image_number].ell.Stroke = System.Windows.Media.Brushes.Black;
-            //images[image_number].ell.StrokeThickness = 1.5;
-            //images[image_number].ell.Margin = new Thickness((canvas.Width - images[image_number].ell.Width) / 2, (canvas.Height - images[image_number].ell.Height) / 2, 0 , 0 );
-            //canvas.Children.Add(images[image_number].ell);
-            //images[image_number].ell.MouseDown += Ell_MouseDown;
-            //images[image_number].ell.MouseUp += Ell_MouseUp;
-            //images[image_number].ell.MouseMove += Ell_MouseMove;
-            ////Ellipse ell2 = new Ellipse();
-            //images[image_number].ell2.Name = "cone_ell";
-            //images[image_number].ell2.Width = cone_sb.Value/resx *images[image_number].zoom_number;
-            //images[image_number].ell2.Height = cone_sb.Value / resy *images[image_number].zoom_number;
-            //images[image_number].ell2.Stroke = System.Windows.Media.Brushes.Red;
-            //images[image_number].ell2.StrokeThickness = 1.5;
-            //images[image_number].ell2.Margin = new Thickness((canvas.Width - images[image_number].ell2.Width) / 2, (canvas.Height - images[image_number].ell2.Height) / 2, 0, 0);
-            //canvas.Children.Add(images[image_number].ell2);
-            //images[image_number].ell2.MouseDown += Ell_MouseDown;
-            //images[image_number].ell2.MouseUp += Ell_MouseUp;
-            //images[image_number].ell2.MouseMove += Ell_MouseMove;
+                //think about whether the direction for the micrometer will be CW or CCW.
+                MessageBox.Show(string.Format(" Field ID: {7} \n Gantry angle: {8}\nThe center of the Ball is: X: {0}  Y: {1} \nThe center of the Cone is: X: {2}  Y: {3} \n Move ball {4} mm in the lateral direction \n Move ball {5} mm in vertical direction \n Move the ball {6} mm in longitudinal direction", position, position1, position2, position3, lat_disp, vert_disp, long_disp, ima.f.Image.Id, g_angle));
 
+                //canvas.Children.Clear();
+                ////Ellipse ell = new Ellipse();
+                //images[image_number].ell = new Ellipse();
+                //images[image_number].ell2 = new Ellipse();
+                //images[image_number].ell.Name = "ball_ell";
+                //images[image_number].ell.Width = ball_sb.Value/resx * images[image_number].zoom_number;
+                //images[image_number].ell.Height = ball_sb.Value/resy *images[image_number].zoom_number;
+                //images[image_number].ell.Stroke = System.Windows.Media.Brushes.Black;
+                //images[image_number].ell.StrokeThickness = 1.5;
+                //images[image_number].ell.Margin = new Thickness((canvas.Width - images[image_number].ell.Width) / 2, (canvas.Height - images[image_number].ell.Height) / 2, 0 , 0 );
+                //canvas.Children.Add(images[image_number].ell);
+                //images[image_number].ell.MouseDown += Ell_MouseDown;
+                //images[image_number].ell.MouseUp += Ell_MouseUp;
+                //images[image_number].ell.MouseMove += Ell_MouseMove;
+                ////Ellipse ell2 = new Ellipse();
+                //images[image_number].ell2.Name = "cone_ell";
+                //images[image_number].ell2.Width = cone_sb.Value/resx *images[image_number].zoom_number;
+                //images[image_number].ell2.Height = cone_sb.Value / resy *images[image_number].zoom_number;
+                //images[image_number].ell2.Stroke = System.Windows.Media.Brushes.Red;
+                //images[image_number].ell2.StrokeThickness = 1.5;
+                //images[image_number].ell2.Margin = new Thickness((canvas.Width - images[image_number].ell2.Width) / 2, (canvas.Height - images[image_number].ell2.Height) / 2, 0, 0);
+                //canvas.Children.Add(images[image_number].ell2);
+                //images[image_number].ell2.MouseDown += Ell_MouseDown;
+                //images[image_number].ell2.MouseUp += Ell_MouseUp;
+                //images[image_number].ell2.MouseMove += Ell_MouseMove;
 
+            }
         }
 
 
@@ -406,7 +410,7 @@ namespace PD_AdvAnalysis
                                 Width = cone_sb.Value / resx * zoom_initial,
                                 Name = "cone_ell",
                                 Height = cone_sb.Value / resy * zoom_initial,
-                                Stroke = System.Windows.Media.Brushes.Red,
+                                Stroke = System.Windows.Media.Brushes.Green,
                                 StrokeThickness = 3,
                                 Margin = new Thickness((canvas.Width - cone_sb.Value / resx * zoom_initial) / 2, (canvas.Height - cone_sb.Value / resy * zoom_initial) / 2, 0, 0),
                             }

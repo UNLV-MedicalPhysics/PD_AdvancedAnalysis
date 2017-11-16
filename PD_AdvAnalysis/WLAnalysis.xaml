@@ -25,7 +25,7 @@
             
         </Border>
         <Button Name="autodetect_btn" Margin="1200,120,0,0" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Width="150" Height="30" Click="autodetect_btn_Click" Content="Auto Detect All"></Button>
-        <Button Name="manualydetect_btn" Margin="1200, 220, 0, 0" FontSize="15" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" Click="manualydetect_btn_Click" Content="Perform AnalYsis"></Button>
+        <Button Name="manualydetect_btn" Margin="1200, 220, 0, 0" FontSize="15" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" Click="manualydetect_btn_Click" Content="Perform Analysis"></Button>
         <Label Name="cone_label" Margin="1200,280, 0, 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="150">Cone</Label>
         <Slider Name="cone_sb" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1200,320,0,0" Width="150"  Minimum="1" Maximum="40" TickPlacement="BottomRight" TickFrequency="1" ValueChanged="ball_sb_ValueChanged" Value="10" ></Slider>
         <Label Name="ball_label" Margin="1200,380, 0, 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="150">Ball</Label>
