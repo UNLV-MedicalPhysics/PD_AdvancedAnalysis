@@ -29,8 +29,8 @@ namespace PD_AdvAnalysis
         int image_number = 0;
         //CheckBox cb = new CheckBox();
         int image_numbermax;
-        double resx = 0.34;
-        double resy = 0.34;
+       // double resx = 0.34;
+        //double resy = 0.34;
         ComboBox currentplan = System.Windows.Application.Current.MainWindow.FindName("plan_ddl") as ComboBox;
         //List<PDBeam> fields;
         //ComboBox c = System.Windows.Application.Current.MainWindow.FindName("course-ddl") as ComboBox;
@@ -165,7 +165,7 @@ namespace PD_AdvAnalysis
                 double position2;// this is the x position of the Cone
                 double position3;// this is the y position of the Cone
                                  // position = images[image_number].ell.Margin.Left - canvas.Width /2 - images[image_number].ell.Width/2;
-                position = ima.ell.Margin.Left - (canvas.Width - ima.ell.Width) / 2;
+                position = (ima.ell.Margin.Left - (canvas.Width - ima.ell.Width) / 2)*(50/34);
                 //position= images[image_number].ell
                 position1 = ima.ell.Margin.Top - (canvas.Height - ima.ell.Height) / 2;
                 position2 = ima.ell2.Margin.Left - (canvas.Width - ima.ell2.Width) / 2;
@@ -179,9 +179,9 @@ namespace PD_AdvAnalysis
                 //Y_disp = (ball pos y - cone pos y)*22.5/96
                 //Lat = X_disp/cos(gantry)
                 //
-                lat_disp = ((position - position2) * (22.5 / 96)) * Math.Cos(g_angle * 180 / Math.PI);
-                vert_disp = ((position - position2) * (22.5 / 96)) * Math.Sin(g_angle * 180 / Math.PI);
-                long_disp = (position1 - position3) * (22.5 / 96);
+                lat_disp = ((position - position2)*images[image_number].resx / images[image_number].zoom_number )  * Math.Cos(g_angle * 180 / Math.PI);
+                vert_disp = ((position - position2)*images[image_number].resx / images[image_number].zoom_number) * Math.Sin(g_angle * 180 / Math.PI);
+                long_disp = -(position1 - position3)*images[image_number].resy / images[image_number].zoom_number;
 
                 //Add Longitudinal displacement.
 
@@ -236,37 +236,37 @@ namespace PD_AdvAnalysis
                 (source as Ellipse).Margin = new Thickness(x, y, 0, 0);
                 if (x < 0)
                 {
-                    images[image_number].ell.Width = ball_sb.Value / resx * images[image_number].zoom_number;
-                    images[image_number].ell.Height = ball_sb.Value / resy * images[image_number].zoom_number;
-                    images[image_number].ell2.Width = cone_sb.Value / resx * images[image_number].zoom_number;
-                    images[image_number].ell2.Height = cone_sb.Value / resy * images[image_number].zoom_number;
+                    images[image_number].ell.Width = ball_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+                    images[image_number].ell.Height = ball_sb.Value / images[image_number].resy * images[image_number].zoom_number;
+                    images[image_number].ell2.Width = cone_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+                    images[image_number].ell2.Height = cone_sb.Value / images[image_number].resy * images[image_number].zoom_number;
                     images[image_number].ell.Margin = new Thickness((canvas.Width - images[image_number].ell.Width) / 2, (canvas.Height - images[image_number].ell.Height) / 2, 0, 0);
                     images[image_number].ell2.Margin = new Thickness((canvas.Width - images[image_number].ell2.Width) / 2, (canvas.Height - images[image_number].ell2.Height) / 2, 0, 0);
                 }
                 else if (x > 600)
                 {
-                    images[image_number].ell.Width = ball_sb.Value / resx * images[image_number].zoom_number;
-                    images[image_number].ell.Height = ball_sb.Value / resy * images[image_number].zoom_number;
-                    images[image_number].ell2.Width = cone_sb.Value / resx * images[image_number].zoom_number;
-                    images[image_number].ell2.Height = cone_sb.Value / resy * images[image_number].zoom_number;
+                    images[image_number].ell.Width = ball_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+                    images[image_number].ell.Height = ball_sb.Value / images[image_number].resy * images[image_number].zoom_number;
+                    images[image_number].ell2.Width = cone_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+                    images[image_number].ell2.Height = cone_sb.Value / images[image_number].resy * images[image_number].zoom_number;
                     images[image_number].ell.Margin = new Thickness((canvas.Width - images[image_number].ell.Width) / 2, (canvas.Height - images[image_number].ell.Height) / 2, 0, 0);
                     images[image_number].ell2.Margin = new Thickness((canvas.Width - images[image_number].ell2.Width) / 2, (canvas.Height - images[image_number].ell2.Height) / 2, 0, 0);
                 }
                 if (y < 0)
                 {
-                    images[image_number].ell.Width = ball_sb.Value / resx * images[image_number].zoom_number;
-                    images[image_number].ell.Height = ball_sb.Value / resy * images[image_number].zoom_number;
-                    images[image_number].ell2.Width = cone_sb.Value / resx * images[image_number].zoom_number;
-                    images[image_number].ell2.Height = cone_sb.Value / resy * images[image_number].zoom_number;
+                    images[image_number].ell.Width = ball_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+                    images[image_number].ell.Height = ball_sb.Value / images[image_number].resy * images[image_number].zoom_number;
+                    images[image_number].ell2.Width = cone_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+                    images[image_number].ell2.Height = cone_sb.Value / images[image_number].resy * images[image_number].zoom_number;
                     images[image_number].ell.Margin = new Thickness((canvas.Width - images[image_number].ell.Width) / 2, (canvas.Height - images[image_number].ell.Height) / 2, 0, 0);
                     images[image_number].ell2.Margin = new Thickness((canvas.Width - images[image_number].ell2.Width) / 2, (canvas.Height - images[image_number].ell2.Height) / 2, 0, 0);
                 }
                 else if (y > 500)
                 {
-                    images[image_number].ell.Width = ball_sb.Value / resx * images[image_number].zoom_number;
-                    images[image_number].ell.Height = ball_sb.Value / resy * images[image_number].zoom_number;
-                    images[image_number].ell2.Width = cone_sb.Value / resx * images[image_number].zoom_number;
-                    images[image_number].ell2.Height = cone_sb.Value / resy * images[image_number].zoom_number;
+                    images[image_number].ell.Width = ball_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+                    images[image_number].ell.Height = ball_sb.Value / images[image_number].resy * images[image_number].zoom_number;
+                    images[image_number].ell2.Width = cone_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+                    images[image_number].ell2.Height = cone_sb.Value / images[image_number].resy * images[image_number].zoom_number;
                     images[image_number].ell.Margin = new Thickness((canvas.Width - images[image_number].ell.Width) / 2, (canvas.Height - images[image_number].ell.Height) / 2, 0, 0);
                     images[image_number].ell2.Margin = new Thickness((canvas.Width - images[image_number].ell2.Width) / 2, (canvas.Height - images[image_number].ell2.Height) / 2, 0, 0);
                 }
@@ -289,10 +289,10 @@ namespace PD_AdvAnalysis
             images[image_number].ell.Height++;
             images[image_number].ell2.Width++;
             images[image_number].ell2.Height++;
-            images[image_number].ell.Width = ball_sb.Value / resx * images[image_number].zoom_number;
-            images[image_number].ell.Height = ball_sb.Value / resy * images[image_number].zoom_number;
-            images[image_number].ell2.Width = cone_sb.Value / resx * images[image_number].zoom_number;
-            images[image_number].ell2.Height = cone_sb.Value / resy * images[image_number].zoom_number;
+            images[image_number].ell.Width = ball_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+            images[image_number].ell.Height = ball_sb.Value / images[image_number].resy * images[image_number].zoom_number;
+            images[image_number].ell2.Width = cone_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+            images[image_number].ell2.Height = cone_sb.Value / images[image_number].resy * images[image_number].zoom_number;
             ImageDecon2.ImageDecon2 id2 = new ImageDecon2.ImageDecon2();
             images[image_number].bmp = id2.DrawImage(images[image_number].f, images[image_number].pixels, images[image_number].zoom_number);
             //BitmapSource bmp = id2.DrawImage(frame, pixels);
@@ -323,10 +323,10 @@ namespace PD_AdvAnalysis
             {
                 images[image_number].zoom_number = 1;
             }
-            images[image_number].ell.Width = ball_sb.Value / resx * images[image_number].zoom_number;
-            images[image_number].ell.Height = ball_sb.Value / resy * images[image_number].zoom_number;
-            images[image_number].ell2.Width = cone_sb.Value / resx * images[image_number].zoom_number;
-            images[image_number].ell2.Height = cone_sb.Value / resy * images[image_number].zoom_number;
+            images[image_number].ell.Width = ball_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+            images[image_number].ell.Height = ball_sb.Value / images[image_number].resy * images[image_number].zoom_number;
+            images[image_number].ell2.Width = cone_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+            images[image_number].ell2.Height = cone_sb.Value / images[image_number].resy * images[image_number].zoom_number;
             ImageDecon2.ImageDecon2 id2 = new ImageDecon2.ImageDecon2();
             images[image_number].bmp = id2.DrawImage(images[image_number].f, images[image_number].pixels, images[image_number].zoom_number);
             //BitmapSource bmp = id2.DrawImage(frame, pixels);
@@ -339,10 +339,10 @@ namespace PD_AdvAnalysis
         {
             images[image_number].zoom_number = 1;
             //images[imag_avg].ell2
-            images[image_number].ell.Width = ball_sb.Value / resx * images[image_number].zoom_number;
-            images[image_number].ell.Height = ball_sb.Value / resy * images[image_number].zoom_number;
-            images[image_number].ell2.Width = cone_sb.Value / resx * images[image_number].zoom_number;
-            images[image_number].ell2.Height = cone_sb.Value / resy * images[image_number].zoom_number;
+            images[image_number].ell.Width = ball_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+            images[image_number].ell.Height = ball_sb.Value / images[image_number].resy * images[image_number].zoom_number;
+            images[image_number].ell2.Width = cone_sb.Value / images[image_number].resx * images[image_number].zoom_number;
+            images[image_number].ell2.Height = cone_sb.Value / images[image_number].resy * images[image_number].zoom_number;
             images[image_number].ell.Margin = new Thickness((canvas.Width - images[image_number].ell.Width) / 2, (canvas.Height - images[image_number].ell2.Height) / 2, 0, 0);
             images[image_number].ell2.Margin = new Thickness((canvas.Width - images[image_number].ell2.Width) / 2, (canvas.Height - images[image_number].ell2.Height) / 2, 0, 0);
 
@@ -364,8 +364,10 @@ namespace PD_AdvAnalysis
             //public string coll_angle { get; set; }
             //public string couch_angle { get; set; }
             public Beam field_id { get; set; }
+            public double resx { get; set; }
+            public double resy { get; set; }
 
-            
+
         }
 
         private void changefield_btn_Click(object sender, RoutedEventArgs e)
@@ -393,29 +395,31 @@ namespace PD_AdvAnalysis
                             zoom_number = zoom_initial,
                             f = PD_AdvAnalysis.MainWindow.plan.Beams[field_numb].PortalDoseImages.Where(j => j.Id == sb.Content.ToString()).First().Image.Frames[0],
                             field_id = PD_AdvAnalysis.MainWindow.plan.Beams[field_numb].Beam,
-
-                            ell = new Ellipse
-                            {
-                                Width = ball_sb.Value / resx * zoom_initial,
-                                Name = "ball_ell",
-                                Height = ball_sb.Value / resy * zoom_initial,
-                                Stroke = System.Windows.Media.Brushes.Black,
-                                StrokeThickness = 3,
-                                Margin = new Thickness((canvas.Width - ball_sb.Value / resx * zoom_initial) / 2, (canvas.Height - ball_sb.Value / resy * zoom_initial) / 2, 0, 0),
-
-
-                            },
-                            ell2 = new Ellipse
-                            {
-                                Width = cone_sb.Value / resx * zoom_initial,
-                                Name = "cone_ell",
-                                Height = cone_sb.Value / resy * zoom_initial,
-                                Stroke = System.Windows.Media.Brushes.Green,
-                                StrokeThickness = 3,
-                                Margin = new Thickness((canvas.Width - cone_sb.Value / resx * zoom_initial) / 2, (canvas.Height - cone_sb.Value / resy * zoom_initial) / 2, 0, 0),
-                            }
-
+                            resx = PD_AdvAnalysis.MainWindow.plan.Beams[field_numb].PortalDoseImages.First(j => j.Id == sb.Content.ToString()).Image.Frames[0].XRes,
+                            resy = PD_AdvAnalysis.MainWindow.plan.Beams[field_numb].PortalDoseImages.First(j => j.Id == sb.Content.ToString()).Image.Frames[0].YRes
                         });
+                        images.Last().ell = new Ellipse
+                        {
+                            Width = ball_sb.Value / images.Last().resx * zoom_initial,
+                            Name = "ball_ell",
+                            Height = ball_sb.Value / images.Last().resy * zoom_initial,
+                            Stroke = System.Windows.Media.Brushes.Black,
+                            StrokeThickness = 3,
+                            Margin = new Thickness((canvas.Width - ball_sb.Value / images.Last().resx * zoom_initial) / 2, (canvas.Height - ball_sb.Value / images.Last().resy * zoom_initial) / 2, 0, 0),
+
+
+                        };
+                        images.Last().ell2 = new Ellipse
+                        {
+                            Width = cone_sb.Value / images.Last().resx * zoom_initial,
+                            Name = "cone_ell",
+                            Height = cone_sb.Value / images.Last().resy * zoom_initial,
+                            Stroke = System.Windows.Media.Brushes.Green,
+                            StrokeThickness = 3,
+                            Margin = new Thickness((canvas.Width - cone_sb.Value / images.Last().resx * zoom_initial) / 2, (canvas.Height - cone_sb.Value / images.Last().resy * zoom_initial) / 2, 0, 0),
+                        };
+
+                        
                         images[i_num].ell.MouseDown += Ell_MouseDown;
                         images[i_num].ell.MouseUp += Ell_MouseUp;
                         images[i_num].ell.MouseMove += Ell_MouseMove;
@@ -574,13 +578,13 @@ namespace PD_AdvAnalysis
             {
                 if (c.Name == "ball_ell")
                 {
-                    c.Width = ball_sb.Value / resx;
-                    c.Height = ball_sb.Value / resy;
+                    c.Width = ball_sb.Value / images.Last().resx;
+                    c.Height = ball_sb.Value / images.Last().resy;
                 }
                 if (c.Name == "cone_ell")
                 {
-                    c.Width = cone_sb.Value / resx;
-                    c.Height = cone_sb.Value / resy;
+                    c.Width = cone_sb.Value / images.Last().resx;
+                    c.Height = cone_sb.Value / images.Last().resy;
                 }
             }
 
