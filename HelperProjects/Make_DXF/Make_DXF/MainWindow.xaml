@@ -1,0 +1,70 @@
+﻿<Window x:Class="Make_DXF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Make_DXF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550" Width="725"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <!--Header row-->
+        <Label Grid.Row="0" Grid.ColumnSpan="4" Margin="5">Machine Information</Label>
+        <!--Machine Data Row2 -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5">Detector type</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="5">Detector Size X[cm]</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="2" Margin="5">Detector Size Y [cm]</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="3" Margin="5">Pixels Number X</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="4" Margin="5">Pixels Number Y</TextBlock>
+        <!--Machine Data Row 3-->
+        <ComboBox Name="detector_cmb" Grid.Row="2" Grid.Column="0" Margin="5" Width="100"
+                  SelectionChanged="detector_cmb_SelectionChanged"></ComboBox>
+        <TextBox Name="sizeX_txt" Grid.Row="2" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox Name="sizeY_txt" Grid.Row="2" Grid.Column="2" Margin="5"></TextBox>
+        <TextBox Name="pixelX_txt" Grid.Row="2" Grid.Column="3" Margin="5"></TextBox>
+        <TextBox Name="pixelY_txt" Grid.Row="2" Grid.Column="4" Margin="5"></TextBox>
+        <!-- Header Row 4-->
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="4">Plan Information</TextBlock>
+        <!-- Plan information row 5-->
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="5">Gantry Angle</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="1" Margin="5">Collimator Angle</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="2" Margin="5">Coll X1</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="3" Margin="5">Coll X2</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="4" Margin="5">Coll Y1</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="5" Margin="5">Coll Y2</TextBlock> 
+        <!-- Plan Information Row 6-->
+        <TextBox Name="gantry_txt" Grid.Row="5" Grid.Column="0" Margin="5"></TextBox>
+        <TextBox Name="coll_txt" Grid.Row="5" Grid.Column="1" Margin="5"></TextBox>
+        <TextBox Name="x1_txt" Grid.Row="5" Grid.Column="2" Margin="5"></TextBox>
+        <TextBox Name="x2_txt" Grid.Row="5" Grid.Column="3" Margin="5"></TextBox>
+        <TextBox Name="y1_txt" Grid.Row="5" Grid.Column="4" Margin="5"></TextBox>
+        <TextBox Name="y2_txt" Grid.Row="5" Grid.Column="5" Margin="5"></TextBox>
+        <!-- cross placement -->
+        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">Set X position from CAX [mm]</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Margin="5">Set Y position from CAX [mm]</TextBlock>
+        <!-- position information-->
+        <TextBox Name="xpos_txt" Grid.Row="7" Grid.Column="0"  Margin="5"></TextBox>
+        <TextBox Name="ypos_txt" Grid.Row="7" Grid.Column="2" Margin="5"></TextBox>
+        <Button Name="generateDXF_btn" Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="2"
+                Content="Generate DXF" Height="30" Click="generateDXF_btn_Click"></Button>
+        </Grid>
+</Window>

@@ -13,8 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VMS.CA.Scripting;
 using VMS.DV.PD.Scripting;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing;
+//using PdfSharp.Pdf;
+//using PdfSharp.Drawing;
 using Microsoft.Win32;
 using System.IO;
 using System.IO.Packaging;
@@ -268,7 +268,7 @@ namespace PD_AdvAnalysis
         private void prindPDF_btn_Click(object sender, RoutedEventArgs e)
         {
             //Build the pdf
-            int Xmargin = 36;
+            /*int Xmargin = 36;
             int Ymargin = 36;
             PdfDocument doc;
             PdfPage page;

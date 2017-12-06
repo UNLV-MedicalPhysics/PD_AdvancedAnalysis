@@ -337,6 +337,7 @@ namespace PD_AdvAnalysis
 
         private void reset_btn_Click(object sender, RoutedEventArgs e)
         {
+            
             images[image_number].zoom_number = 1;
             //images[imag_avg].ell2
             images[image_number].ell.Width = ball_sb.Value / images[image_number].resx * images[image_number].zoom_number;
