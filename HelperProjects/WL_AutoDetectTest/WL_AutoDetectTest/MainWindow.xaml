@@ -23,12 +23,20 @@
         </Grid>
          <Border Width="384" Height="384" HorizontalAlignment="Center" VerticalAlignment="Top"
                 Margin="0,40,0,0" BorderBrush="Black" BorderThickness="1">
-            <Canvas Name="image_cnv" Margin="0,0,0,0" ></Canvas>
+            <!--<Canvas Name="image_cnv" Margin="0,0,0,0" >
+                
+            </Canvas>-->
         </Border>
+        <Image Name="image_im" Width="384" Height="384" HorizontalAlignment="Center" VerticalAlignment="Top"
+               Margin="0,40,0,0"></Image>
         <Border Width="384" Height="126" HorizontalAlignment="Center" VerticalAlignment="Top"
                 Margin="0,460,0,0" BorderBrush="Black" BorderThickness="1">
-            <Canvas Name="profile_cnv" Margin="0,0,0,0"></Canvas>
+            <Canvas Name="profile_cnv" Margin="0,0,0,0">
+                
+            </Canvas>
+            
         </Border>
+        
         <!-- sliders to control certain areas can go here.-->
         <Border Width="384" Height="126" HorizontalAlignment="Center" VerticalAlignment="Top"
                 Margin="0,680,0,0" BorderBrush="Black" BorderThickness="1">
