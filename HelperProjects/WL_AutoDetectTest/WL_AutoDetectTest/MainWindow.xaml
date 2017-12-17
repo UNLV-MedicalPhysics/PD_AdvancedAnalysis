@@ -23,15 +23,16 @@
         </Grid>
          <Border Width="384" Height="384" HorizontalAlignment="Center" VerticalAlignment="Top"
                 Margin="0,40,0,0" BorderBrush="Black" BorderThickness="1">
-            <!--<Canvas Name="image_cnv" Margin="0,0,0,0" >
-                
-            </Canvas>-->
+            <Canvas Name="image_cnv" Margin="0,0,0,0" Width="384" Height="384">
+                <Line Name="profile_ln" Width="300" Stroke="Black" StrokeThickness="5" Margin="42,192,0,0"
+                      X1="000" X2="300"></Line>
+            </Canvas>
         </Border>
         <Image Name="image_im" Width="384" Height="384" HorizontalAlignment="Center" VerticalAlignment="Top"
-               Margin="0,40,0,0"></Image>
+               Margin="0,40,0,0" Panel.ZIndex="-1"></Image>
         <Border Width="384" Height="126" HorizontalAlignment="Center" VerticalAlignment="Top"
                 Margin="0,460,0,0" BorderBrush="Black" BorderThickness="1">
-            <Canvas Name="profile_cnv" Margin="0,0,0,0">
+            <Canvas Name="profile_cnv" Margin="0,0,0,0" Width="384" Height="126">
                 
             </Canvas>
             
@@ -40,7 +41,7 @@
         <!-- sliders to control certain areas can go here.-->
         <Border Width="384" Height="126" HorizontalAlignment="Center" VerticalAlignment="Top"
                 Margin="0,680,0,0" BorderBrush="Black" BorderThickness="1">
-            <Canvas Name="gradient_cnv" Margin="0,0,0,0"></Canvas>
+            <Canvas Name="gradient_cnv" Margin="0,0,0,0" Height="126" Width="384"></Canvas>
         </Border>
     </Grid>
 </Window>

@@ -95,9 +95,72 @@ namespace WL_AutoDetectTest
                     //}
                     BitmapSource bms = WL_AutoDetectTest.ImageDecon2.DrawImage(image);
                     image_im.Source = bms;
+                    //get x and y position of the line.
+                    int line_x = Convert.ToInt32((image.sizeX-image_cnv.Width)/2 + profile_ln.Margin.Left);
+                    int line_y = Convert.ToInt32((image.sizeY-image_cnv.Height)/2 + profile_ln.Margin.Top);
+                    int rows_AVG = Convert.ToInt16(profile_ln.StrokeThickness);//some rounding issues may occur.
+                    int line_length = Convert.ToInt32(profile_ln.Width);
+                    //line orientation shoudl be here as well in order to allow the user to get vertical position.
+                    //get profile row.
+                    float[] profile = GetProf(image, line_x, line_y, rows_AVG, line_length);
+                    plotCanv1(profile, profile_cnv);
+                    float[] gradient = GetGrad(image, line_x, line_y, rows_AVG, line_length);
+                    plotCanv1(gradient, gradient_cnv);
                 }
+                
+
             }
         }
 
+        private float[] GetGrad(Models.Image image, int line_x, int line_y, int rows_AVG, int line_length)
+        {
+            //throw new NotImplementedException();
+            float[] averaged_grad = new float[Convert.ToInt32(image_cnv.Width)];
+            for(int i = line_x; i<line_x+line_length; i++)
+            {
+                float sumDiff = 0; int count = 0;
+                for(int j = Convert.ToInt32(line_y-rows_AVG/2); j< Convert.ToInt32(line_y + rows_AVG / 2); j++)
+                {
+                    sumDiff += Math.Abs(image.pixels[j][i + 1] - image.pixels[j][i]);
+                    count++;
+                }
+                averaged_grad[Convert.ToInt32(profile_ln.Margin.Left) + i - line_x] = sumDiff / count;
+
+            }
+            return averaged_grad;
+        }
+        private void plotCanv1(float[] profile, Canvas cnv)
+        {
+            //throw new NotImplementedException();
+            double xcoeff = profile_cnv.Width;
+            double yCoeff = profile_cnv.Height/profile.Max();
+            for(int i = 0; i < profile.Count()-1; i++)
+            {
+                Line drawnProfile = new Line() { Stroke = Brushes.Blue, StrokeThickness = 2.0 };
+                drawnProfile.X1 = i;
+                drawnProfile.X2 = i+1;
+                drawnProfile.Y1 = profile_cnv.Height-profile[i] * yCoeff;
+                drawnProfile.Y2 = profile_cnv.Height-profile[i + 1]*yCoeff;
+                cnv.Children.Add(drawnProfile);
+            }
+        }
+        private float[] GetProf(Models.Image image, int line_x, int line_y, int rows_AVG, int line_length)
+        {
+            //throw new NotImplementedException();
+            float[] averaged_row = new float[Convert.ToInt32(image_cnv.Width)];
+            for(int i = line_x; i<line_x+line_length; i++)
+            {
+                //loop through and get the average based on the thickness of the line.
+                float sum = 0; int count = 0;
+                for(int j = Convert.ToInt32(line_y-rows_AVG/2); j < Convert.ToInt32(line_y + rows_AVG/2); j++)
+                {
+                    sum += image.pixels[j][i];
+                    count++;
+                }
+                averaged_row[Convert.ToInt32(profile_ln.Margin.Left) + i - line_x] = sum / count;
+            }
+            return averaged_row;
+
+        }
     }
 }
