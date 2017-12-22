@@ -25,56 +25,50 @@ namespace ImageDecon2
 
     public partial class ImageDecon2
     {
-        /*public ScriptContext sc;
-        public VMS.CA.Scripting.Frame f;
-        public PortalDoseImage pdi;
-        public double slope;
-        VMS.DV.PD.Scripting.Application app = ((ImageDecon2App)System.Windows.Application.Current).APIApp;
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-       /* private void load_btn_Click(object sender, RoutedEventArgs e)
-        {
-            Patient p = app.OpenPatientById("US-PD-004");
-            PDPlanSetup pds = p.PDPlanSetups.First();
-            PDBeam pdb = pds.Beams.First();
-            pdi = pdb.PortalDoseImages.First();
-            VMS.CA.Scripting.Image i = pdi.Image;
-            f = i.Frames[0];//get first frame
-            //int min, max = pdi.GetMinMax(out min, out max, false);
-            ushort[,] pixels = new ushort[f.XSize, f.YSize];
-            f.GetVoxels(0, pixels);
-            int image_min;// = pixels.Cast<UInt16>().Min();
-            int image_max;// = pixels.Cast<UInt16>().Max();
-            pdi.GetMinMax(out image_max, out image_min, false);
-            //set window CU values
-            max_CU.Text = f.VoxelToDisplayValue(image_min).ToString("F3");
-            min_CU.Text = f.VoxelToDisplayValue(image_max).ToString("F3");
-            slope = (image_max - image_min) / (f.VoxelToDisplayValue(image_max) - f.VoxelToDisplayValue(image_min));
-            //information from imaging-overview on MSDN (https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/imaging-overview 
-            ///BitmapSource is an important class used in decoding and enconding of images.
-            ///It is the basic building block of the WPF Imaging pipeline and represents a single, constant set of pixels at a certain size and resolution.
-            ///A Bitmapsource can be an individual frame of a multiple frame image, or it can be the result of transform performed on a BitmapSource.
-            ///It is the parent of many of the primary classes in WPF imaging such as BitmapFrame.
-            //var image_pixels = pixels.Cast<UInt16>().ToArray();
-            //image_pixels above has to be constructed manually, becuase the rows and columns are transposed. 
-            BitmapSource bmp = DrawImage(f, pixels, image_min,image_max);
+        //testing stuff.
+        /* private void load_btn_Click(object sender, RoutedEventArgs e)
+         {
+             Patient p = app.OpenPatientById("US-PD-004");
+             PDPlanSetup pds = p.PDPlanSetups.First();
+             PDBeam pdb = pds.Beams.First();
+             pdi = pdb.PortalDoseImages.First();
+             VMS.CA.Scripting.Image i = pdi.Image;
+             f = i.Frames[0];//get first frame
+             //int min, max = pdi.GetMinMax(out min, out max, false);
+             ushort[,] pixels = new ushort[f.XSize, f.YSize];
+             f.GetVoxels(0, pixels);
+             int image_min;// = pixels.Cast<UInt16>().Min();
+             int image_max;// = pixels.Cast<UInt16>().Max();
+             pdi.GetMinMax(out image_max, out image_min, false);
+             //set window CU values
+             max_CU.Text = f.VoxelToDisplayValue(image_min).ToString("F3");
+             min_CU.Text = f.VoxelToDisplayValue(image_max).ToString("F3");
+             slope = (image_max - image_min) / (f.VoxelToDisplayValue(image_max) - f.VoxelToDisplayValue(image_min));
+             //information from imaging-overview on MSDN (https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/imaging-overview 
+             ///BitmapSource is an important class used in decoding and enconding of images.
+             ///It is the basic building block of the WPF Imaging pipeline and represents a single, constant set of pixels at a certain size and resolution.
+             ///A Bitmapsource can be an individual frame of a multiple frame image, or it can be the result of transform performed on a BitmapSource.
+             ///It is the parent of many of the primary classes in WPF imaging such as BitmapFrame.
+             //var image_pixels = pixels.Cast<UInt16>().ToArray();
+             //image_pixels above has to be constructed manually, becuase the rows and columns are transposed. 
+             BitmapSource bmp = DrawImage(f, pixels, image_min,image_max);
 
-            image.Source = bmp;// _rot;
+             image.Source = bmp;// _rot;
 
-        }*/
+         }*/
+        //this method is to take the pixels of the image and make them bitmaps.
         public BitmapSource DrawImage(VMS.CA.Scripting.Frame f, ushort[,] pixels, int zoom_level)
         {
             PD_AdvAnalysis.WLAnalysis wla = new PD_AdvAnalysis.WLAnalysis();
+            //this is the image that is behind the canvas.
             System.Windows.Controls.Image imag = wla.field_img; //System.Windows.Application.Current.MainWindow.FindName("field_img") as System.Windows.Controls.Image;
             int w = Convert.ToInt16(imag.Width); int h = Convert.ToInt16(imag.Height);
-            double[] image_pixels = new double[w*h];
+            double[] image_pixels = new double[w * h];
             int index_out = 0;
-            for (int j =(f.YSize - h/zoom_level)/2; j < (f.YSize + h/zoom_level)/2; j++)
+            for (int j = (f.YSize - h / zoom_level) / 2; j < (f.YSize + h / zoom_level) / 2; j++)
             {
                 int index_in = 0;
-                for (int k = (f.XSize -w/zoom_level)/2; k < (f.XSize + w/zoom_level)/2; k++)
+                for (int k = (f.XSize - w / zoom_level) / 2; k < (f.XSize + w / zoom_level) / 2; k++)
                 {
                     if (zoom_level == 1)
                     {
@@ -83,16 +77,47 @@ namespace ImageDecon2
                     }
                     else
                     {
-                        for (int o = 0; o < zoom_level; o++)
-                        {
-                            image_pixels[index_in + (index_out+o) * w] = f.VoxelToDisplayValue(pixels[k, j]);
+                        //loop through the rows above and below the current pixel.
+                        for (int oout = -zoom_level/2; oout < zoom_level/2; oout++)
+                        {                          
+                            if(index_out == 0 && oout<0)//this is a top row, you cannot set pixel values above it.
+                            {
+                                
+                            }
+                            else if(index_out == f.YSize+h/zoom_level - 1 && oout>0)
+                            {
+                                //this is a bottom row, you cannot add to it.
+                            }
+                            else
+                            {
+                                //fixes up down.
+                                //image_pixels[index_in + (index_out + oout) * w] = f.VoxelToDisplayValue(pixels[k, j]);
+                                //set voxels right and left. 
+                                if(index_in == 0 && oout < 0)
+                                {
+                                    //this is left column, cannot put anything left of that
+                                }
+                                else if(index_in == f.XSize+w/zoom_level-1 && oout > 0)
+                                {
+                                    //this is right column, cannot put anything past that
+                                }
+                                else
+                                {
+                                    //loop throught the pixels right and left of the current pixels
+                                    for (int ooin = -zoom_level / 2; ooin < zoom_level / 2; ooin++)
+                                    {
+                                       image_pixels[index_in + ooin + (index_out + oout) * w] = f.VoxelToDisplayValue(pixels[k, j]);
+                                    }
+                                }
+                            }
+                           
                             index_in++;
                         }
 
                     }
-                    
+
                 }
-                index_out+=zoom_level;
+                index_out += zoom_level;
             }
             double image_max = image_pixels.Max();
             double image_min = image_pixels.Min();
@@ -115,8 +140,9 @@ namespace ImageDecon2
                     MessageBox.Show("hello");
                 }
                 System.Windows.Media.Color c = new System.Windows.Media.Color();
-                if(value < image_min)
+                if (value < image_min)
                 {
+                    //this is a catch. it should never go in here because the values hould never be less than the minimum value.
                     c.B = 0;
                     c.R = 0;
                     c.G = 0;
@@ -133,8 +159,9 @@ namespace ImageDecon2
                     c.R = Convert.ToByte(255 - (255 * (image_max - value) / (image_max - image_med)));
                     c.G = Convert.ToByte(255 - (255 * (value - image_med) / (image_max - image_med)));
                 }
-                else if(value > image_max)
+                else if (value > image_max)
                 {
+                    //another catch it should never be greater than the maximum value.
                     c.R = 0;
                     c.B = 0;
                     c.G = 0;
@@ -157,29 +184,6 @@ namespace ImageDecon2
             return bmp;
         }
 
-        /*private void winLev_btn_Click(object sender, RoutedEventArgs e)
-        {
-            if (f != null && pdi != null)
-            {
-                double min_val;
-                double max_val;
-                Double.TryParse(min_CU.Text, out max_val);
-                Double.TryParse(max_CU.Text, out min_val);
-                ushort[,] pixels = new ushort[f.XSize, f.YSize];
-                f.GetVoxels(0, pixels);
-                int image_min; //pixels.Cast<UInt16>().Min();
-                int image_max;//pixels.Cast<UInt16>().Max();
-                //image_min = image_min*
-                pdi.GetMinMax(out image_max, out image_min, false);
-                int window_max = Convert.ToInt16(image_max - slope * (f.VoxelToDisplayValue(image_max) - max_val));
-                int window_min = Convert.ToInt16(image_min - slope * (f.VoxelToDisplayValue(image_min) - min_val));
-                BitmapSource bmp = DrawImage(f, pixels, window_min, window_max);
-                image.Source = bmp;
-            }
-            else
-            {
-                MessageBox.Show("Open Image first");
-            }
-        }*/
+        
     }
 }

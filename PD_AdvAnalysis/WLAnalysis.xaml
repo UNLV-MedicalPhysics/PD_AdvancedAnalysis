@@ -9,7 +9,7 @@
              d:DesignHeight="900" d:DesignWidth="1400">
     
     <Grid>
-        <Button Name="grabimag_btn" Margin="30,120,0,0" FontSize="18" FontWeight="Bold"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="True" Click="grabimag_btn_Click" Content="Grab Fields"></Button>
+        <Button Name="getField_btn" Margin="30,120,0,0" FontSize="18" FontWeight="Bold"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" IsEnabled="True" Click="getField_btn_Click" Content="Grab Fields"></Button>
         <StackPanel Name="Fields" Width ="400" Margin="60,220,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
            
         </StackPanel>
@@ -35,6 +35,6 @@
         <Button Name="reset_btn" Margin="1200, 560, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Click="reset_btn_Click" Content="Reset"></Button>
         <Button Name="previous_btn" Margin="535, 550, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Previous" Click="previous_btn_Click"></Button>
         <Button Name="next_btn" Margin="1017, 550, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Next" Click="next_btn_Click"></Button>
-        <Button Name="changefield_btn" Margin="765, 550, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Grab Images" Click="changefield_btn_Click"></Button>
+        <Button Name="getImages_btn" Margin="765, 550, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Grab Images" Click="getImages_btn_Click"></Button>
     </Grid>
 </UserControl>

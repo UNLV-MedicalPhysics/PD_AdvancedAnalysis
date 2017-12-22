@@ -188,11 +188,8 @@ namespace PD_AdvAnalysis
                     //there is no predicted image.
                     comp_ddl.Items.Add("No Predicted Image");
                     comp_ddl.SelectedIndex = 0;
-                    //this exact string will be handled in GammaPassMatrix.xaml.cs file.
-                    //testing changes
-
+                    //this exact string will be handled in GammaPassMatrix.xaml.cs file.                   
                 }
-
 
             }
         }        
