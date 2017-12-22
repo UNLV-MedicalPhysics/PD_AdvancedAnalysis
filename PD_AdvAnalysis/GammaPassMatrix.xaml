@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1400">
     <Grid>
-        <!--<local:GammaPassTableUserControl/>-->
+       
         <StackPanel Name="pdType_pnl">
             <Grid>
                 <Grid.RowDefinitions>
@@ -75,12 +75,12 @@
                 <Button Name="prindPDF_btn" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" Grid.Column="7" Width="150" Height="30" Margin="5" Click="prindPDF_btn_Click" Content="Print PDF"></Button>
 
                 <!--Row 4-->
-                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" Margin="5">Test Parameter:</Label>
-                <TextBox Name="testparam_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" Width="150" Height="30" Margin="5"></TextBox>
-                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="2" Margin="5">Tolerance [%]:</Label>
-                <TextBox Name="tol_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="3" Width="150" Height="30" Margin="5"></TextBox>
-                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="4" Margin="5">Evaluation Tests Kind:</Label>
-                <ComboBox  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="5" Width="150" Height="30" Margin="5" SelectedIndex="0" Name="EvalTestKind_cmb" SelectionChanged="EvalTestKind_cmb_SelectionChanged">
+                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="2" Margin="5">Test Parameter:</Label>
+                <TextBox Name="testparam_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="3" IsEnabled="False" Width="150" Height="30" Margin="5"></TextBox>
+                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="4" Margin="5">Tolerance [%]:</Label>
+                <TextBox Name="tol_txt" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="5" Width="150" Height="30" Margin="5"></TextBox>
+                <Label FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" Margin="5">Evaluation Tests Kind:</Label>
+                <ComboBox  HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" Width="150" Height="30" Margin="5" SelectedIndex="0" Name="EvalTestKind_cmb" SelectionChanged="EvalTestKind_cmb_SelectionChanged">
                     <ComboBoxItem>GammaAreLessThanOne</ComboBoxItem>
                     <ComboBoxItem>GammaLargestConnectedArea</ComboBoxItem>
                     <ComboBoxItem>MaxGamma</ComboBoxItem>

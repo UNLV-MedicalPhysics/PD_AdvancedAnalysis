@@ -32,15 +32,12 @@ namespace PD_AdvAnalysis
 
     public partial class GammaPassMatrix : UserControl
     {
+        //get measured field from MainWindow code.
         ComboBox meas_ddl = System.Windows.Application.Current.MainWindow.FindName("meas_ddl") as ComboBox;
-        
-        public Patient newcontext;//save these guys for use later.
-        
-        PDPlanSetup plan;
-        Course course;
+        ComboBox comp_ddl = System.Windows.Application.Current.MainWindow.FindName("comp_ddl") as ComboBox;
+        public Patient newcontext;//save these guys for use later.  
         public PDBeam field;
         PortalDoseImage fieldm;
-        PortalDoseImage fieldc;
         public GammaPassMatrix()
         {
             InitializeComponent();
@@ -48,18 +45,18 @@ namespace PD_AdvAnalysis
         }
         private void calc_btn_Click(object sender, RoutedEventArgs e)
         {
-            //newcontext = System.Windows.Application.Current.MainWindow.FindName("newcontext") as Patient;
+            //pulling initial values from the MainWindow class. 
             newcontext = PD_AdvAnalysis.MainWindow.newcontext;
-            if(newcontext == null)
+            field = PD_AdvAnalysis.MainWindow.field;
+            if (newcontext == null)
             {
                 MessageBox.Show("No Patient Selected.");
                 return;
             }
-            field = PD_AdvAnalysis.MainWindow.field;
             gamma_grd.Children.Clear();
             //here's where all the magic happens!!
             //check the fields are selected
-            if (meas_ddl.SelectedIndex == 0)
+            if (meas_ddl.SelectedIndex == -1)
             {
                 MessageBox.Show("Please select a field");
             }
@@ -67,11 +64,16 @@ namespace PD_AdvAnalysis
             {
                 MessageBox.Show("Please input all numeric parameters in the appropriate box");
             }
+            else if (comp_ddl.SelectedItem.ToString() == "No Predicted Image")
+            {
+                MessageBox.Show("This field contains no predicted image.");
+            }
             else
-            { 
+            {
+                //check for any empty mandatory boxes with this bool.
                 bool any_empty = false;
                 //This portion of the code makes the textboxes red if they are empty
-                List<Control> mandatory_boxes = new List<Control>() {startdd_txt,enddd_txt, deldd_txt, startdta_txt, enddta_txt, deldta_txt, marg_txt, tol_txt };
+                List<Control> mandatory_boxes = new List<Control>() { startdd_txt, enddd_txt, deldd_txt, startdta_txt, enddta_txt, deldta_txt, tol_txt };
                 foreach (Control c in mandatory_boxes)
                 {
                     double test_double;
@@ -88,6 +90,7 @@ namespace PD_AdvAnalysis
                         (c as TextBox).BorderBrush = Brushes.Transparent;
                     }
                 }
+                //this is testing to see if the the threshold percentage is added.
                 if ((bool)threshold_chk.IsChecked)
                 {
                     double test_double2;
@@ -103,6 +106,8 @@ namespace PD_AdvAnalysis
                         (threshold_txt).BorderBrush = Brushes.Transparent;
                     }
                 }
+                //if the test contains a necessary test parameter, then make sure the test parameter is selected.
+                //for instance, the test gamma area < _____ must be > ______ needs to have the parameters defined.
                 int[] threshold_parm = new int[] { 4, 5, 8, 9, 12, 13 };
 
                 if (threshold_parm.Contains(EvalTestKind_cmb.SelectedIndex))
@@ -120,17 +125,17 @@ namespace PD_AdvAnalysis
                         (testparam_txt).BorderBrush = Brushes.Transparent;
                     }
                 }
-              
+                //final catch in case any necessary inputs are missed. 
                 if (any_empty) { return; }
                 //get beams
-                fieldm = field.PortalDoseImages.Where(i => i.Id == meas_ddl.SelectedItem.ToString()).First();
+                fieldm = field.PortalDoseImages.First(i => i.Id == meas_ddl.SelectedItem.ToString());
                 //don't need to do the where clause for the predicted.
-                double startdd = Convert.ToDouble(startdd_txt.Text) / 100; double endd = Convert.ToDouble(enddd_txt.Text) / 100; double deldd = Convert.ToDouble(deldd_txt.Text) / 100;
+                double startdd = Convert.ToDouble(startdd_txt.Text); double endd = Convert.ToDouble(enddd_txt.Text); double deldd = Convert.ToDouble(deldd_txt.Text);
                 double startdta = Convert.ToDouble(startdta_txt.Text); double enddta = Convert.ToDouble(enddta_txt.Text); double deldta = Convert.ToDouble(deldta_txt.Text);
                 double tol = Convert.ToDouble(tol_txt.Text) / 100;
                 double parm;
                 Double.TryParse(testparam_txt.Text, out parm);
-                
+
                 //setup portal dosimetry analysis template.
                 IEnumerable<EvaluationTestDesc> tested = new List<EvaluationTestDesc> { new EvaluationTestDesc((EvaluationTestKind)EvalTestKind_cmb.SelectedIndex, parm, tol, false) };
 
@@ -143,7 +148,7 @@ namespace PD_AdvAnalysis
                 int marginx = bw; int marginy = bh;
                 for (double i = startdd; i <= endd; i += deldd)
                 {
-                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}%", i * 100);
+                    TextBox dbox = new TextBox(); dbox.IsReadOnly = true; dbox.Text = String.Format("{0}%", i);
                     dbox.Width = bw; dbox.Background = Brushes.White; dbox.BorderBrush = Brushes.Black;
                     dbox.HorizontalAlignment = HorizontalAlignment.Left; dbox.VerticalAlignment = VerticalAlignment.Top;
                     dbox.Height = bh;
@@ -164,7 +169,7 @@ namespace PD_AdvAnalysis
                 }
                 marginx = bw; marginy = 0;
 
-
+                //now calculate all the boxes for the matrix.
                 for (double i = startdta; i <= enddta; i += deldta)
                 {
                     //lay down a new header for the column.
@@ -175,31 +180,18 @@ namespace PD_AdvAnalysis
                     Double.TryParse(marg_txt.Text, out margins_txt);
                     double th_txt;
                     double.TryParse(threshold_txt.Text, out th_txt);
-                    // MessageBox.Show(margins_txt.ToString());
-
-                    int anal_mode = (bool)abs_rdb.IsChecked ? 0 : 2;
+                    int analysisMode = (bool)abs_rdb.IsChecked ? 0 : 2;
                     for (double j = startdd; j <= endd; j += deldd)
                     {
                         marginx += bw;
                         //lay down an initial grid for the dta and dd
                         TextBox header_box = new TextBox();
                         //modify the template
-                        //PDTemplate template = new PDTemplate(false, false, false, AnalysisMode.CU, NormalizationMethod.Unknown, false, 0, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, j, i, false, tested);
-                        PDTemplate template1 = new PDTemplate(false, false, false, (AnalysisMode)anal_mode, (NormalizationMethod)Normalizaton_cmb.SelectedIndex, (bool)threshold_chk.IsChecked, th_txt, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, j, i, false, tested);
-                        //PDTemplate template2 = new PDTemplate(false,false, false, (AnalysisMode))
-                        // PDTemplate template_test = new PDTemplate(false, false, false, AnalysisMode.CU, NormalizationMethod.Unknown, false, Convert.ToDouble(margins_txt.Text));
+                        PDTemplate template1 = new PDTemplate(false, false, false, (AnalysisMode)analysisMode, (NormalizationMethod)Normalizaton_cmb.SelectedIndex, (bool)threshold_chk.IsChecked, th_txt, (ROIType)ROITypes_cmb.SelectedIndex, margins_txt, j / 100, i, false, tested);
                         //apply the template to the analysis.
-
                         PDAnalysis analysis = fieldm.CreateTransientAnalysis(template1, field.PredictedDoseImage);
-                        //get the gamma value. 
-                        //ImageRT gamma = analysis.GammaImage;
-                        //VMS.CA.Scripting.Frame F = gamma.FramesRT.First();
-                        //ushort[,] pixels = new ushort[F.XSize, F.YSize];
-                        //MessageBox.Show(analysis.GammaParamHistogramCutoff.ToString());//this is not the gamma pass rate.
-                        //F.GetVoxels(0, pixels);
-                        //double gamma_pass = GetGammaPassRate(gamma);
                         //This code determines if the Gamma Test Parameters are in absolute or relative value
-                        int[] selec_in = new int[] { 0, 3, 4, 5, 8, 9 };
+                        int[] selec_in = new int[] { 0, 1, 4, 5, 8, 9,12,13 };
                         double gamma_pass;
 
                         if (selec_in.Contains(EvalTestKind_cmb.SelectedIndex))
@@ -210,8 +202,6 @@ namespace PD_AdvAnalysis
                         {
                             gamma_pass = analysis.EvaluationTests.First().TestValue;
                         }
-
-                        //MessageBox.Show(gamma_pass.ToString());
                         //The Code below shows the results from the gamma test. It is color coded to show where the gamma passes or failes.
                         TextBox gamma_box = new TextBox(); gamma_box.IsReadOnly = true; gamma_box.Text = gamma_pass.ToString("F3");
                         gamma_box.Width = bw; gamma_box.Height = bh; gamma_box.Background = gamma_pass < tol * 100 ? Brushes.Pink : Brushes.LightGreen; gamma_box.BorderBrush = Brushes.Black;
@@ -222,29 +212,7 @@ namespace PD_AdvAnalysis
                 }
             }
         }
-        /*private double GetGammaPassRate(ImageRT image)
-        {
-            int count_pass = 0;
-            int count_all = 0;
-            //get first frame.
-            VMS.CA.Scripting.Frame F = image.FramesRT.First();
-            ushort[,] pixels = new ushort[F.XSize, F.YSize];
-            F.GetVoxels(0, pixels);
-            for (int i = 0; i < F.XSize; i++)
-            {
-                for (int j = 0; j < F.YSize; j++)
-                {
-                    if (F.VoxelToDisplayValue(pixels[i, j]) < 1.0)
-                    {
-                        count_pass++;
-                    }
-                    count_all++;
-                }
-            }
-            double pass_rate = (Convert.ToDouble(count_pass) / Convert.ToDouble(count_all)) * 100;
-            return (pass_rate);
-        }*/
-
+       
         private void EvalTestKind_cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //string[] values = new string[]{"0, 1, 2, 3, 6, 7, 10, 11" };
@@ -255,7 +223,7 @@ namespace PD_AdvAnalysis
                 MessageBox.Show("Please select a gamma analysis parameter");
             }
 
-            else if (sel_in.Contains(EvalTestKind_cmb.SelectedIndex))
+            else if (!sel_in.Contains(EvalTestKind_cmb.SelectedIndex))
             {
                 testparam_txt.IsEnabled = true;
             }
@@ -264,7 +232,7 @@ namespace PD_AdvAnalysis
                 testparam_txt.IsEnabled = false;
             }
         }
-       
+        //under construction.
         private void prindPDF_btn_Click(object sender, RoutedEventArgs e)
         {
             //Build the pdf
@@ -316,7 +284,7 @@ namespace PD_AdvAnalysis
             PDFRenderer renderer = new PDFRenderer();*/
 
             MessageBox.Show("Hello");
-            
+
         }
     }
 }
