@@ -44,25 +44,19 @@ namespace PD_AdvAnalysis
 
             foreach (PDBeam pb in ps.Beams)
             {
-                TextBlock cb = new TextBlock();
-                cb.Text = pb.Id;
-                cb.FontSize = 14;
-                cb.TextDecorations = TextDecorations.Underline;
-                cb.HorizontalAlignment = HorizontalAlignment.Left;
-                cb.VerticalAlignment = VerticalAlignment.Top;
-                cb.Margin = new Thickness(5, margin_height, 0, 0);
+                
 
-                Fields.Children.Add(cb);
+                //Fields.Children.Add(cb);
 
                 ScrollViewer sv = new ScrollViewer();
                 sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
                 sv.HorizontalAlignment = HorizontalAlignment.Left;
                 sv.VerticalAlignment = VerticalAlignment.Top;
-                sv.Height = 60;
-                sv.Width = 400;
+                //sv.Height = 60;
+                //sv.Width = 400;
 
                 sv.Margin = new Thickness(5, margin_height + 10, 0, 0);
-                int margin_width = 2;
+                int margin_width = 30;
                 Grid sp = new Grid();
                 sp.Name = String.Format("Grid_{0}", beam_number);
                 beam_number++;
@@ -75,11 +69,23 @@ namespace PD_AdvAnalysis
                     sp.ColumnDefinitions.Add(cd);
 
                 }
+                RowDefinition rd0 = new RowDefinition();
+                sp.RowDefinitions.Add(rd0);
                 RowDefinition rd = new RowDefinition();
                 sp.RowDefinitions.Add(rd);
                 RowDefinition rd2 = new RowDefinition();
                 sp.RowDefinitions.Add(rd2);
                 int col = 0;
+                TextBlock cb = new TextBlock();
+                cb.Text = pb.Id;
+                cb.FontSize = 14;
+                cb.TextDecorations = TextDecorations.Underline;
+                cb.HorizontalAlignment = HorizontalAlignment.Left;
+                cb.VerticalAlignment = VerticalAlignment.Top;
+                cb.Margin = new Thickness(5);
+                Grid.SetRow(cb, 0);
+                Grid.SetColumn(cb, 0);
+                sp.Children.Add(cb);
                 foreach (PortalDoseImage pdi in pb.PortalDoseImages)
                 {
                     //ColumnDefinition cd = new ColumnDefinition();
@@ -89,7 +95,7 @@ namespace PD_AdvAnalysis
                     cb2.Content = pdi.Id;
                     cb2.HorizontalAlignment = HorizontalAlignment.Left;
                     cb2.VerticalAlignment = VerticalAlignment.Top;
-                    cb2.Margin = new Thickness(0, 0, 0, 0);
+                    cb2.Margin = new Thickness(5);
 
                     //RowDefinition rd = new RowDefinition();
                     //sp.RowDefinitions.Add(rd);
@@ -99,14 +105,14 @@ namespace PD_AdvAnalysis
                     text_blck.Text = StartDate;
                     text_blck.HorizontalAlignment = HorizontalAlignment.Left;
                     text_blck.VerticalAlignment = VerticalAlignment.Top;
-                    text_blck.Margin = new Thickness(0, 20, 0, 0);
+                    text_blck.Margin = new Thickness(5);
                     //margin_width = 60;
                     //sp.Children.Add(cb2);
                     //sp.Children.Add(text_blck);
-                    Grid.SetRow(cb2, 0);
+                    Grid.SetRow(cb2, 1);
                     Grid.SetColumn(cb2, col);
                     sp.Children.Add(cb2);
-                    Grid.SetRow(text_blck, 0);
+                    Grid.SetRow(text_blck, 2);
                     Grid.SetColumn(text_blck, col);
                     sp.Children.Add(text_blck);
                     col++;
@@ -229,7 +235,7 @@ namespace PD_AdvAnalysis
         private void zoomin_btn_Click(object sender, RoutedEventArgs e)
         {
             //chnage the size of the image (with the ImageDecon2 class) and the size of the ellipse.
-            images[image_number].zoom_number= images[image_number].zoom_number*2;
+            images[image_number].zoom_number = images[image_number].zoom_number * 2;
             images[image_number].ell.Width = ball_sb.Value / images[image_number].resx * images[image_number].zoom_number;
             images[image_number].ell.Height = ball_sb.Value / images[image_number].resy * images[image_number].zoom_number;
             images[image_number].ell.Margin = new Thickness((canvas.Width - ball_sb.Value / images[image_number].resx * images[image_number].zoom_number) / 2, (canvas.Height - ball_sb.Value / images[image_number].resy * images[image_number].zoom_number) / 2, 0, 0);
@@ -244,7 +250,7 @@ namespace PD_AdvAnalysis
 
         private void zoomout_btn_Click(object sender, RoutedEventArgs e)
         {
-            images[image_number].zoom_number = images[image_number].zoom_number/2;
+            images[image_number].zoom_number = images[image_number].zoom_number / 2;
             if (images[image_number].zoom_number < 1)
             {
                 images[image_number].zoom_number = 1;
