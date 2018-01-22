@@ -38,13 +38,15 @@
         <Button Name="previous_btn" Margin="30, 700, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Previous" Click="previous_btn_Click"></Button>
         <Button Name="next_btn" Margin="508, 700, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Next" Click="next_btn_Click"></Button>
         <Button Name="getImages_btn" Margin="240, 700, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Grab Images" Click="getImages_btn_Click"></Button>
+        <Button Name="visualAnal_btn" Margin="840, 700, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Grab Images" Click="visualAnal_btn_Click"></Button>
         <Border Margin="840,210,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="500" Height="450" BorderBrush="Black" BorderThickness="2">
             <Grid>
-                <Canvas Name="canvasgraph"  Width="500" Height="450">
+                <Canvas Name="visualCanvas"  Width="500" Height="450">
 
                 </Canvas>
                 <!--<Image Name="field_img" Width="600" Height="450" Panel.ZIndex="-1"></Image>-->
             </Grid>
+            
 
         </Border>
     </Grid>

@@ -406,6 +406,24 @@ namespace PD_AdvAnalysis
             field_img.Source = images[image_number].bmp;
         }
 
+        private void visualAnal_btn_Click(object sender, RoutedEventArgs e)
+        {
+            var brush = new SolidColorBrush(Colors.Black);
+            var ellipse = new Ellipse
+            {
+                Stroke = brush,
+                Fill = brush,
+                StrokeThickness = 1,
+                Height =5,
+                Width = 5,
+            };
+            double xposition;
+            double yposition;
+            xposition = (ellipse.Margin.Left - visualCanvas.Width) / 2;
+            yposition = (ellipse.Margin.Top - visualCanvas.Height) / 2;
+            visualCanvas.Children.Add(ellipse);
+        }
+
         private void Ell_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //throw new NotImplementedException();
