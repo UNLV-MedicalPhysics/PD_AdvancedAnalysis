@@ -129,6 +129,7 @@ namespace PD_AdvAnalysis
         }
         private void manualydetect_btn_Click(object sender, RoutedEventArgs e)
         {
+            List<WL_Results> wlresults = new List<WL_Results>();
             foreach (WL_Image ima in images)
             {
                 //loop through all the images and detect the ball and cone position and report deviations
@@ -146,29 +147,91 @@ namespace PD_AdvAnalysis
                 double position2;// this is the x position of the Cone
                 double position3;// this is the y position of the Cone
                                  // position = images[image_number].ell.Margin.Left - canvas.Width /2 - images[image_number].ell.Width/2;
-                position = (ima.ell.Margin.Left - (canvas.Width - ima.ell.Width) / 2) * (50 / 34);
+                wlresults.Add(new WL_Results());
+                position = (ima.ell.Margin.Left - (canvas.Width - ima.ell.Width) / 2);
                 //position= images[image_number].ell
                 position1 = ima.ell.Margin.Top - (canvas.Height - ima.ell.Height) / 2;
                 position2 = ima.ell2.Margin.Left - (canvas.Width - ima.ell2.Width) / 2;
                 position3 = ima.ell2.Margin.Top - (canvas.Height - ima.ell2.Height) / 2;
-                double g_angle;
-                g_angle = ima.WLBeam.ControlPoints.First().GantryAngle;
-                double lat_disp;
-                double vert_disp;
-                double long_disp;
+                //double g_angle;
+                wlresults.Last().gantry_angle = ima.WLBeam.ControlPoints.First().GantryAngle;
+                //double ps_angle
+                wlresults.Last().psupport_angle = ima.WLBeam.ControlPoints.First().PatientSupportAngle;
+                //rounding for half angles for Convert.ToInt32 will give the nearest even number of a .5 is found (i.e. 4.5 rounds to 4 and 5.5 roundes to 6).
+                wlresults.Last().rounded_gantry = Convert.ToInt32(wlresults.Last().gantry_angle);
+                wlresults.Last().rounded_psupport = Convert.ToInt32(wlresults.Last().psupport_angle);
+                //double lat_disp;
+                //double vert_disp;
+                //double long_disp;
                 //X_disp = (ball pos x - cone pos x)*22.5/96*(Math.Cos(gantry) + Math.Sin(gantry))
                 //Y_disp = (ball pos y - cone pos y)*22.5/96
                 //Lat = X_disp/cos(gantry)
                 //
-                lat_disp = ((position - position2) * images[image_number].resx / images[image_number].zoom_number) * Math.Cos(g_angle * 180 / Math.PI);
-                vert_disp = ((position - position2) * images[image_number].resx / images[image_number].zoom_number) * Math.Sin(g_angle * 180 / Math.PI);
-                long_disp = -(position1 - position3) * images[image_number].resy / images[image_number].zoom_number;
+                wlresults.Last().x_display = ((position - position2) * images[image_number].resx / images[image_number].zoom_number);// * Math.Cos(g_angle * 180 / Math.PI);
+                //vert_disp = ((position - position2) * images[image_number].resx / images[image_number].zoom_number);// * Math.Sin(g_angle * 180 / Math.PI);
+                wlresults.Last().y_display = -(position1 - position3) * images[image_number].resy / images[image_number].zoom_number;
 
                 //Add Longitudinal displacement.
 
                 //think about whether the direction for the micrometer will be CW or CCW.
-                MessageBox.Show(string.Format(" Field ID: {7} \n Gantry angle: {8}\nThe center of the Ball is: X: {0}  Y: {1} \nThe center of the Cone is: X: {2}  Y: {3} \n Move ball {4} mm in the lateral direction \n Move ball {5} mm in vertical direction \n Move the ball {6} mm in longitudinal direction", position, position1, position2, position3, lat_disp, vert_disp, long_disp, ima.f.Image.Id, g_angle));
+                
+                System.Windows.Controls.Label newLabel = new System.Windows.Controls.Label();
+                newLabel.HorizontalAlignment = HorizontalAlignment.Left;
+                newLabel.VerticalAlignment = VerticalAlignment.Top;
+                newLabel.Width = 200;
+                newLabel.Height = 100;
+                string newLabel_txt = string.Format(" Field ID: {0} \n Gantry Angle: {1} \n Coouch Angle {2}", ima.f.Image.Id, wlresults.Last().rounded_gantry, wlresults.Last().rounded_psupport);
+                newLabel.Content = newLabel_txt;
+                canvas.Children.Clear();
+                canvas.Children.Add(newLabel);
+            
+                MessageBox.Show(string.Format(" Field ID: {7} \n Gantry angle: {8}\nThe center of the Ball is: X: {0}  Y: {1} \nThe center of the Cone is: X: {2}  Y: {3} \n Move ball {4} mm in the lateral direction \n Move ball {5} mm in vertical direction \n Move the ball {6} mm in longitudinal direction", position, position1, position2, position3, wlresults.Last().x_display, wlresults.Last().y_display, ima.f.Image.Id, wlresults.Last().rounded_gantry, wlresults.Last().rounded_psupport));
             }
+            //display markers on canvas. 
+            //for this first round, just make everything an ellipse with the color changing based on the gantry angle.
+            //to change colors, just create an array of colors that will be longer than your array of gantry angles.
+            //can call up colors using Color.FromName(string colorname);
+            String[] colors = new string[] { "Red", "Blue", "Green", "Orange", "Yellow", "Purple", "Gray" };
+            //get unique gantry angles to the nearest degree.
+            int[] unique_gantry = wlresults.Select(x => x.rounded_gantry).Distinct().ToArray();
+            //create dictionary where key is this unique value option and value is the color.  
+            Dictionary<int, string> color_lookup = new Dictionary<int, string>();
+            for(int i = 0; i<unique_gantry.Count();i++)
+            {
+                color_lookup.Add(unique_gantry[i], colors[i]);
+            }
+            //call up the color by using color_lookup[wlresults.rounded_gantry];
+            //var color = Color.FromName(color_lookup);
+            //var color = System.Drawing.Color.FromName(color_lookup).ToString;
+            foreach (WL_Results m in wlresults ) {
+                //var brush = new SolidColorBrush(System.Drawing.Color.FromName(color_lookup[m.rounded_gantry]));
+                var brush = System.Drawing.Color.FromName(color_lookup[m.rounded_gantry]);
+                var color_brsh = new SolidColorBrush(System.Windows.Media.Color.FromArgb(brush.A,brush.R, brush.G, brush.B));
+                var ellipse = new Ellipse
+                {
+                    Stroke = color_brsh,
+                    Fill = color_brsh,
+                    StrokeThickness = 1,
+                    Height = 5,
+                    Width = 5,
+                    
+                };
+                ellipse.Margin = new Thickness( (visualCanvas.Width - ellipse.Width) / 2 - m.x_display, (visualCanvas.Height - ellipse.Height) / 2 - m.y_display, 0, 0);
+                visualCanvas.Children.Add(ellipse);
+                }
+            var brush1 = new SolidColorBrush(Colors.Black);
+            var ellipse1 = new Ellipse
+            {
+                Stroke = brush1,
+                Fill = brush1,
+                StrokeThickness = 1,
+                Height = 5,
+                Width = 5,
+                
+            };
+            ellipse1.Margin = new Thickness((visualCanvas.Width - ellipse1.Width) / 2, (visualCanvas.Height - ellipse1.Height) / 2, 0, 0);
+            visualCanvas.Children.Add(ellipse1);
+            //List<int>[] unique_gantry = int.Parse(wlresults.Select(x=>x.gantry_angle))
         }
         private UIElement source;
         private bool captured;
@@ -298,6 +361,15 @@ namespace PD_AdvAnalysis
             public double resx { get; set; }
             public double resy { get; set; }
         }
+        public class WL_Results
+        {
+            public double x_display { get; set; }
+            public double y_display { get; set; }
+            public double gantry_angle { get; set; }
+            public double  psupport_angle { get; set; }
+            public int rounded_gantry { get; set; }
+            public int rounded_psupport { get; set; }
+        }
         private void getImages_btn_Click(object sender, RoutedEventArgs e)
         {
             images.Clear();
@@ -406,23 +478,10 @@ namespace PD_AdvAnalysis
             field_img.Source = images[image_number].bmp;
         }
 
-        private void visualAnal_btn_Click(object sender, RoutedEventArgs e)
-        {
-            var brush = new SolidColorBrush(Colors.Black);
-            var ellipse = new Ellipse
-            {
-                Stroke = brush,
-                Fill = brush,
-                StrokeThickness = 1,
-                Height =5,
-                Width = 5,
-            };
-            double xposition;
-            double yposition;
-            xposition = (ellipse.Margin.Left - visualCanvas.Width) / 2;
-            yposition = (ellipse.Margin.Top - visualCanvas.Height) / 2;
-            visualCanvas.Children.Add(ellipse);
-        }
+        //private void visualAnal_btn_Click(object sender, RoutedEventArgs e)
+        //{
+           
+        //}
 
         private void Ell_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -457,10 +516,7 @@ namespace PD_AdvAnalysis
                     c.Height = cone_sb.Value / images.Last().resy;
                 }
             }
-
         }
-
-
     }
 }
 
