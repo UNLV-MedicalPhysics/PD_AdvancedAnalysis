@@ -174,7 +174,7 @@ namespace PD_AdvAnalysis
                 //Add Longitudinal displacement.
 
                 //think about whether the direction for the micrometer will be CW or CCW.
-                
+
                 System.Windows.Controls.Label newLabel = new System.Windows.Controls.Label();
                 newLabel.HorizontalAlignment = HorizontalAlignment.Left;
                 newLabel.VerticalAlignment = VerticalAlignment.Top;
@@ -184,7 +184,7 @@ namespace PD_AdvAnalysis
                 newLabel.Content = newLabel_txt;
                 canvas.Children.Clear();
                 canvas.Children.Add(newLabel);
-            
+
                 MessageBox.Show(string.Format(" Field ID: {7} \n Gantry angle: {8}\nThe center of the Ball is: X: {0}  Y: {1} \nThe center of the Cone is: X: {2}  Y: {3} \n Move ball {4} mm in the lateral direction \n Move ball {5} mm in vertical direction \n Move the ball {6} mm in longitudinal direction", position, position1, position2, position3, wlresults.Last().x_display, wlresults.Last().y_display, ima.f.Image.Id, wlresults.Last().rounded_gantry, wlresults.Last().rounded_psupport));
             }
             //display markers on canvas. 
@@ -196,17 +196,17 @@ namespace PD_AdvAnalysis
             int[] unique_gantry = wlresults.Select(x => x.rounded_gantry).Distinct().ToArray();
             //create dictionary where key is this unique value option and value is the color.  
             Dictionary<int, string> color_lookup = new Dictionary<int, string>();
-            for(int i = 0; i<unique_gantry.Count();i++)
+            for (int i = 0; i < unique_gantry.Count(); i++)
             {
                 color_lookup.Add(unique_gantry[i], colors[i]);
             }
             //call up the color by using color_lookup[wlresults.rounded_gantry];
             //var color = Color.FromName(color_lookup);
             //var color = System.Drawing.Color.FromName(color_lookup).ToString;
-            foreach (WL_Results m in wlresults ) {
+            foreach (WL_Results m in wlresults) {
                 //var brush = new SolidColorBrush(System.Drawing.Color.FromName(color_lookup[m.rounded_gantry]));
                 var brush = System.Drawing.Color.FromName(color_lookup[m.rounded_gantry]);
-                var color_brsh = new SolidColorBrush(System.Windows.Media.Color.FromArgb(brush.A,brush.R, brush.G, brush.B));
+                var color_brsh = new SolidColorBrush(System.Windows.Media.Color.FromArgb(brush.A, brush.R, brush.G, brush.B));
                 var ellipse = new Ellipse
                 {
                     Stroke = color_brsh,
@@ -214,11 +214,14 @@ namespace PD_AdvAnalysis
                     StrokeThickness = 1,
                     Height = 5,
                     Width = 5,
-                    
+
                 };
-                ellipse.Margin = new Thickness( (visualCanvas.Width - ellipse.Width) / 2 - m.x_display, (visualCanvas.Height - ellipse.Height) / 2 - m.y_display, 0, 0);
+                ellipse.Margin = new Thickness((visualCanvas.Width - ellipse.Width) / 2 - m.x_display, (visualCanvas.Height - ellipse.Height) / 2 - m.y_display, 0, 0);
                 visualCanvas.Children.Add(ellipse);
-                }
+                double distance_x = ((visualCanvas.Width - ellipse.Width) / 2);
+                double distance_y = ((visualCanvas.Height - ellipse.Height) / 2);
+                ellipse.ToolTip = string.Format("The distance from the center is the X direction is: {0} \n The distance from the cetner in the Y direction is:{1}", distance_x, distance_y);
+            }
             var brush1 = new SolidColorBrush(Colors.Black);
             var ellipse1 = new Ellipse
             {
@@ -227,10 +230,33 @@ namespace PD_AdvAnalysis
                 StrokeThickness = 1,
                 Height = 5,
                 Width = 5,
-                
+
             };
             ellipse1.Margin = new Thickness((visualCanvas.Width - ellipse1.Width) / 2, (visualCanvas.Height - ellipse1.Height) / 2, 0, 0);
             visualCanvas.Children.Add(ellipse1);
+            
+            var threshold_ellipse = new Ellipse
+            {
+                Stroke = brush1,
+                StrokeThickness = 1,
+                Height = 20,
+                Width = 20,
+            };
+            threshold_ellipse.Margin = new Thickness((visualCanvas.Width - threshold_ellipse.Width) / 2, (visualCanvas.Height - threshold_ellipse.Height) / 2, 0, 0);
+            visualCanvas.Children.Add(threshold_ellipse);
+            //ToolTip t = new System.Windows.Controls.ToolTip();
+            //t.PlacementTarget = ellipse1;
+            //t.Placement = System.Windows.Controls.Primitives.PlacementMode.Center;
+            //t.Content = distance_fromCenter;
+            //t.IsOpen = true;
+            
+            //else
+            //{
+
+            //}
+            //visualCanvas.Children.Clear();
+            //visualCanvas.Children.Add(t);
+
             //List<int>[] unique_gantry = int.Parse(wlresults.Select(x=>x.gantry_angle))
         }
         private UIElement source;
@@ -369,6 +395,7 @@ namespace PD_AdvAnalysis
             public double  psupport_angle { get; set; }
             public int rounded_gantry { get; set; }
             public int rounded_psupport { get; set; }
+            public Ellipse ell3 { get; set; }
         }
         private void getImages_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -478,9 +505,23 @@ namespace PD_AdvAnalysis
             field_img.Source = images[image_number].bmp;
         }
 
+        private void threshold_sb_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+        //    foreach( Shape l in visualCanvas.Children)
+        //    {
+        //        if (l.Name == "threshold_sb")
+        //        {
+        //            l.Width = threshold_sb.Value;
+        //            l.Height = threshold_sb.Value;
+        //        }
+        //        visualCanvas.Children.Add(ell3);
+        //    }
+
+        }
+
         //private void visualAnal_btn_Click(object sender, RoutedEventArgs e)
         //{
-           
+
         //}
 
         private void Ell_MouseDown(object sender, MouseButtonEventArgs e)
