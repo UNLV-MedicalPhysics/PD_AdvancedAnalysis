@@ -44,7 +44,7 @@ namespace PD_AdvAnalysis
 
             foreach (PDBeam pb in ps.Beams)
             {
-                
+
 
                 //Fields.Children.Add(cb);
 
@@ -175,17 +175,17 @@ namespace PD_AdvAnalysis
 
                 //think about whether the direction for the micrometer will be CW or CCW.
 
-                System.Windows.Controls.Label newLabel = new System.Windows.Controls.Label();
-                newLabel.HorizontalAlignment = HorizontalAlignment.Left;
-                newLabel.VerticalAlignment = VerticalAlignment.Top;
-                newLabel.Width = 200;
-                newLabel.Height = 100;
-                string newLabel_txt = string.Format(" Field ID: {0} \n Gantry Angle: {1} \n Coouch Angle {2}", ima.f.Image.Id, wlresults.Last().rounded_gantry, wlresults.Last().rounded_psupport);
-                newLabel.Content = newLabel_txt;
-                canvas.Children.Clear();
-                canvas.Children.Add(newLabel);
+                //System.Windows.Controls.Label newLabel = new System.Windows.Controls.Label();
+                //newLabel.HorizontalAlignment = HorizontalAlignment.Left;
+                //newLabel.VerticalAlignment = VerticalAlignment.Top;
+                //newLabel.Width = 200;
+                //newLabel.Height = 100;
+                //string newLabel_txt = string.Format(" Field ID: {0} \n Gantry Angle: {1} \n Coouch Angle {2}", ima.f.Image.Id, wlresults.Last().rounded_gantry, wlresults.Last().rounded_psupport);
+                //newLabel.Content = newLabel_txt;
+                //canvas.Children.Clear();
+                //canvas.Children.Add(newLabel);
 
-                MessageBox.Show(string.Format(" Field ID: {7} \n Gantry angle: {8}\nThe center of the Ball is: X: {0}  Y: {1} \nThe center of the Cone is: X: {2}  Y: {3} \n Move ball {4} mm in the lateral direction \n Move ball {5} mm in vertical direction \n Move the ball {6} mm in longitudinal direction", position, position1, position2, position3, wlresults.Last().x_display, wlresults.Last().y_display, ima.f.Image.Id, wlresults.Last().rounded_gantry, wlresults.Last().rounded_psupport));
+                //MessageBox.Show(string.Format(" Field ID: {7} \n Gantry angle: {8}\nThe center of the Ball is: X: {0}  Y: {1} \nThe center of the Cone is: X: {2}  Y: {3} \n Move ball {4} mm in the lateral direction \n Move ball {5} mm in vertical direction \n Move the ball {6} mm in longitudinal direction", position, position1, position2, position3, wlresults.Last().x_display, wlresults.Last().y_display, ima.f.Image.Id, wlresults.Last().rounded_gantry, wlresults.Last().rounded_psupport));
             }
             //display markers on canvas. 
             //for this first round, just make everything an ellipse with the color changing based on the gantry angle.
@@ -203,10 +203,14 @@ namespace PD_AdvAnalysis
             //call up the color by using color_lookup[wlresults.rounded_gantry];
             //var color = Color.FromName(color_lookup);
             //var color = System.Drawing.Color.FromName(color_lookup).ToString;
-            foreach (WL_Results m in wlresults) {
+            visualCanvas.Children.Clear();
+            foreach (WL_Results m in wlresults)
+            {
+
                 //var brush = new SolidColorBrush(System.Drawing.Color.FromName(color_lookup[m.rounded_gantry]));
                 var brush = System.Drawing.Color.FromName(color_lookup[m.rounded_gantry]);
                 var color_brsh = new SolidColorBrush(System.Windows.Media.Color.FromArgb(brush.A, brush.R, brush.G, brush.B));
+
                 var ellipse = new Ellipse
                 {
                     Stroke = color_brsh,
@@ -215,12 +219,15 @@ namespace PD_AdvAnalysis
                     Height = 5,
                     Width = 5,
 
+
                 };
                 ellipse.Margin = new Thickness((visualCanvas.Width - ellipse.Width) / 2 - m.x_display, (visualCanvas.Height - ellipse.Height) / 2 - m.y_display, 0, 0);
+
                 visualCanvas.Children.Add(ellipse);
-                double distance_x = ((visualCanvas.Width - ellipse.Width) / 2);
-                double distance_y = ((visualCanvas.Height - ellipse.Height) / 2);
-                ellipse.ToolTip = string.Format("The distance from the center is the X direction is: {0} \n The distance from the cetner in the Y direction is:{1}", distance_x, distance_y);
+                double distance_x = (ellipse.Margin.Left - (visualCanvas.Width + ellipse.Width) / 2);
+                double distance_y = (ellipse.Margin.Top - (visualCanvas.Height + ellipse.Height) / 2);
+                ellipse.ToolTip = string.Format("Field ID: {0} \n Gantry Angle: {1} \n Coouch Angle {2} \n The distance from the center is the X direction is: {0} \n The distance from the cetner in the Y direction is:{1}"
+                  , images.Last().image_id, wlresults.Last().rounded_gantry.ToString("F2"), wlresults.Last().rounded_psupport.ToString("F2"), m.x_display, m.y_display);
             }
             var brush1 = new SolidColorBrush(Colors.Black);
             var ellipse1 = new Ellipse
@@ -234,28 +241,23 @@ namespace PD_AdvAnalysis
             };
             ellipse1.Margin = new Thickness((visualCanvas.Width - ellipse1.Width) / 2, (visualCanvas.Height - ellipse1.Height) / 2, 0, 0);
             visualCanvas.Children.Add(ellipse1);
-            
+            Binding bnd = new Binding("Value") { ElementName = "slValue" };
             var threshold_ellipse = new Ellipse
             {
                 Stroke = brush1,
                 StrokeThickness = 1,
-                Height = 20,
-                Width = 20,
+                Height = 50,
+                Width = 50,
             };
-            threshold_ellipse.Margin = new Thickness((visualCanvas.Width - threshold_ellipse.Width) / 2, (visualCanvas.Height - threshold_ellipse.Height) / 2, 0, 0);
-            visualCanvas.Children.Add(threshold_ellipse);
-            //ToolTip t = new System.Windows.Controls.ToolTip();
-            //t.PlacementTarget = ellipse1;
-            //t.Placement = System.Windows.Controls.Primitives.PlacementMode.Center;
-            //t.Content = distance_fromCenter;
-            //t.IsOpen = true;
-            
-            //else
-            //{
+            //threshold_ellipse.Margin = new Thickness((visualCanvas.Width - threshold_ellipse.Width) / 2, (visualCanvas.Height - threshold_ellipse.Height) / 2, 0, 0);
+            threshold_ellipse.HorizontalAlignment = HorizontalAlignment.Center;
 
-            //}
-            //visualCanvas.Children.Clear();
-            //visualCanvas.Children.Add(t);
+            threshold_ellipse.VerticalAlignment = VerticalAlignment.Center;
+            BindingOperations.SetBinding(threshold_ellipse, Ellipse.WidthProperty, bnd);
+            BindingOperations.SetBinding(threshold_ellipse, Ellipse.HeightProperty, bnd);
+            //BindingOperations.SetBinding(threshold_ellipse, Ellipse.MarginProperty, bnd);
+            visualGrid.Children.Add(threshold_ellipse);
+            
 
             //List<int>[] unique_gantry = int.Parse(wlresults.Select(x=>x.gantry_angle))
         }
@@ -392,7 +394,7 @@ namespace PD_AdvAnalysis
             public double x_display { get; set; }
             public double y_display { get; set; }
             public double gantry_angle { get; set; }
-            public double  psupport_angle { get; set; }
+            public double psupport_angle { get; set; }
             public int rounded_gantry { get; set; }
             public int rounded_psupport { get; set; }
             public Ellipse ell3 { get; set; }
@@ -400,6 +402,7 @@ namespace PD_AdvAnalysis
         private void getImages_btn_Click(object sender, RoutedEventArgs e)
         {
             images.Clear();
+          
             int i_num = 0; int zoom_initial = 1;
             //get all the grids that make up all the fields.
             IEnumerable<Grid> grid_collections = Fields.Children.OfType<Grid>();
@@ -453,15 +456,28 @@ namespace PD_AdvAnalysis
                         //get the pixels and the frame of the new image.
                         images[i_num].pixels = new ushort[images[i_num].f.XSize, images[i_num].f.YSize];
                         images[i_num].f.GetVoxels(0, images[i_num].pixels);
+                        System.Windows.Controls.Label newLabel = new System.Windows.Controls.Label();
+                        newLabel.HorizontalAlignment = HorizontalAlignment.Left;
+                        newLabel.VerticalAlignment = VerticalAlignment.Top;
+                        newLabel.Width = 200;
+                        newLabel.Height = 100;
+                        string newLabel_txt = string.Format(" Field ID: {0} \n Gantry Angle: {1} \n Coouch Angle {2}",
+                            images[i_num].f.Image.Id, images[i_num].WLBeam.ControlPoints.First().GantryAngle.ToString("F2"),
+                            images[i_num].WLBeam.ControlPoints.First().PatientSupportAngle.ToString("F2"));
+                        newLabel.Content = newLabel_txt;
+                        //canvas.Children.Clear();
+                        Panel.SetZIndex(newLabel, -2);
+                        canvas.Children.Add(newLabel);
+
                         i_num++;
 
                     }
-
                 }
-            }
+            } 
             canvas.Children.Clear();
             canvas.Children.Add(images[image_number].ell);
             canvas.Children.Add(images[image_number].ell2);
+            
             //create the bitmap for the first field (image number is 0 until changed with the next or previous button.
             ImageDecon2.ImageDecon2 id2 = new ImageDecon2.ImageDecon2();
             images[image_number].bmp = id2.DrawImage(images[image_number].f, images[image_number].pixels, images[image_number].zoom_number);
@@ -507,15 +523,20 @@ namespace PD_AdvAnalysis
 
         private void threshold_sb_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-        //    foreach( Shape l in visualCanvas.Children)
-        //    {
-        //        if (l.Name == "threshold_sb")
-        //        {
-        //            l.Width = threshold_sb.Value;
-        //            l.Height = threshold_sb.Value;
-        //        }
-        //        visualCanvas.Children.Add(ell3);
-        //    }
+            //    foreach( Shape l in visualCanvas.Children)
+            //    {
+            //        if (l.Name == "threshold_sb")
+            //        {
+            //            l.Width = threshold_sb.Value;
+            //            l.Height = threshold_sb.Value;
+            //        }
+            //        visualCanvas.Children.Add(ell3);
+            //    }
+
+        }
+
+        private void threshold_sb_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
 
         }
 

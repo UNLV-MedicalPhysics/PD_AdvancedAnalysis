@@ -38,17 +38,19 @@
         <Button Name="previous_btn" Margin="30, 700, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Previous" Click="previous_btn_Click"></Button>
         <Button Name="next_btn" Margin="508, 700, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="120" Height="30" Content="Next" Click="next_btn_Click"></Button>
         <Button Name="getImages_btn" Margin="240, 700, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Grab Images" Click="getImages_btn_Click"></Button>
-        <Slider Name="threshold_sb" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1000,700,0,0" Width="150"  Minimum="1" Maximum="40" TickPlacement="BottomRight" TickFrequency="1" ValueChanged="threshold_sb_ValueChanged" Value="15"></Slider>
-        <Label Name="Threshold_Label" Margin="840,690, 0, 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="150">Set Threshold</Label>
+        <!--<Slider x:Name="threshold_sb" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1000,700,0,0" Width="150"  Minimum="1" Maximum="40" TickPlacement="BottomRight" TickFrequency="1" ValueChanged="threshold_sb_ValueChanged" Value="15" Binding.TargetUpdated="threshold_sb_TargetUpdated"></Slider>
+        <Label Name="Threshold_Label" Margin="840,690, 0, 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="150">Set Threshold</Label>-->
+        <DockPanel  Width="150" Height="30" Margin="800, 600, 0, 0">
+            <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}"  DockPanel.Dock="Right" TextAlignment="Right" Width="40" Height="30" RenderTransformOrigin="0.628,-2.382" />
+            <Slider Maximum="300" Minimum="50" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" Name="slValue" />
+        </DockPanel>
         <Border Margin="840,210,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="500" Height="450" BorderBrush="Black" BorderThickness="2">
-           
+            <Grid x:Name="visualGrid" Width="500" Height="450">
                 <Canvas Name="visualCanvas"  Width="500" Height="450">
                 
                 </Canvas>
-                <!--<Image Name="field_img" Width="600" Height="450" Panel.ZIndex="-1"></Image>-->
-            
-            
-
-        </Border>
+            </Grid>
+            <!--<Image Name="field_img" Width="600" Height="450" Panel.ZIndex="-1"></Image>-->
+           </Border>
     </Grid>
 </UserControl>
