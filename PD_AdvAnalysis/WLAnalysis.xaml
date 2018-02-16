@@ -40,9 +40,18 @@
         <Button Name="getImages_btn" Margin="240, 700, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Width="150" Height="30" Content="Grab Images" Click="getImages_btn_Click"></Button>
         <!--<Slider x:Name="threshold_sb" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1000,700,0,0" Width="150"  Minimum="1" Maximum="40" TickPlacement="BottomRight" TickFrequency="1" ValueChanged="threshold_sb_ValueChanged" Value="15" Binding.TargetUpdated="threshold_sb_TargetUpdated"></Slider>
         <Label Name="Threshold_Label" Margin="840,690, 0, 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="150">Set Threshold</Label>-->
+        <!--Possible new framework element to do arithmatic inside of the binded property-->
+        <FrameworkElement Name="dummy" Visibility="Collapsed">
+            <FrameworkElement.RenderTransform>
+                <TransformGroup x:Name="xformgrp">
+                    <TranslateTransform X="{Binding ElementName=slValue, Path=Value}" />
+                    <ScaleTransform ScaleX="0.26458" />
+                </TransformGroup>
+            </FrameworkElement.RenderTransform>
+        </FrameworkElement>
         <DockPanel  Width="150" Height="30" Margin="800, 600, 0, 0">
-            <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}"  DockPanel.Dock="Right" TextAlignment="Right" Width="40" Height="30" RenderTransformOrigin="0.628,-2.382" />
-            <Slider Maximum="300" Minimum="50" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" Name="slValue" />
+            <TextBox Text="{Binding ElementName=dummy, Path=RenderTransform.Value.OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"  DockPanel.Dock="Right" TextAlignment="Right" Width="40" Height="30" RenderTransformOrigin="0.628,-2.382" />
+            <Slider Maximum="37.8" Minimum="3.78" TickPlacement="BottomRight" TickFrequency="3.78" IsSnapToTickEnabled="True" Name="slValue" />
         </DockPanel>
         <Border Margin="840,210,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="500" Height="450" BorderBrush="Black" BorderThickness="2">
             <Grid x:Name="visualGrid" Width="500" Height="450">

@@ -52,6 +52,7 @@ namespace PD_AdvAnalysis
             else
             {
                 //get the patient from the patient ID
+                //need PDapp.ClosePatient();
                 newcontext = PDapp.OpenPatientById(id_txt.Text);
 
                 //first clear the plan boxes.

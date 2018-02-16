@@ -241,7 +241,7 @@ namespace PD_AdvAnalysis
             };
             ellipse1.Margin = new Thickness((visualCanvas.Width - ellipse1.Width) / 2, (visualCanvas.Height - ellipse1.Height) / 2, 0, 0);
             visualCanvas.Children.Add(ellipse1);
-            Binding bnd = new Binding("Value") { ElementName = "slValue" };
+            Binding bnd = new Binding("Value") { ElementName = "slValue" };//binding to dummy element that has the multiplier
             var threshold_ellipse = new Ellipse
             {
                 Stroke = brush1,
@@ -261,6 +261,10 @@ namespace PD_AdvAnalysis
 
             //List<int>[] unique_gantry = int.Parse(wlresults.Select(x=>x.gantry_angle))
         }
+        //public class myEllipse : Ellipse
+        //{
+
+        //}
         private UIElement source;
         private bool captured;
         double current_x, current_y;
