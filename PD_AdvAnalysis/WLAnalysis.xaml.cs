@@ -167,7 +167,7 @@ namespace PD_AdvAnalysis
                 //Y_disp = (ball pos y - cone pos y)*22.5/96
                 //Lat = X_disp/cos(gantry)
                 //
-                wlresults.Last().x_display = ((position - position2) * images[image_number].resx / images[image_number].zoom_number);// * Math.Cos(g_angle * 180 / Math.PI);
+                wlresults.Last().x_display = -((position - position2) * images[image_number].resx / images[image_number].zoom_number);// * Math.Cos(g_angle * 180 / Math.PI);
                 //vert_disp = ((position - position2) * images[image_number].resx / images[image_number].zoom_number);// * Math.Sin(g_angle * 180 / Math.PI);
                 wlresults.Last().y_display = -(position1 - position3) * images[image_number].resy / images[image_number].zoom_number;
 
@@ -226,8 +226,8 @@ namespace PD_AdvAnalysis
                 visualCanvas.Children.Add(ellipse);
                 double distance_x = (ellipse.Margin.Left - (visualCanvas.Width + ellipse.Width) / 2);
                 double distance_y = (ellipse.Margin.Top - (visualCanvas.Height + ellipse.Height) / 2);
-                ellipse.ToolTip = string.Format("Field ID: {0} \n Gantry Angle: {1} \n Coouch Angle {2} \n The distance from the center is the X direction is: {0} \n The distance from the cetner in the Y direction is:{1}"
-                  , images.Last().image_id, wlresults.Last().rounded_gantry.ToString("F2"), wlresults.Last().rounded_psupport.ToString("F2"), m.x_display, m.y_display);
+                ellipse.ToolTip = string.Format("Field ID: {0} \n Gantry Angle: {1} \n Coouch Angle {2} \n The distance from the center is the X direction is: {3} \n The distance from the cetner in the Y direction is:{4}"
+                  , images.Last().image_id, wlresults.Last().rounded_gantry.ToString("F2"), wlresults.Last().rounded_psupport.ToString("F2"), m.x_display.ToString("F2"), m.y_display.ToString("F2"));
             }
             var brush1 = new SolidColorBrush(Colors.Black);
             var ellipse1 = new Ellipse

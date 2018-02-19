@@ -18,7 +18,7 @@
         </ScrollViewer>
 
         <Border Margin="30,210,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="600" Height="450" BorderBrush="Black" BorderThickness="2">
-            <Grid>
+            <Grid Name="grid1_name">
                 <Canvas Name="canvas"  Width="600" Height="450">
 
                 </Canvas>
@@ -45,13 +45,13 @@
             <FrameworkElement.RenderTransform>
                 <TransformGroup x:Name="xformgrp">
                     <TranslateTransform X="{Binding ElementName=slValue, Path=Value}" />
-                    <ScaleTransform ScaleX="0.26458" />
+                    <ScaleTransform ScaleX="0.4033" />
                 </TransformGroup>
             </FrameworkElement.RenderTransform>
         </FrameworkElement>
         <DockPanel  Width="150" Height="30" Margin="800, 600, 0, 0">
             <TextBox Text="{Binding ElementName=dummy, Path=RenderTransform.Value.OffsetX, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"  DockPanel.Dock="Right" TextAlignment="Right" Width="40" Height="30" RenderTransformOrigin="0.628,-2.382" />
-            <Slider Maximum="37.8" Minimum="3.78" TickPlacement="BottomRight" TickFrequency="3.78" IsSnapToTickEnabled="True" Name="slValue" />
+            <Slider Maximum="49.6" Minimum="2.48" TickPlacement="BottomRight" TickFrequency="2.48" IsSnapToTickEnabled="True" Name="slValue" />
         </DockPanel>
         <Border Margin="840,210,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="500" Height="450" BorderBrush="Black" BorderThickness="2">
             <Grid x:Name="visualGrid" Width="500" Height="450">
