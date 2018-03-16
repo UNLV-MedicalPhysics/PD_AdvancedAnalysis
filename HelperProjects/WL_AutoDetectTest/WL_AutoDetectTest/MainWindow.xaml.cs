@@ -121,7 +121,7 @@ namespace WL_AutoDetectTest
                 float sumDiff = 0; int count = 0;
                 for(int j = Convert.ToInt32(line_y-rows_AVG/2); j< Convert.ToInt32(line_y + rows_AVG / 2); j++)
                 {
-                    sumDiff += Math.Abs(image.pixels[j][i + 1] - image.pixels[j][i]);
+                    sumDiff += image.pixels[j][i + 1] - image.pixels[j][i];
                     count++;
                 }
                 averaged_grad[Convert.ToInt32(profile_ln.Margin.Left) + i - line_x] = sumDiff / count;
