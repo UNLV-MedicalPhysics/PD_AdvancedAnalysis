@@ -203,7 +203,7 @@ namespace PD_AdvAnalysis
                             gamma_pass = analysis.EvaluationTests.First().TestValue;
                         }
                         //The Code below shows the results from the gamma test. It is color coded to show where the gamma passes or failes.
-                        TextBox gamma_box = new TextBox(); gamma_box.IsReadOnly = true; gamma_box.Text = gamma_pass.ToString("F3");
+                        TextBox gamma_box = new TextBox(); gamma_box.IsReadOnly = true; gamma_box.Text = gamma_pass.ToString("F2"); 
                         gamma_box.Width = bw; gamma_box.Height = bh; gamma_box.Background = gamma_pass < tol * 100 ? Brushes.Pink : Brushes.LightGreen; gamma_box.BorderBrush = Brushes.Black;
                         gamma_box.HorizontalAlignment = HorizontalAlignment.Left; gamma_box.VerticalAlignment = VerticalAlignment.Top;
                         gamma_box.Margin = new Thickness(marginx, marginy, 0, 0);
