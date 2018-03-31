@@ -123,6 +123,8 @@ namespace PD_AdvAnalysis
 
         }
         //under construction.
+        List<List<float[]>> gradients_x_allimages = new List<List<float[]>>();
+        int row_number = 0;
         private void autodetect_btn_Click(object sender, RoutedEventArgs e)
         {
             foreach (WL_Image img in images)
@@ -136,117 +138,169 @@ namespace PD_AdvAnalysis
                 List<int> peak_difference_y = new List<int>();
                 List<int> peak_difference_xBall = new List<int>();
                 List<int> peak_difference_yBall = new List<int>();
-                List<float[]> gradients_x = new List<float[]>();
-                for (int y_line1 = Convert.ToInt32((img.pixels.GetLength(1)/2) - 30); y_line1 < Convert.ToInt32((img.pixels.GetLength(1)/2) + 30);y_line1++)
-                {
-                    //this will get the gradient of the row at y_line.
-                    float[] gradient = GetGrad(img, x_line, y_line1);
-                    //determine where the gradient first peaks at a maximum. 
-                    //write that locaiton to a class.
-                    gradients_x.Add(gradient);
-                    int cone_edge = gradient.ToList().IndexOf(gradient.Max());
-                    int cone_edge_end = gradient.ToList().IndexOf(gradient.Min());
-                    //double coneX = (cone_edge - cone_edge_end) / 2;
-                    int ball_edge = 0;
-                    int ball_edge_end = 0;
-                    peak_points_x.Add(new Tuple<int, int, int, int>(cone_edge, cone_edge_end, ball_edge, ball_edge_end));
-                    peak_difference_x.Add(cone_edge_end - cone_edge);
-                }
-                double cone_x = (Convert.ToInt32(peak_difference_x.Max())/2);
-                using (StreamWriter sw = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\testgradient.csv"))
-                {
-                    //foreach(float[] f in gradients_x)
-                    //{
-                    //    sw.WriteLine(String.Join(",", f));
-                    //}
-                    
-                    for(int i = 0; i < gradients_x[0].Length; i++)
-                    {
-                        string row = "";
-                        for(int j = 0; j < gradients_x.Count; j++)
-                        {
-                            row += gradients_x[j][i].ToString()+",";
-                        }
-                        sw.WriteLine(row);
-                    }
-                    sw.Flush();
-                }
-                    // double coneX = (cone_edge - cone_edge_end) / 2;
-                    for (int x_line1 = Convert.ToInt32(img.pixels.GetLength(1)/2) - 30; x_line1 < Convert.ToInt32(img.pixels.GetLength(1)/2) + 30; x_line1++)
-                    {
-                        float[] gradient = GetGrad(img, x_line, x_line1);
-                        //determine where the gradient first peaks at a maximum. 
-                        //write that locaiton to a class.
-                        int ball_edgeY = 0;
-                        int ball_edge_endY = 0;
-                        int cone_edgeY = gradient.ToList().IndexOf(gradient.Max());
-                        int cone_edge_endY = gradient.ToList().IndexOf(gradient.Min());
-                        peak_points_y.Add(new Tuple<int, int, int, int>(cone_edgeY, cone_edge_endY, ball_edgeY, ball_edge_endY));
-                        peak_difference_y.Add(cone_edge_endY - cone_edgeY);
-                    }
-                
-                double cone_y = (Convert.ToInt32(peak_difference_y.Max())/ 2);
-                //this if for the ball
-                for (int y_line1 = Convert.ToInt32(img.pixels.GetLength(1)/2) - 20; y_line1 < Convert.ToInt32(img.pixels.GetLength(1)/2) + 20;y_line1++)
-                {
-                    //this will get the gradient of the row at y_line.
-                    float[] gradient = GetGrad(img, x_line, y_line1);
-                    //determine where the gradient first peaks at a maximum. 
-                    //write that locaiton to a class.
-                    int ball_edge = gradient.ToList().IndexOf(gradient.Max());
-                    int ball_edge_end = gradient.ToList().IndexOf(gradient.Min());
-                    //double coneX = (cone_edge - cone_edge_end) / 2;
-                    int cone_edge = 0;
-                    int cone_edge_end = 0;
-                    peak_points_x.Add(new Tuple<int, int, int, int>(cone_edge, cone_edge_end, ball_edge, ball_edge_end));
-                    peak_difference_xBall.Add(ball_edge_end - ball_edge);
-                }
-                double ball_x = (Convert.ToInt32(peak_difference_xBall.Max() )/2);
-                for (int x_line1 = (Convert.ToInt32(img.pixels.GetLength(1)/2)) - 20; x_line1 <( Convert.ToInt32(img.pixels.GetLength(1))/2) + 20;x_line1++)
-                {
-                    float[] gradient = GetGrad(img, x_line, x_line1);
-                    //determine where the gradient first peaks at a maximum. 
-                    //write that locaiton to a class.
-                    int cone_edgeY = 0;
-                    int cone_edge_endY = 0;
-                    int ball_edgeY = gradient.ToList().IndexOf(gradient.Max());
-                    int ball_edge_endY = gradient.ToList().IndexOf(gradient.Min());
-                    peak_points_y.Add(new Tuple<int, int, int, int>(cone_edgeY, cone_edge_endY, ball_edgeY, ball_edge_endY));
-                    peak_difference_yBall.Add((ball_edge_endY - ball_edgeY));
-                }
-                double ball_y = (Convert.ToInt32(peak_difference_yBall.Max()) / 2);
-                double position_x = (ball_x - cone_x) * img.resx / img.zoom_number;
-                double position_y = (ball_y - cone_y) * img.resy / img.zoom_number;
-                MessageBox.Show(string.Format(" The distance from the center is the X direction is: {0} mm\n The distance from the cetner in the Y direction is:{1} mm", position_x.ToString("F2"), position_y.ToString("F2")));
+                List<float[]> gradients_x = GetGrad(img, x_line, y_line);
+                gradients_x_allimages.Add(gradients_x);
+                //for (int y_line1 = Convert.ToInt32((img.pixels.GetLength(1)/2) - 30); y_line1 < Convert.ToInt32((img.pixels.GetLength(1)/2) + 30);y_line1++)
+                //{
+                //this will get the gradient of the row at y_line.
+                //    float[] gradient = GetGrad(img, x_line, y_line1);
+                //determine where the gradient first peaks at a maximum. 
+                //write that locaiton to a class.
+                //    gradients_x.Add(gradient);
+                //int cone_edge = gradient.ToList().IndexOf(gradient.Max());
+                //int cone_edge_end = gradient.ToList().IndexOf(gradient.Min());
+                ////double coneX = (cone_edge - cone_edge_end) / 2;
+                //int ball_edge = 0;
+                //int ball_edge_end = 0;
+                //peak_points_x.Add(new Tuple<int, int, int, int>(cone_edge, cone_edge_end, ball_edge, ball_edge_end));
+                //peak_difference_x.Add(cone_edge_end - cone_edge);
+                //}
+                //double cone_x = (Convert.ToInt32(peak_difference_x.Max())/2);
+                //using (StreamWriter sw = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\testgradient.csv"))
+                //{
+                //    //foreach(float[] f in gradients_x)
+                //    //{
+                //    //    sw.WriteLine(String.Join(",", f));
+                //    //}
+
+                //    for(int i = 0; i < gradients_x[0].Length; i++)
+                //    {
+                //        string row = "";
+                //        for(int j = 0; j < gradients_x.Count; j++)
+                //        {
+                //            row += gradients_x[j][i].ToString()+",";
+                //        }
+                //        sw.WriteLine(row);
+                //    }
+                //    sw.Flush();
+                //}
+                //        // double coneX = (cone_edge - cone_edge_end) / 2;
+                //        for (int x_line1 = Convert.ToInt32(img.pixels.GetLength(1)/2) - 30; x_line1 < Convert.ToInt32(img.pixels.GetLength(1)/2) + 30; x_line1++)
+                //        {
+                //            float[] gradient = GetGrad(img, x_line, x_line1);
+                //            //determine where the gradient first peaks at a maximum. 
+                //            //write that locaiton to a class.
+                //            int ball_edgeY = 0;
+                //            int ball_edge_endY = 0;
+                //            int cone_edgeY = gradient.ToList().IndexOf(gradient.Max());
+                //            int cone_edge_endY = gradient.ToList().IndexOf(gradient.Min());
+                //            peak_points_y.Add(new Tuple<int, int, int, int>(cone_edgeY, cone_edge_endY, ball_edgeY, ball_edge_endY));
+                //            peak_difference_y.Add(cone_edge_endY - cone_edgeY);
+                //        }
+
+                //    double cone_y = (Convert.ToInt32(peak_difference_y.Max())/ 2);
+                //    //this if for the ball
+                //    for (int y_line1 = Convert.ToInt32(img.pixels.GetLength(1)/2) - 20; y_line1 < Convert.ToInt32(img.pixels.GetLength(1)/2) + 20;y_line1++)
+                //    {
+                //        //this will get the gradient of the row at y_line.
+                //        float[] gradient = GetGrad(img, x_line, y_line1);
+                //        //determine where the gradient first peaks at a maximum. 
+                //        //write that locaiton to a class.
+                //        int ball_edge = gradient.ToList().IndexOf(gradient.Max());
+                //        int ball_edge_end = gradient.ToList().IndexOf(gradient.Min());
+                //        //double coneX = (cone_edge - cone_edge_end) / 2;
+                //        int cone_edge = 0;
+                //        int cone_edge_end = 0;
+                //        peak_points_x.Add(new Tuple<int, int, int, int>(cone_edge, cone_edge_end, ball_edge, ball_edge_end));
+                //        peak_difference_xBall.Add(ball_edge_end - ball_edge);
+                //    }
+                //    double ball_x = (Convert.ToInt32(peak_difference_xBall.Max() )/2);
+                //    for (int x_line1 = (Convert.ToInt32(img.pixels.GetLength(1)/2)) - 20; x_line1 <( Convert.ToInt32(img.pixels.GetLength(1))/2) + 20;x_line1++)
+                //    {
+                //        float[] gradient = GetGrad(img, x_line, x_line1);
+                //        //determine where the gradient first peaks at a maximum. 
+                //        //write that locaiton to a class.
+                //        int cone_edgeY = 0;
+                //        int cone_edge_endY = 0;
+                //        int ball_edgeY = gradient.ToList().IndexOf(gradient.Max());
+                //        int ball_edge_endY = gradient.ToList().IndexOf(gradient.Min());
+                //        peak_points_y.Add(new Tuple<int, int, int, int>(cone_edgeY, cone_edge_endY, ball_edgeY, ball_edge_endY));
+                //        peak_difference_yBall.Add((ball_edge_endY - ball_edgeY));
+                //    }
+                //    double ball_y = (Convert.ToInt32(peak_difference_yBall.Max()) / 2);
+                //    double position_x = (ball_x - cone_x) * img.resx / img.zoom_number;
+                //    double position_y = (ball_y - cone_y) * img.resy / img.zoom_number;
+                //    MessageBox.Show(string.Format(" The distance from the center is the X direction is: {0} mm\n The distance from the cetner in the Y direction is:{1} mm", position_x.ToString("F2"), position_y.ToString("F2")));
             }
+            plotCanv1(gradients_x_allimages, gradient_cnv, image_number, row_number);
         }
-        private float[] GetGrad(WL_Image image, int line_x, int y_line)
+
+        private void plotCanv1(List<List<float[]>> gradients_x_allimages, Canvas gradient_cnv, int image_number, int row_number)
         {
             //throw new NotImplementedException();
-            float[] averaged_grad = new float[Convert.ToInt32(line_x*2)];
-            float sumDiff = 0;// int count = 0;
-
-
-
-
-
-
-                int indexer = 0;
-            for (int i = (Convert.ToInt32(image.pixels.GetLength(1)/2) - line_x); i < (Convert.ToInt32(image.pixels.GetLength(1)/2) + line_x) ; i++)
-            {                
-                //for (int j = Convert.ToInt32(line_y - rows_AVG / 2); j < Convert.ToInt32(line_y + rows_AVG / 2); j++)
-                //{
-                int j = y_line;
-                sumDiff += image.pixels[j,i + 1] - image.pixels[j,i];
-                //count++;
-                // averaged_grad[Convert.ToInt32(profile_ln.Margin.Left) + i - line_x] = sumDiff / count;
-                averaged_grad[indexer] = sumDiff;
-                indexer++;
-                 //}
-              
+            gradient_cnv.Children.Clear();
+            float[] profile = gradients_x_allimages[image_number][row_number];
+            
+            double xcoeff = gradient_cnv.Width;
+            double ycoeff = gradient_cnv.Height / (profile.Max()-profile.Min());
+            max_txt.Text = profile.Max().ToString("F2");
+            min_txt.Text = profile.Min().ToString("F2");
+            for(int i = 0; i<profile.Count()-1; i++)
+            {
+                Line dProfile = new Line { Stroke = System.Windows.Media.Brushes.Blue, StrokeThickness = 2 };
+                dProfile.X1 = i;
+                dProfile.X2 = i + 1;
+                dProfile.Y1 = gradient_cnv.Height/2 - profile[i] * ycoeff;
+                dProfile.Y2 = gradient_cnv.Height /2- profile[i + 1] * ycoeff;
+                gradient_cnv.Children.Add(dProfile);
             }
-            return averaged_grad;
-           
+            //absolute max gradient of all profiles.
+            float abs_max = gradients_x_allimages[image_number].Max(x => x.Max());
+            float abs_min = gradients_x_allimages[image_number].Min(x => x.Min());
+            //only  put the distance between the min and max if it is within 20% of the overall max and min.
+            if(profile.Max() > 0.8*abs_max && profile.Min() < 0.8 * abs_min)
+            {
+                distance_txt.Text = Convert.ToString(profile.ToList().IndexOf(profile.Max()) - profile.ToList().IndexOf(profile.Min()));
+            }
+            else
+            {
+                distance_txt.Text = "NAN";
+            }
+        }
+
+        private List<float[]> GetGrad(WL_Image image, int line_x, int y_line)
+        {
+            ////throw new NotImplementedException();
+            //float[] averaged_grad = new float[Convert.ToInt32(line_x*2)];
+            //float sumDiff = 0;// int count = 0;
+
+
+
+
+
+
+            //    int indexer = 0;
+            //for (int i = (Convert.ToInt32(image.pixels.GetLength(1)/2) - line_x); i < (Convert.ToInt32(image.pixels.GetLength(1)/2) + line_x) ; i++)
+            //{                
+            //    //for (int j = Convert.ToInt32(line_y - rows_AVG / 2); j < Convert.ToInt32(line_y + rows_AVG / 2); j++)
+            //    //{
+            //    int j = y_line;
+            //    sumDiff += image.pixels[j,i + 1] - image.pixels[j,i];
+            //    //count++;
+            //    // averaged_grad[Convert.ToInt32(profile_ln.Margin.Left) + i - line_x] = sumDiff / count;
+            //    averaged_grad[indexer] = sumDiff;
+            //    indexer++;
+            //     //}
+
+            //}
+            //return averaged_grad;
+            //initialize a new list .
+            List<float[]> gradients = new List<float[]>();
+            for (int i = image.pixels.GetLength(1) / 2 - line_x / 2; i < image.pixels.GetLength(1) / 2 + line_x / 2; i++)
+            {
+                float[] this_grad = new float[y_line];
+                int index = 0;
+                for (int j = image.pixels.GetLength(0) / 2 - y_line / 2; j < image.pixels.GetLength(0) / 2 + y_line / 2; j++)
+                {
+
+                    this_grad[index] = image.pixels[i, j] - image.pixels[i, j - 1];
+
+
+                    index++;
+                }
+                gradients.Add(this_grad);
+            }
+            return gradients;
         }
         private void manualydetect_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -350,7 +404,7 @@ namespace PD_AdvAnalysis
                 double x_diplayposition = m.x_display / 4;
                 double y_displayposition = m.y_display / 4;
                 ellipse.ToolTip = string.Format("Field ID: {0} \n Gantry Angle: {1} \n Coouch Angle {2} \n The distance from the center is the X direction is: {3} \n The distance from the cetner in the Y direction is:{4}"
-                  , images.Last().image_id, wlresults.Last().rounded_gantry.ToString("F2"), wlresults.Last().rounded_psupport.ToString("F2"), x_diplayposition.ToString("F2") , y_displayposition.ToString("F2"));
+                  , images.Last().image_id, wlresults.Last().rounded_gantry.ToString("F2"), wlresults.Last().rounded_psupport.ToString("F2"), x_diplayposition.ToString("F2"), y_displayposition.ToString("F2"));
             }
             var brush1 = new SolidColorBrush(Colors.Black);
             var ellipse1 = new Ellipse
@@ -665,6 +719,28 @@ namespace PD_AdvAnalysis
         private void threshold_sb_TargetUpdated(object sender, DataTransferEventArgs e)
         {
 
+        }
+
+        private void up_btn_Click(object sender, RoutedEventArgs e)
+        {
+            row_number++;
+            if(row_number >= gradients_x_allimages[image_number].Count())
+            {
+                row_number = 0;
+            }
+            row_txt.Text = row_number.ToString();
+            plotCanv1(gradients_x_allimages, gradient_cnv, image_number, row_number);
+        }
+
+        private void down_btn_Click(object sender, RoutedEventArgs e)
+        {
+            row_number--;
+            if(row_number < 0)
+            {
+                row_number = gradients_x_allimages[image_number].Count() - 1;
+            }
+            row_txt.Text = row_number.ToString();
+            plotCanv1(gradients_x_allimages, gradient_cnv, image_number, row_number);
         }
 
         //private void visualAnal_btn_Click(object sender, RoutedEventArgs e)
