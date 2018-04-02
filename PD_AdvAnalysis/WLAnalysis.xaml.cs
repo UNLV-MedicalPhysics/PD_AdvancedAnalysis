@@ -124,6 +124,8 @@ namespace PD_AdvAnalysis
         }
         //under construction.
         List<List<float[]>> gradients_x_allimages = new List<List<float[]>>();
+        List<List<float[]>> gradients_y_allimages = new List<List<float[]>>();
+        int column_number = 0;
         int row_number = 0;
         private void autodetect_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -139,7 +141,10 @@ namespace PD_AdvAnalysis
                 List<int> peak_difference_xBall = new List<int>();
                 List<int> peak_difference_yBall = new List<int>();
                 List<float[]> gradients_x = GetGrad(img, x_line, y_line);
+                List<float[]> gradients_y = GetGradY(img, y_line, x_line);
                 gradients_x_allimages.Add(gradients_x);
+                gradients_y_allimages.Add(gradients_y);
+                
                 //for (int y_line1 = Convert.ToInt32((img.pixels.GetLength(1)/2) - 30); y_line1 < Convert.ToInt32((img.pixels.GetLength(1)/2) + 30);y_line1++)
                 //{
                 //this will get the gradient of the row at y_line.
@@ -223,6 +228,7 @@ namespace PD_AdvAnalysis
                 //    MessageBox.Show(string.Format(" The distance from the center is the X direction is: {0} mm\n The distance from the cetner in the Y direction is:{1} mm", position_x.ToString("F2"), position_y.ToString("F2")));
             }
             plotCanv1(gradients_x_allimages, gradient_cnv, image_number, row_number);
+            plotCanvY(gradients_y_allimages, gradient_cnvY, image_number, column_number);
         }
 
         private void plotCanv1(List<List<float[]>> gradients_x_allimages, Canvas gradient_cnv, int image_number, int row_number)
@@ -255,6 +261,39 @@ namespace PD_AdvAnalysis
             else
             {
                 distance_txt.Text = "NAN";
+            }
+        }
+
+        private void plotCanvY(List<List<float[]>> gradients_y_allimages, Canvas gradient_cnvY, int image_number, int column_number)
+        {
+            //throw new NotImplementedException();
+            gradient_cnvY.Children.Clear();
+            float[] profileY = gradients_y_allimages[image_number][column_number];
+
+            double xcoeff = gradient_cnvY.Width / (profileY.Max() - profileY.Min());
+            double ycoeff = gradient_cnvY.Height;
+            max_txtY.Text = profileY.Max().ToString("F2");
+            min_txtY.Text = profileY.Min().ToString("F2");
+            for (int j = 0; j < profileY.Count() - 1; j++)
+            {
+                Line dProfile = new Line { Stroke = System.Windows.Media.Brushes.Blue, StrokeThickness = 2 };
+                dProfile.X1 = gradient_cnvY.Width / 2 - profileY[j] * xcoeff;
+                dProfile.X2 = gradient_cnvY.Width / 2 - profileY[j + 1] * xcoeff;
+                dProfile.Y1 = j;
+                dProfile.Y2 = j + 1;
+                gradient_cnvY.Children.Add(dProfile);
+            }
+            //absolute max gradient of all profiles.
+            float abs_maxY = gradients_y_allimages[image_number].Max(x => x.Max());
+            float abs_minY = gradients_y_allimages[image_number].Min(x => x.Min());
+            //only  put the distance between the min and max if it is within 20% of the overall max and min.
+            if (profileY.Max() > 0.8 * abs_maxY && profileY.Min() < 0.8 * abs_minY)
+            {
+                distance_txtY.Text = Convert.ToString(profileY.ToList().IndexOf(profileY.Max()) - profileY.ToList().IndexOf(profileY.Min()));
+            }
+            else
+            {
+                distance_txtY.Text = "NAN";
             }
         }
 
@@ -301,7 +340,29 @@ namespace PD_AdvAnalysis
                 gradients.Add(this_grad);
             }
             return gradients;
+            
         }
+        private List<float[]> GetGradY(WL_Image image, int line_y, int x_line)
+        {
+            List<float[]> gradients = new List<float[]>();
+            for (int i = image.pixels.GetLength(1) / 2 - line_y / 2; i < image.pixels.GetLength(1) / 2 + line_y / 2; i++)
+            {
+                float[] this_grad = new float[line_y];
+                int index = 0;
+                for (int j = image.pixels.GetLength(0) / 2 - x_line / 2; j < image.pixels.GetLength(0) / 2 + x_line / 2; j++)
+                {
+
+                    this_grad[index] = image.pixels[i, j] - image.pixels[i, j - 1];
+
+
+                    index++;
+                }
+                gradients.Add(this_grad);
+            }
+            return gradients;
+
+        }
+
         private void manualydetect_btn_Click(object sender, RoutedEventArgs e)
         {
             List<WL_Results> wlresults = new List<WL_Results>();
@@ -734,10 +795,32 @@ namespace PD_AdvAnalysis
 
         private void down_btn_Click(object sender, RoutedEventArgs e)
         {
-            row_number--;
-            if(row_number < 0)
+            column_number--;
+            if(column_number < 0)
             {
-                row_number = gradients_x_allimages[image_number].Count() - 1;
+                column_number = gradients_y_allimages[image_number].Count() - 1;
+            }
+            column_txtY.Text = column_number.ToString();
+            plotCanvY(gradients_y_allimages, gradient_cnvY, image_number, column_number);
+        }
+
+        private void up_btnY_Click(object sender, RoutedEventArgs e)
+        {
+            column_number--;
+            if (column_number < 0)
+            {
+                column_number = gradients_y_allimages[image_number].Count() - 1;
+            }
+            column_txtY.Text = column_number.ToString();
+            plotCanvY(gradients_y_allimages, gradient_cnvY, image_number, column_number);
+        }
+
+        private void down_btn_Click_1(object sender, RoutedEventArgs e)
+        {
+            row_number++;
+            if (row_number >= gradients_x_allimages[image_number].Count())
+            {
+                row_number = 0;
             }
             row_txt.Text = row_number.ToString();
             plotCanv1(gradients_x_allimages, gradient_cnv, image_number, row_number);

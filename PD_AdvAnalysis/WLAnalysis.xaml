@@ -68,9 +68,20 @@
         <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,200">Row Number</TextBlock>
         <Button Name="up_btn" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,170" Content="Up" Width="50" Click="up_btn_Click"></Button>
         <TextBox Name="row_txt" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Margin="0,0,20,130"></TextBox>
-        <Button Name="down_btn" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,100" Width="50" Content="Dwn" Click="down_btn_Click"></Button>
+        <Button Name="down_btn" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,105" Width="50" Content="Dwn" Click="down_btn_Click_1"></Button>
         <TextBox Name="max_txt" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Margin="0,0,20,70"></TextBox>
         <TextBox Name="min_txt" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Margin="0,0,20,40"></TextBox>
         <TextBox Name="distance_txt" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Margin="0,0,20,10"></TextBox>
+        <Border Width="124" Height="240" HorizontalAlignment="Right" VerticalAlignment="Bottom" BorderBrush="Black"
+                Margin="0,0,600,20" BorderThickness="2">
+            <Canvas Name="gradient_cnvY" Margin="0,0,0,0" Height="240" Width="124"></Canvas>
+        </Border>
+        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,500,200">Column Number</TextBlock>
+        <Button Name="up_btnY" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,500,170" Content="Up" Width="50" Click="up_btnY_Click"></Button>
+        <TextBox Name="column_txtY" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Margin="0,0,500,130"></TextBox>
+        <Button Name="down_btnY" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,500,100" Width="50" Content="Dwn" Click="down_btn_Click"></Button>
+        <TextBox Name="max_txtY" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Margin="0,0,500,70"></TextBox>
+        <TextBox Name="min_txtY" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Margin="0,0,500,40"></TextBox>
+        <TextBox Name="distance_txtY" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Margin="0,0,500,10"></TextBox>
     </Grid>
 </UserControl>
