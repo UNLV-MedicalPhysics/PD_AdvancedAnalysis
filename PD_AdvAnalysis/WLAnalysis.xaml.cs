@@ -125,26 +125,29 @@ namespace PD_AdvAnalysis
         //under construction.
         List<List<float[]>> gradients_x_allimages = new List<List<float[]>>();
         List<List<float[]>> gradients_y_allimages = new List<List<float[]>>();
+        List<Tuple<double, double>> center_position_all_images = new List<Tuple<double, double>>();
         int column_number = 0;
         int row_number = 0;
         private void autodetect_btn_Click(object sender, RoutedEventArgs e)
         {
+            int image_loop = 0;
             foreach (WL_Image img in images)
             {
 
                 int x_line = 100;
                 int y_line = 100;
-                List<Tuple<int, int, int, int>> peak_points_x = new List<Tuple<int, int, int, int>>();
+                /*List<Tuple<int, int, int, int>> peak_points_x = new List<Tuple<int, int, int, int>>();
                 List<Tuple<int, int, int, int>> peak_points_y = new List<Tuple<int, int, int, int>>();
                 List<int> peak_difference_x = new List<int>();
                 List<int> peak_difference_y = new List<int>();
                 List<int> peak_difference_xBall = new List<int>();
-                List<int> peak_difference_yBall = new List<int>();
+                List<int> peak_difference_yBall = new List<int>();*/
+
                 List<float[]> gradients_x = GetGrad(img, x_line, y_line);
                 List<float[]> gradients_y = GetGradY(img, y_line, x_line);
                 gradients_x_allimages.Add(gradients_x);
                 gradients_y_allimages.Add(gradients_y);
-                
+
                 //for (int y_line1 = Convert.ToInt32((img.pixels.GetLength(1)/2) - 30); y_line1 < Convert.ToInt32((img.pixels.GetLength(1)/2) + 30);y_line1++)
                 //{
                 //this will get the gradient of the row at y_line.
@@ -226,9 +229,92 @@ namespace PD_AdvAnalysis
                 //    double position_x = (ball_x - cone_x) * img.resx / img.zoom_number;
                 //    double position_y = (ball_y - cone_y) * img.resy / img.zoom_number;
                 //    MessageBox.Show(string.Format(" The distance from the center is the X direction is: {0} mm\n The distance from the cetner in the Y direction is:{1} mm", position_x.ToString("F2"), position_y.ToString("F2")));
+
+                plotCanv1(gradients_x_allimages, gradient_cnv, image_number, row_number);
+                plotCanvY(gradients_y_allimages, gradient_cnvY, image_number, column_number);
+                // loop thorugh all profiles in gradient list.
+                //use same criteria as plotCanv1 to determine if they should be added to the list.
+                // find maximum value of this list.
+                //find all indexes where this max value exists. 
+                //take the median of this point.
+                float abs_max1 = gradients_x_allimages[image_loop].Max(x => x.Max());
+                float abs_min1 = gradients_x_allimages[image_loop].Min(x => x.Min());
+                List<int> min_max_distX = new List<int>();
+
+                foreach (float[] row in gradients_x_allimages[image_loop])
+                {
+                    if (row.Max() > 0.8 * abs_max1 && row.Min() < 0.8 * abs_min1)
+                    {
+                        min_max_distX.Add(row.ToList().IndexOf(row.Min()) - row.ToList().IndexOf(row.Max()));
+                    }
+                    else
+                    {
+                        min_max_distX.Add(0);
+                    }
+
+                }
+
+                int max_dist = min_max_distX.Max();
+                //a maximum distance of the max min differences exist, but may exist in more than 1 place.
+                //where does max_dist exist.
+                IEnumerable<int> max_dist_pos = min_max_distX.Where(x => x == max_dist);
+                //2 scenarios. 
+                //there is only 1 location for the maximum distance.
+                int max_dist_row = 0;
+                if (max_dist_pos.Count() == 1)
+                {
+                    max_dist_row = min_max_distX.IndexOf(max_dist);
+                }
+                else
+                {
+                    //if there is more than one, get the middle position.
+                    //get array of indexes
+                    int[] row_xs = min_max_distX.Select((a, i) => a == max_dist ? i : -1).Where(i => i != -1).ToArray();
+                    //middle one should be the row.
+                    max_dist_row = row_xs[(int)Math.Floor((double)(row_xs.Count() / 2))];
+                }
+                //max_dist = min_max_distX.Where(x => x == min_max_distX.Max;
+                //now max dist row is the position, find the actual location in the image where this row exists.
+                double actual_row_number;
+                actual_row_number = (img.pixels.GetLength(0) / 2 - x_line / 2 + max_dist_row);
+                //finding the maximum profile in the y direction
+                float abs_maxY = gradients_y_allimages[image_loop].Max(x => x.Max());
+                float abs_minY = gradients_y_allimages[image_loop].Min(x => x.Min());
+                List<int> min_max_distY = new List<int>();
+                
+                
+                    foreach (float[] col in gradients_y_allimages[image_loop])
+                    {
+                        if (col.Max() > 0.8 * abs_maxY && col.Min() < 0.8 * abs_minY)
+                        {
+                            min_max_distY.Add(col.ToList().IndexOf(col.Min()) - col.ToList().IndexOf(col.Max()));
+                        }
+                        else
+                        {
+                            min_max_distY.Add(0);
+                        }
+                    }
+                
+                int max_distY = min_max_distY.Max();
+                int max_dist_col = 0;
+                if (max_dist_pos.Count() == 1)
+                {
+                    max_dist_col = min_max_distY.IndexOf(max_distY);
+                }
+                else
+                {
+                    //if there is more than one, get the middle position.
+                    //get array of indexes
+                    int[] col_ys = min_max_distY.Select((a, i) => a == max_distY ? i : -1).Where(i => i != -1).ToArray();
+                    //middle one should be the row.
+                    max_dist_col = col_ys[(int)Math.Floor((double)(col_ys.Count() / 2))];
+                }
+                double actual_col_number;
+                actual_col_number = (img.pixels.GetLength(1) / 2 - y_line / 2 + max_dist_col);
+                center_position_all_images.Add(new Tuple<double, double>(actual_row_number, actual_col_number));
+                MessageBox.Show(string.Format("Position of the cone is: {0}, {1}", center_position_all_images.Last().Item1.ToString("F1"),
+                    center_position_all_images.Last().Item2.ToString("F1")));
             }
-            plotCanv1(gradients_x_allimages, gradient_cnv, image_number, row_number);
-            plotCanvY(gradients_y_allimages, gradient_cnvY, image_number, column_number);
         }
 
         private void plotCanv1(List<List<float[]>> gradients_x_allimages, Canvas gradient_cnv, int image_number, int row_number)
@@ -236,27 +322,28 @@ namespace PD_AdvAnalysis
             //throw new NotImplementedException();
             gradient_cnv.Children.Clear();
             float[] profile = gradients_x_allimages[image_number][row_number];
-            
+
             double xcoeff = gradient_cnv.Width;
-            double ycoeff = gradient_cnv.Height / (profile.Max()-profile.Min());
+            double ycoeff = gradient_cnv.Height / (profile.Max() - profile.Min());
             max_txt.Text = profile.Max().ToString("F2");
             min_txt.Text = profile.Min().ToString("F2");
-            for(int i = 0; i<profile.Count()-1; i++)
+            for (int i = 0; i < profile.Count() - 1; i++)
             {
                 Line dProfile = new Line { Stroke = System.Windows.Media.Brushes.Blue, StrokeThickness = 2 };
                 dProfile.X1 = i;
                 dProfile.X2 = i + 1;
-                dProfile.Y1 = gradient_cnv.Height/2 - profile[i] * ycoeff;
-                dProfile.Y2 = gradient_cnv.Height /2- profile[i + 1] * ycoeff;
+                dProfile.Y1 = gradient_cnv.Height / 2 - profile[i] * ycoeff;
+                dProfile.Y2 = gradient_cnv.Height / 2 - profile[i + 1] * ycoeff;
                 gradient_cnv.Children.Add(dProfile);
             }
             //absolute max gradient of all profiles.
             float abs_max = gradients_x_allimages[image_number].Max(x => x.Max());
             float abs_min = gradients_x_allimages[image_number].Min(x => x.Min());
             //only  put the distance between the min and max if it is within 20% of the overall max and min.
-            if(profile.Max() > 0.8*abs_max && profile.Min() < 0.8 * abs_min)
+            if (profile.Max() > 0.8 * abs_max && profile.Min() < 0.8 * abs_min)
             {
                 distance_txt.Text = Convert.ToString(profile.ToList().IndexOf(profile.Max()) - profile.ToList().IndexOf(profile.Min()));
+
             }
             else
             {
@@ -295,6 +382,7 @@ namespace PD_AdvAnalysis
             {
                 distance_txtY.Text = "NAN";
             }
+
         }
 
         private List<float[]> GetGrad(WL_Image image, int line_x, int y_line)
@@ -340,19 +428,19 @@ namespace PD_AdvAnalysis
                 gradients.Add(this_grad);
             }
             return gradients;
-            
+
         }
         private List<float[]> GetGradY(WL_Image image, int line_y, int x_line)
         {
             List<float[]> gradients = new List<float[]>();
-            for (int i = image.pixels.GetLength(1) / 2 - line_y / 2; i < image.pixels.GetLength(1) / 2 + line_y / 2; i++)
+            for (int j = image.pixels.GetLength(1) / 2 - line_y / 2; j < image.pixels.GetLength(1) / 2 + line_y / 2; j++)
             {
                 float[] this_grad = new float[line_y];
                 int index = 0;
-                for (int j = image.pixels.GetLength(0) / 2 - x_line / 2; j < image.pixels.GetLength(0) / 2 + x_line / 2; j++)
+                for (int i = image.pixels.GetLength(0) / 2 - x_line / 2; i < image.pixels.GetLength(0) / 2 + x_line / 2; i++)
                 {
 
-                    this_grad[index] = image.pixels[i, j] - image.pixels[i, j - 1];
+                    this_grad[index] = image.pixels[j, i] - image.pixels[j, i - 1];
 
 
                     index++;
@@ -785,7 +873,7 @@ namespace PD_AdvAnalysis
         private void up_btn_Click(object sender, RoutedEventArgs e)
         {
             row_number++;
-            if(row_number >= gradients_x_allimages[image_number].Count())
+            if (row_number >= gradients_x_allimages[image_number].Count())
             {
                 row_number = 0;
             }
@@ -796,7 +884,7 @@ namespace PD_AdvAnalysis
         private void down_btn_Click(object sender, RoutedEventArgs e)
         {
             column_number--;
-            if(column_number < 0)
+            if (column_number < 0)
             {
                 column_number = gradients_y_allimages[image_number].Count() - 1;
             }
